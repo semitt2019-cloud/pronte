@@ -15,7 +15,17 @@ const faq: [string, string][] = [
 ---
 <Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], ['ติดตั้งแอป', '/app/']]), faqSchema(faq)]}>
   <section class="hero">
-    <img src="/icons/icon-192.png" width="72" height="72" alt="ไอคอนแอปโปรเน็ต AIS สุดคุ้ม" class="ico" />
+    <div class="mock" aria-label="ตัวอย่างไอคอนแอปบนหน้าจอมือถือ" role="img">
+      <div class="m-notch"></div>
+      <div class="m-time">9:41</div>
+      <div class="m-grid">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <div class="m-app"><img src="/icons/icon-192.png" width="52" height="52" alt="" /><small>โปรเน็ตสุดคุ้ม</small></div>
+        <span></span><span></span><span></span>
+      </div>
+      <div class="m-dock"><span></span><span></span><span></span><span></span></div>
+    </div>
     <h1>แอปสมัครเน็ต AIS<br /><em>เน็ตหมดก็สมัครได้</em></h1>
     <p>ติดตั้งไว้ในมือถือครั้งเดียว ถึงเน็ตหมดหรือสัญญาณเน็ตหลุด ก็เปิดแอปดูโปรและกดรหัสสมัครได้ทันที ไม่ต้องจำรหัส</p>
     <button type="button" id="app-install" class="btn-install">ติดตั้งแอปฟรี</button>
@@ -65,7 +75,26 @@ const faq: [string, string][] = [
       linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
     box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
   }
-  .ico { border-radius: 18px; box-shadow: 0 10px 24px -8px rgba(30,70,10,.6); }
+  .mock {
+    position: relative; width: 236px; height: 400px; margin: 0 auto 6px; border-radius: 38px; padding: 42px 14px 16px;
+    background: linear-gradient(160deg, #e9f6d6, #cfe9a8 60%, #b5dc7d); border: 8px solid #10180f;
+    box-shadow: 0 24px 40px -18px rgba(20,50,5,.75), inset 0 0 0 1px rgba(255,255,255,.4);
+  }
+  .m-notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 70px; height: 18px; border-radius: 12px; background: #10180f; }
+  .m-time { position: absolute; top: 9px; left: 20px; font-size: .68rem; font-weight: 600; color: #10180f; }
+  .m-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 8px; justify-items: center; }
+  .m-grid > span, .m-dock span { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,.55); }
+  .m-app { grid-column: span 1; display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
+  .m-app img { width: 38px; height: 38px; border-radius: 10px; box-shadow: 0 6px 12px -4px rgba(30,70,10,.6); animation: pop 2.4s ease-in-out infinite; }
+  .m-app small { font-size: .5rem; color: #10180f; white-space: nowrap; font-weight: 600; }
+  .m-app::after {
+    content: ''; position: absolute; top: -6px; left: 50%; width: 48px; height: 48px; transform: translateX(-50%);
+    border-radius: 13px; border: 2px solid #fff; opacity: .9; animation: ring 2.4s ease-out infinite;
+  }
+  .m-dock { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; justify-content: space-around; padding: 8px; border-radius: 18px; background: rgba(255,255,255,.35); }
+  @keyframes pop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  @keyframes ring { 0% { opacity: .9; transform: translateX(-50%) scale(.9); } 100% { opacity: 0; transform: translateX(-50%) scale(1.35); } }
+  @media (prefers-reduced-motion: reduce) { .m-app img, .m-app::after { animation: none; } }
   .hero h1 { font-size: 1.8rem; margin: 14px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
   .hero h1 em { font-style: normal; color: #fff6c2; }
   .hero p { color: rgba(255,255,255,.95); max-width: 480px; margin: 0 auto 18px; }
