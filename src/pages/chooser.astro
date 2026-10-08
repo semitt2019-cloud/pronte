@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import { AIS } from '../data/ais';
+import { ussd, telHref } from '../config';
+import { breadcrumb } from '../lib/seo';
+
+const data = AIS.map((p) => ({ ...p, ussd: ussd(p.code), href: telHref(p.code) }));
+const title = 'ช่วยเลือกโปรเน็ต AIS ตอบ 3 ข้อ รู้เลยโปรไหนคุ้ม';
+const description = 'ไม่รู้จะเลือกโปรเน็ต AIS โปรไหนดี ตอบ 3 คำถามเรื่องการใช้งาน จำนวนวัน และงบประมาณ แล้วรับโปรที่คุ้มที่สุดพร้อมรหัสกดสมัคร';
+---
+<Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], [title, '/chooser/']])]}>
+  <h1>โปรเน็ต AIS โปรไหนดี? ตอบ 3 ข้อ</h1>
+  <p class="lead">เลือกคำตอบ แล้วระบบจะแนะนำโปรที่ถูกที่สุดซึ่งยังใช้งานได้ลื่น</p>
+
+  <form id="q" class="q">
+    <fieldset>
+      <legend>1. ใช้เน็ตทำอะไรเป็นหลัก?</legend>
+      <label><input type="radio" name="use" value="0.5" /> แชต LINE อ่านข่าว</label>
+      <label><input type="radio" name="use" value="2" checked /> Facebook, TikTok</label>
+      <label><input type="radio" name="use" value="4" /> YouTube, วิดีโอคอล, เล่นเกม</label>
+      <label><input type="radio" name="use" value="6" /> ไลฟ์สด, แชร์ฮอตสปอต</label>
+    </fieldset>
+    <fieldset>
+      <legend>2. ต้องการใช้กี่วัน?</legend>
+      <label><input type="radio" name="days" value="1" /> 1 วัน</label>
+      <label><input type="radio" name="days" value="3" /> 2–3 วัน</label>
+      <label><input type="radio" name="days" value="7" checked /> 1 สัปดาห์</label>
+      <label><input type="radio" name="days" value="30" /> 1 เดือน</label>
+    </fieldset>
+    <fieldset>
+      <legend>3. งบไม่เกินเท่าไหร่?</legend>
+      <label><input type="radio" name="budget" value="100" /> 100 บาท</label>
+      <label><input type="radio" name="budget" value="300" /> 300 บาท</label>
+      <label><input type="radio" name="budget" value="600" /> 600 บาท</label>
+      <label><input type="radio" name="budget" value="99999" checked /> ไม่จำกัด</label>
+    </fieldset>
+  </form>
+
+  <h2>โปรที่แนะนำ</h2>
+  <div id="out" class="out" aria-live="polite"></div>
+  <p class="small">ผลลัพธ์คำนวณจากราคาในหน้าเว็บ ตรวจราคาใน SMS ยืนยันก่อนใช้งาน</p>
+
+  <script is:inline define:vars={{ data }}>
+    const form = document.getElementById('q');
+    const out = document.getElementById('out');
+    const sp = (m) => (m < 1 ? m * 1000 + ' Kbps' : m + ' Mbps');
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    function pick() {
+      const f = new FormData(form);
+      const need = Number(f.get('use'));
+      const days = Number(f.get('days'));
+      const budget = Number(f.get('budget'));
+      const range = days === 3 ? [2, 3] : [days, days];
+      let list = data.filter((p) => p.mbps >= need && p.days >= range[0] && p.days <= range[1] && p.price <= budget);
+      list.sort((a, b) => a.price / a.days - b.price / b.days || a.mbps - b.mbps);
+      if (!list.length) {
+        out.innerHTML = '<p class="note">ไม่มีโปรที่ตรงกับทุกเงื่อนไข ลองเพิ่มงบ หรือลดความเร็ว/จำนวนวันลง</p>';
+        return;
+      }
+      out.innerHTML = list.slice(0, 3).map((p, i) => `
+        <div class="res${i === 0 ? ' best' : ''}">
+          ${i === 0 ? '<span class="tag">คุ้มที่สุด</span>' : ''}
+          <div class="row"><b>${p.price} บาท / ${p.days} วัน</b><span>${p.net} ${sp(p.mbps)}</span></div>
+          ${(p.bonus || []).map((b) => `<div class="bn">+ ${esc(b)}</div>`).join('')}
+          <div class="row act"><code>${esc(p.ussd)}</code><a class="btn" href="${p.href}">กดสมัคร</a></div>
+        </div>`).join('');
+    }
+    form.addEventListener('change', pick);
+    pick();
+  </script>
+</Base>
+
+<style>
+  .q { display: grid; gap: 12px; }
+  fieldset { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 10px 14px 12px; margin: 0; }
+  legend { font-weight: 600; padding: 0 4px; }
+  label { display: inline-flex; align-items: center; gap: 6px; margin: 4px 14px 4px 0; cursor: pointer; }
+  :global(.out) { display: grid; gap: 10px; }
+  :global(.res) { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  :global(.res.best) { border: 2px solid var(--brand); }
+  :global(.res .tag) { position: absolute; top: -11px; left: 12px; background: var(--brand); color: #fff; font-size: .75rem; padding: 2px 10px; border-radius: 999px; }
+  :global(.res .row) { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  :global(.res .row b) { font-size: 1.2rem; }
+  :global(.res .bn) { color: var(--hot); font-size: .9rem; }
+  :global(.res .act) { margin-top: 10px; }
+  :global(.res code) { flex: 1; text-align: center; padding: 10px; }
+  :global(.res .btn) { background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 10px; }
+</style>

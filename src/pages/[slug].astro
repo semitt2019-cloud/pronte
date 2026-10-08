@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import PkgList from '../components/PkgList.astro';
+import Faq from '../components/Faq.astro';
+import { LIST_PAGES, type ListPage } from '../data/pages';
+import { faqSchema, offersSchema, breadcrumb } from '../lib/seo';
+import { SITE } from '../config';
+
+export function getStaticPaths() {
+  return LIST_PAGES.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props as { page: ListPage };
+const items = page.items();
+const related = LIST_PAGES.filter((p) => p.slug !== page.slug);
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], [page.title, `/${page.slug}/`]]),
+  offersSchema(page.title, items),
+  faqSchema(page.faq),
+];
+---
+<Base title={page.title} description={page.description} schema={schema}>
+  <h1>{page.title}</h1>
+  <p class="lead">อัปเดตราคา {SITE.updated} · {items.length} โปร</p>
+  <p>{page.intro}</p>
+  <p class="note"><strong>แนะนำ:</strong> {page.pick}</p>
+
+  <h2>โปรทั้งหมดในหมวดนี้</h2>
+  <PkgList items={items} />
+
+  <h2>วิธีสมัคร</h2>
+  <ol>
+    <li>เช็กเงินในซิมให้พอกับราคาโปร (กด <code>*121#</code>)</li>
+    <li>กดปุ่ม "กดสมัคร" หรือกดรหัสบนแป้นโทรศัพท์แล้วโทรออก</li>
+    <li>รอ SMS ยืนยัน ตรวจราคาให้ตรง แล้วเริ่มใช้งานได้ทันที</li>
+  </ol>
+
+  <Faq items={page.faq} />
+
+  <h2>โปรเน็ตหมวดอื่น</h2>
+  <ul class="links">
+    {related.map((p) => <li><a href={`/${p.slug}/`}>{p.keyword}</a></li>)}
+  </ul>
+</Base>

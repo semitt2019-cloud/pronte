@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { SPEED_GUIDE, speedLabel, AIS } from '../data/ais';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const title = 'เน็ต 2, 4, 6, 10 Mbps ต่างกันยังไง ใช้ทำอะไรได้บ้าง';
+const description = 'อธิบายความเร็วเน็ตมือถือแต่ละระดับ 512 Kbps ถึง 10 Mbps ดู YouTube, TikTok, เล่นเกม, ไลฟ์สดได้แค่ไหน พร้อมราคาโปร AIS ที่ถูกที่สุดในแต่ละความเร็ว';
+const cheapest = (mbps: number) => AIS.filter((p) => p.mbps === mbps).sort((a, b) => a.price - b.price)[0];
+const faq: [string, string][] = [
+  ['4G กับ 5G ที่ความเร็วเท่ากัน ต่างกันไหม?', 'ความเร็วสูงสุดเท่ากันตามโปร แต่ 5G มักหน่วงน้อยกว่าและนิ่งกว่าในพื้นที่ที่มีสัญญาณ 5G'],
+  ['เล่นเกมออนไลน์ใช้ความเร็วเท่าไหร่?', 'เกมมือถือส่วนใหญ่ใช้ข้อมูลน้อย 2–4 Mbps เพียงพอ สิ่งที่สำคัญกว่าคือค่าปิง (ความหน่วง) และความแรงของสัญญาณ'],
+];
+---
+<Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], [title, '/speed-guide/']]), faqSchema(faq)]}>
+  <h1>{title}</h1>
+  <p class="lead">สรุปสั้น: แชตใช้ 1 Mbps, โซเชียลและ TikTok ใช้ 2–4 Mbps, วิดีโอ HD และไลฟ์สดใช้ 6 Mbps ขึ้นไป</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>ความเร็ว</th><th>ใช้ได้สบาย</th><th>ข้อจำกัด</th><th>โปรถูกสุด</th></tr></thead>
+      <tbody>
+        {SPEED_GUIDE.map((s) => {
+          const c = cheapest(s.mbps);
+          return (
+            <tr>
+              <td><strong>{speedLabel(s.mbps)}</strong></td>
+              <td>{s.good}</td>
+              <td>{s.limit}</td>
+              <td>{c ? `${c.price} บาท / ${c.days} วัน` : '–'}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>เลือกยังไงให้คุ้ม</h2>
+  <p>เริ่มจากสิ่งที่ใช้บ่อยที่สุดในแต่ละวัน แล้วเลือกความเร็วขั้นต่ำที่รองรับ ความเร็วที่สูงเกินจำเป็นทำให้จ่ายแพงขึ้นเกือบเท่าตัวโดยแทบไม่รู้สึกต่างบนจอมือถือ</p>
+  <p>ถ้าแชร์เน็ตให้โน้ตบุ๊กหรือมือถืออีกเครื่อง ให้บวกความเร็วที่แต่ละเครื่องใช้เข้าด้วยกัน</p>
+
+  <Faq items={faq} />
+  <p><a href="/">ดูโปรเน็ต AIS ทั้งหมด →</a></p>
+</Base>

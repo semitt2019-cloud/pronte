@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PkgList from '../components/PkgList.astro';
+import Faq from '../components/Faq.astro';
+import { AIS, byDays } from '../data/ais';
+import { LIST_PAGES } from '../data/pages';
+import { faqSchema, offersSchema } from '../lib/seo';
+import { SITE } from '../config';
+
+const popular = AIS.filter((p) => p.popular).sort((a, b) => a.days - b.days || a.price - b.price);
+const groups: [number, string][] = [[1, 'ais-1-day'], [2, 'ais-2-day'], [3, 'ais-3-day'], [7, 'ais-7-day'], [30, 'ais-30-day']];
+
+const title = `โปรเน็ต AIS ไม่อั้น ไม่ลดสปีด ล่าสุด ${SITE.updated}`;
+const description = 'รวมโปรเน็ต AIS เติมเงิน ไม่จำกัดปริมาณ ไม่ลดสปีด ทั้งรายวัน 7 วัน และ 30 วัน ราคาเริ่ม 24 บาท พร้อมรหัสกดสมัครและวิธีเลือกความเร็วให้เหมาะกับการใช้งาน';
+const faq: [string, string][] = [
+  ['เน็ตไม่อั้นไม่ลดสปีดคืออะไร?', 'ใช้ได้ไม่จำกัดปริมาณที่ความเร็วคงที่ตามโปรตลอดอายุ เช่น 4 Mbps ก็ได้ 4 Mbps ตลอด ไม่ถูกลดลงเมื่อใช้เยอะ'],
+  ['ควรเลือกความเร็วเท่าไหร่?', 'แชตและ Facebook ใช้ 1–2 Mbps, TikTok และ YouTube 720p ใช้ 4 Mbps, ไลฟ์สดหรือแชร์ฮอตสปอตใช้ 6 Mbps ขึ้นไป'],
+  ['สมัครแล้วเงินถูกหักจากไหน?', 'หักจากยอดเงินในซิม AIS เติมเงินของคุณโดยตรง ไม่ต้องโอนเงินหรือให้ข้อมูลส่วนตัวใด ๆ'],
+  ['เช็กโปรที่ใช้อยู่ยังไง?', 'กด *121*32# แล้วโทรออก ระบบจะส่งรายละเอียดโปรที่ใช้อยู่ทาง SMS'],
+];
+---
+<Base title={title} description={description} schema={[offersSchema('โปรเน็ต AIS ยอดนิยม', popular), faqSchema(faq)]}>
+  <h1>{title}</h1>
+  <p class="lead">โปรเน็ต AIS เติมเงินแบบไม่จำกัดปริมาณ ไม่ลดสปีด กดรหัสสมัครได้ทันที ไม่ต้องโหลดแอป</p>
+
+  <p class="note">
+    ไม่แน่ใจว่าโปรไหนเหมาะ? <a href="/chooser/">ตอบ 3 ข้อ ให้เราช่วยเลือก</a>
+  </p>
+
+  <h2>โปรยอดนิยม</h2>
+  <PkgList items={popular} />
+
+  {groups.map(([d, slug]) => (
+    <section>
+      <h2>โปรเน็ต AIS {d} วัน</h2>
+      <PkgList items={byDays(d)} />
+      <p><a href={`/${slug}/`}>ดูรายละเอียดและคำแนะนำโปร {d} วัน →</a></p>
+    </section>
+  ))}
+
+  <h2>เลือกโปรตามการใช้งาน</h2>
+  <ul class="links">
+    {LIST_PAGES.map((p) => <li><a href={`/${p.slug}/`}>{p.keyword}</a></li>)}
+    <li><a href="/speed-guide/">ความเร็วแต่ละระดับใช้ทำอะไรได้</a></li>
+  </ul>
+
+  <Faq items={faq} />
+</Base>

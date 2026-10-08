@@ -1,0 +1,48 @@
+---
+import { ussd, telHref } from '../config';
+import { type Pkg, perDay, speedLabel } from '../data/ais';
+
+interface Props { p: Pkg }
+const { p } = Astro.props;
+const code = ussd(p.code);
+---
+<article class="pkg">
+  <div class="head">
+    <div>
+      <div class="price">{p.price.toLocaleString('th-TH')} <span>บาท</span></div>
+      <div class="dur">{p.days} วัน{p.days === 1 ? ' (24 ชม.)' : ''} · เฉลี่ย {perDay(p)} บาท/วัน</div>
+    </div>
+    <div class="speed">
+      <b>{speedLabel(p.mbps)}</b>
+      <span>{p.net}</span>
+    </div>
+  </div>
+  <ul>
+    <li>เน็ตไม่จำกัดปริมาณ ไม่ลดสปีด</li>
+    {p.bonus?.map((b) => <li class="bonus">{b}</li>)}
+    <li class="muted">ราคารวมภาษีแล้ว</li>
+  </ul>
+  <div class="act">
+    <code class="ussd">{code}</code>
+    <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+  </div>
+</article>
+
+<style>
+  .pkg { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  .price { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
+  .price span { font-size: .95rem; font-weight: 500; }
+  .dur { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  .speed { text-align: right; background: var(--accent); border-radius: 10px; padding: 6px 10px; line-height: 1.2; flex: none; }
+  .speed b { display: block; color: var(--brand); font-size: 1.05rem; }
+  .speed span { font-size: .75rem; color: var(--muted); }
+  ul { margin: 10px 0 12px; padding-left: 18px; font-size: .93rem; }
+  li { margin: 2px 0; }
+  .bonus { color: var(--hot); }
+  .muted { color: var(--muted); }
+  .act { display: flex; gap: 8px; align-items: center; }
+  .ussd { flex: 1; font-size: .95rem; padding: 10px; text-align: center; letter-spacing: .5px; overflow-wrap: anywhere; }
+  .btn { flex: none; background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 10px; }
+  .btn:active { transform: translateY(1px); }
+</style>

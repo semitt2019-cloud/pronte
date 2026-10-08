@@ -1,0 +1,122 @@
+---
+import { SITE } from '../config';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object[];
+}
+const { title, description, schema = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
+
+const nav = [
+  ['/', 'โปรทั้งหมด'],
+  ['/ais-1-day/', 'รายวัน'],
+  ['/ais-7-day/', '7 วัน'],
+  ['/ais-30-day/', '30 วัน'],
+  ['/chooser/', 'ช่วยเลือกโปร'],
+];
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="th_TH" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta name="theme-color" content="#0b6b5d" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-in">
+      <a href="/" class="logo"><span class="dot"></span>{SITE.name}</a>
+      <span class="upd">อัปเดต {SITE.updated}</span>
+    </div>
+    <nav class="wrap nav" aria-label="เมนูหลัก">
+      {nav.map(([href, label]) => (
+        <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <slot />
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p><strong>{SITE.name}</strong> รวบรวมโปรเน็ตมือถือเติมเงิน อัปเดตราคาทุกเดือน</p>
+      <p class="small">
+        เว็บไซต์นี้ไม่ใช่เว็บไซต์ทางการของ AIS ชื่อ AIS เป็นเครื่องหมายการค้าของเจ้าของ
+        ราคาและเงื่อนไขอาจเปลี่ยนแปลงได้ ตรวจสอบราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง
+      </p>
+      <p class="small">
+        <a href="/ais-shortcodes/">เบอร์ลัด AIS</a> ·
+        <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับ</a> ·
+        <a href="/about/">เกี่ยวกับเรา</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #f6f7f5;
+    --card: #ffffff;
+    --ink: #17201d;
+    --muted: #5d6b66;
+    --line: #e2e6e3;
+    --brand: #0b6b5d;
+    --brand-ink: #ffffff;
+    --accent: #e8f4f1;
+    --hot: #c2410c;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Sukhumvit Set', 'Noto Sans Thai', 'Leelawadee UI', Tahoma, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.65;
+  }
+  a { color: var(--brand); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+  .top { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; }
+  .top-in { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .logo { font-weight: 700; font-size: 1.1rem; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); }
+  .upd { font-size: .8rem; color: var(--muted); }
+  .nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .nav a { flex: none; padding: 5px 12px; border-radius: 999px; background: var(--bg); color: var(--ink); text-decoration: none; font-size: .9rem; }
+  .nav a[aria-current='page'] { background: var(--brand); color: var(--brand-ink); }
+  main { padding-top: 20px; padding-bottom: 40px; }
+  h1 { font-size: 1.6rem; line-height: 1.3; margin: 8px 0 8px; }
+  h2 { font-size: 1.25rem; margin: 32px 0 12px; }
+  h3 { font-size: 1.05rem; margin: 20px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 16px; }
+  .small { font-size: .85rem; color: var(--muted); }
+  .note { background: var(--accent); border-radius: var(--radius); padding: 12px 16px; font-size: .95rem; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; font-size: .95rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--accent); font-weight: 600; }
+  .tbl { overflow-x: auto; }
+  code { background: var(--accent); padding: 1px 6px; border-radius: 6px; font-size: .95em; }
+  .foot { border-top: 1px solid var(--line); background: var(--card); padding: 20px 0 32px; }
+  .foot p { margin: 6px 0; }
+  .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; padding: 0; list-style: none; }
+  .links a { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; text-decoration: none; color: var(--ink); }
+  .links a:hover { border-color: var(--brand); }
+</style>

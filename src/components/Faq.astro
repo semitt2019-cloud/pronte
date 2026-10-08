@@ -1,0 +1,21 @@
+---
+// แสดงคำถามที่พบบ่อย (Schema FAQ ส่งผ่าน faqSchema() ไปที่ Layout)
+interface Props { items: [string, string][] }
+const { items } = Astro.props;
+---
+<h2>คำถามที่พบบ่อย</h2>
+<div class="faq">
+  {items.map(([q, a]) => (
+    <details>
+      <summary>{q}</summary>
+      <p>{a}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { display: grid; gap: 8px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+  summary { font-weight: 600; cursor: pointer; }
+  details p { margin: 8px 0 2px; color: var(--muted); }
+</style>
