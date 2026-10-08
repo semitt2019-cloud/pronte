@@ -6,43 +6,75 @@ interface Props { p: Pkg }
 const { p } = Astro.props;
 const code = ussd(p.code);
 ---
-<article class="pkg">
+<article class:list={['pkg', { hot: p.popular }]}>
+  {p.popular && <span class="ribbon">ยอดนิยม</span>}
   <div class="head">
     <div>
-      <div class="price">{p.price.toLocaleString('th-TH')} <span>บาท</span></div>
+      <div class="price"><small>฿</small>{p.price.toLocaleString('th-TH')}</div>
       <div class="dur">{p.days} วัน{p.days === 1 ? ' (24 ชม.)' : ''} · เฉลี่ย {perDay(p)} บาท/วัน</div>
     </div>
     <div class="speed">
+      <span class="net">{p.net}</span>
       <b>{speedLabel(p.mbps)}</b>
-      <span>{p.net}</span>
     </div>
   </div>
   <ul>
     <li>เน็ตไม่จำกัดปริมาณ ไม่ลดสปีด</li>
     {p.bonus?.map((b) => <li class="bonus">{b}</li>)}
-    <li class="muted">ราคารวมภาษีแล้ว</li>
   </ul>
   <div class="act">
     <code class="ussd">{code}</code>
     <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
   </div>
+  <div class="tax">ราคารวมภาษีแล้ว</div>
 </article>
 
 <style>
-  .pkg { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .pkg {
+    position: relative; background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 18px 14px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .pkg:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgba(10,18,12,.05), 0 16px 32px -14px rgba(10,18,12,.28); }
+  .pkg.hot { border-color: transparent; background:
+      linear-gradient(var(--card), var(--card)) padding-box,
+      linear-gradient(140deg, var(--lime-2), var(--lime) 40%, var(--gold)) border-box;
+    border: 1.5px solid transparent; }
+  .ribbon {
+    position: absolute; top: -11px; right: 16px; background: var(--dark); color: var(--lime-2);
+    font-size: .72rem; font-weight: 600; letter-spacing: .5px; padding: 3px 12px; border-radius: 999px;
+    border: 1px solid rgba(141,198,63,.5);
+  }
   .head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
-  .price { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
-  .price span { font-size: .95rem; font-weight: 500; }
-  .dur { font-size: .85rem; color: var(--muted); margin-top: 4px; }
-  .speed { text-align: right; background: var(--accent); border-radius: 10px; padding: 6px 10px; line-height: 1.2; flex: none; }
-  .speed b { display: block; color: var(--brand); font-size: 1.05rem; }
-  .speed span { font-size: .75rem; color: var(--muted); }
-  ul { margin: 10px 0 12px; padding-left: 18px; font-size: .93rem; }
-  li { margin: 2px 0; }
-  .bonus { color: var(--hot); }
-  .muted { color: var(--muted); }
-  .act { display: flex; gap: 8px; align-items: center; }
-  .ussd { flex: 1; font-size: .95rem; padding: 10px; text-align: center; letter-spacing: .5px; overflow-wrap: anywhere; }
-  .btn { flex: none; background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 10px; }
+  .price { font-size: 2.1rem; font-weight: 700; line-height: 1; letter-spacing: -.5px; }
+  .price small { font-size: 1.1rem; font-weight: 500; color: var(--muted); margin-right: 3px; vertical-align: 8px; }
+  .dur { font-size: .84rem; color: var(--muted); margin-top: 8px; }
+  .speed {
+    text-align: center; background: var(--dark); color: #fff; border-radius: 12px;
+    padding: 7px 12px 8px; line-height: 1.15; flex: none; min-width: 84px;
+  }
+  .speed .net { display: block; font-size: .68rem; letter-spacing: 1px; color: var(--lime-2); font-weight: 600; }
+  .speed b { font-size: 1.05rem; font-weight: 600; }
+  ul { margin: 14px 0 16px; padding: 0; list-style: none; font-size: .92rem; flex: 1; }
+  li { position: relative; padding-left: 22px; margin: 4px 0; }
+  li::before {
+    content: ''; position: absolute; left: 0; top: .5em; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--lime-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3.5 7.2l2.2 2.2 4.8-4.8' stroke='%233b7a12' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;
+  }
+  .bonus { color: var(--ink); font-weight: 500; }
+  .bonus::before { background-color: #fdf3dc; }
+  .act { display: flex; gap: 8px; align-items: stretch; }
+  .ussd {
+    flex: 1; font-size: .92rem; padding: 11px 8px; text-align: center; letter-spacing: .5px;
+    overflow-wrap: anywhere; background: #f5f7f3; border: 1px dashed #cfd8c8; color: var(--ink);
+  }
+  .btn {
+    flex: none; display: grid; place-items: center;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime)); color: var(--dark);
+    text-decoration: none; font-weight: 600; padding: 0 20px; border-radius: 12px;
+    box-shadow: 0 6px 16px -8px rgba(110,170,40,.9);
+  }
   .btn:active { transform: translateY(1px); }
+  .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
 </style>

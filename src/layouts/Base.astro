@@ -33,16 +33,24 @@ const path = Astro.url.pathname;
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
-  <meta name="theme-color" content="#0b6b5d" />
+  <meta name="theme-color" content="#0a120c" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
 </head>
 <body>
   <header class="top">
     <div class="wrap top-in">
-      <a href="/" class="logo"><span class="dot"></span>{SITE.name}</a>
-      <span class="upd">อัปเดต {SITE.updated}</span>
+      <a href="/" class="logo">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 14a11 11 0 0 1 16 0M7.5 17.5a6 6 0 0 1 9 0" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="20.5" r="1.6" fill="currentColor"/></svg>
+        </span>
+        {SITE.name}
+      </a>
+      <span class="upd"><i></i>อัปเดต {SITE.updated}</span>
     </div>
     <nav class="wrap nav" aria-label="เมนูหลัก">
       {nav.map(([href, label]) => (
@@ -57,15 +65,22 @@ const path = Astro.url.pathname;
 
   <footer class="foot">
     <div class="wrap">
-      <p><strong>{SITE.name}</strong> รวบรวมโปรเน็ตมือถือเติมเงิน อัปเดตราคาทุกเดือน</p>
-      <p class="small">
+      <a href="/" class="logo">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 14a11 11 0 0 1 16 0M7.5 17.5a6 6 0 0 1 9 0" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="20.5" r="1.6" fill="currentColor"/></svg>
+        </span>
+        {SITE.name}
+      </a>
+      <p>รวบรวมโปรเน็ตมือถือเติมเงิน ไม่อั้น ไม่ลดสปีด อัปเดตราคาทุกเดือน</p>
+      <p class="flinks">
+        <a href="/ais-shortcodes/">เบอร์ลัด AIS</a>
+        <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับ</a>
+        <a href="/chooser/">ช่วยเลือกโปร</a>
+        <a href="/about/">เกี่ยวกับเรา</a>
+      </p>
+      <p class="disc">
         เว็บไซต์นี้ไม่ใช่เว็บไซต์ทางการของ AIS ชื่อ AIS เป็นเครื่องหมายการค้าของเจ้าของ
         ราคาและเงื่อนไขอาจเปลี่ยนแปลงได้ ตรวจสอบราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง
-      </p>
-      <p class="small">
-        <a href="/ais-shortcodes/">เบอร์ลัด AIS</a> ·
-        <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับ</a> ·
-        <a href="/about/">เกี่ยวกับเรา</a>
       </p>
     </div>
   </footer>
@@ -74,49 +89,91 @@ const path = Astro.url.pathname;
 
 <style is:global>
   :root {
-    --bg: #f6f7f5;
+    --bg: #f3f5f0;
     --card: #ffffff;
-    --ink: #17201d;
-    --muted: #5d6b66;
-    --line: #e2e6e3;
-    --brand: #0b6b5d;
-    --brand-ink: #ffffff;
-    --accent: #e8f4f1;
+    --ink: #0e1710;
+    --muted: #5f6b62;
+    --line: #e3e8e0;
+    --dark: #0a120c;
+    --dark-2: #13221a;
+    --lime: #8dc63f;        /* เขียวมะนาว */
+    --lime-2: #b4e05a;
+    --lime-ink: #3b7a12;    /* เขียวเข้มสำหรับตัวอักษรบนพื้นขาว */
+    --lime-soft: #eef7e1;
+    --gold: #d4b26a;
     --hot: #c2410c;
-    --radius: 14px;
+    --radius: 18px;
+    --shadow: 0 1px 2px rgba(10, 18, 12, .04), 0 8px 24px -12px rgba(10, 18, 12, .18);
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
-    font-family: 'Sukhumvit Set', 'Noto Sans Thai', 'Leelawadee UI', Tahoma, system-ui, sans-serif;
-    font-size: 16px; line-height: 1.65;
+    font-family: 'Prompt', 'Noto Sans Thai', 'Leelawadee UI', Tahoma, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.7; font-weight: 400;
+    -webkit-font-smoothing: antialiased;
   }
-  a { color: var(--brand); }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
-  .top { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; }
-  .top-in { display: flex; align-items: center; justify-content: space-between; height: 52px; }
-  .logo { font-weight: 700; font-size: 1.1rem; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand); }
-  .upd { font-size: .8rem; color: var(--muted); }
-  .nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-  .nav a { flex: none; padding: 5px 12px; border-radius: 999px; background: var(--bg); color: var(--ink); text-decoration: none; font-size: .9rem; }
-  .nav a[aria-current='page'] { background: var(--brand); color: var(--brand-ink); }
-  main { padding-top: 20px; padding-bottom: 40px; }
-  h1 { font-size: 1.6rem; line-height: 1.3; margin: 8px 0 8px; }
-  h2 { font-size: 1.25rem; margin: 32px 0 12px; }
-  h3 { font-size: 1.05rem; margin: 20px 0 8px; }
-  .lead { color: var(--muted); margin: 0 0 16px; }
+  a { color: var(--lime-ink); }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---------- หัวเว็บ ---------- */
+  .top {
+    background: linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+    color: #fff; position: sticky; top: 0; z-index: 10;
+    border-bottom: 1px solid rgba(141, 198, 63, .25);
+  }
+  .top-in { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .logo { font-weight: 600; font-size: 1.15rem; color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: .2px; }
+  .mark {
+    width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime)); color: var(--dark);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 6px 18px -6px rgba(141,198,63,.7);
+  }
+  .upd { font-size: .78rem; color: rgba(255,255,255,.65); display: flex; align-items: center; gap: 6px; }
+  .upd i { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px var(--lime); }
+  .nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a {
+    flex: none; padding: 6px 14px; border-radius: 999px; color: rgba(255,255,255,.82);
+    text-decoration: none; font-size: .9rem; border: 1px solid rgba(255,255,255,.12);
+  }
+  .nav a[aria-current='page'] { background: var(--lime); color: var(--dark); border-color: var(--lime); font-weight: 600; }
+
+  /* ---------- เนื้อหา ---------- */
+  main { padding-top: 24px; padding-bottom: 48px; }
+  h1 { font-size: 1.75rem; line-height: 1.3; margin: 6px 0 10px; font-weight: 700; letter-spacing: -.2px; }
+  h2 { font-size: 1.3rem; margin: 40px 0 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  h2::before { content: ''; width: 4px; height: 1.1em; border-radius: 4px; background: linear-gradient(var(--lime-2), var(--lime)); }
+  h3 { font-size: 1.05rem; margin: 20px 0 8px; font-weight: 600; }
+  .lead { color: var(--muted); margin: 0 0 18px; }
   .small { font-size: .85rem; color: var(--muted); }
-  .note { background: var(--accent); border-radius: var(--radius); padding: 12px 16px; font-size: .95rem; }
-  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; font-size: .95rem; }
-  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { background: var(--accent); font-weight: 600; }
-  .tbl { overflow-x: auto; }
-  code { background: var(--accent); padding: 1px 6px; border-radius: 6px; font-size: .95em; }
-  .foot { border-top: 1px solid var(--line); background: var(--card); padding: 20px 0 32px; }
-  .foot p { margin: 6px 0; }
-  .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; padding: 0; list-style: none; }
-  .links a { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; text-decoration: none; color: var(--ink); }
-  .links a:hover { border-color: var(--brand); }
+  .note {
+    background: var(--lime-soft); border: 1px solid #d9ecbf; border-radius: var(--radius);
+    padding: 14px 18px; font-size: .97rem;
+  }
+  .note strong { color: var(--lime-ink); }
+  ol, ul { padding-left: 22px; }
+
+  .tbl { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; background: var(--card); font-size: .95rem; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--dark); color: #fff; font-weight: 500; }
+  tr:last-child td { border-bottom: 0; }
+  code { background: var(--lime-soft); padding: 2px 8px; border-radius: 8px; font-size: .95em; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+  .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; padding: 0; list-style: none; }
+  .links a {
+    display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px 14px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow);
+    transition: border-color .15s, transform .15s;
+  }
+  .links a:hover { border-color: var(--lime); transform: translateY(-1px); }
+
+  /* ---------- ท้ายเว็บ ---------- */
+  .foot { background: var(--dark); color: rgba(255,255,255,.75); padding: 32px 0 40px; font-size: .92rem; }
+  .foot .logo { color: #fff; margin-bottom: 8px; }
+  .foot p { margin: 8px 0; }
+  .flinks { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .flinks a { color: var(--lime-2); text-decoration: none; }
+  .disc { font-size: .8rem; color: rgba(255,255,255,.5); border-top: 1px solid rgba(255,255,255,.1); padding-top: 14px; margin-top: 16px !important; }
 </style>

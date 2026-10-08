@@ -73,17 +73,25 @@ const description = 'ไม่รู้จะเลือกโปรเน็�
 
 <style>
   .q { display: grid; gap: 12px; }
-  fieldset { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 10px 14px 12px; margin: 0; }
-  legend { font-weight: 600; padding: 0 4px; }
-  label { display: inline-flex; align-items: center; gap: 6px; margin: 4px 14px 4px 0; cursor: pointer; }
-  :global(.out) { display: grid; gap: 10px; }
-  :global(.res) { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
-  :global(.res.best) { border: 2px solid var(--brand); }
-  :global(.res .tag) { position: absolute; top: -11px; left: 12px; background: var(--brand); color: #fff; font-size: .75rem; padding: 2px 10px; border-radius: 999px; }
+  fieldset { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 12px 16px 14px; margin: 0; box-shadow: var(--shadow); }
+  legend { font-weight: 600; padding: 0 6px; }
+  label {
+    display: inline-flex; align-items: center; gap: 6px; margin: 4px 6px 4px 0; cursor: pointer;
+    padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: .93rem;
+  }
+  label:has(input:checked) { background: var(--dark); color: #fff; border-color: var(--dark); }
+  label input { accent-color: var(--lime); margin: 0; }
+  :global(.out) { display: grid; gap: 14px; }
+  :global(.res) { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  :global(.res.best) { border: 1.5px solid transparent; background:
+      linear-gradient(var(--card), var(--card)) padding-box,
+      linear-gradient(140deg, var(--lime-2), var(--lime) 40%, var(--gold)) border-box; }
+  :global(.res .tag) { position: absolute; top: -11px; left: 16px; background: var(--dark); color: var(--lime-2); border: 1px solid rgba(141,198,63,.5); font-size: .72rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; }
   :global(.res .row) { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  :global(.res .row b) { font-size: 1.2rem; }
-  :global(.res .bn) { color: var(--hot); font-size: .9rem; }
-  :global(.res .act) { margin-top: 10px; }
-  :global(.res code) { flex: 1; text-align: center; padding: 10px; }
-  :global(.res .btn) { background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 10px; }
+  :global(.res .row b) { font-size: 1.35rem; }
+  :global(.res .row span) { background: var(--dark); color: var(--lime-2); font-size: .85rem; padding: 4px 10px; border-radius: 10px; }
+  :global(.res .bn) { font-size: .9rem; color: var(--muted); }
+  :global(.res .act) { margin-top: 12px; }
+  :global(.res .act code) { flex: 1; text-align: center; padding: 11px; background: #f5f7f3; border: 1px dashed #cfd8c8; }
+  :global(.res .btn) { background: linear-gradient(140deg, var(--lime-2), var(--lime)); color: var(--dark); text-decoration: none; font-weight: 600; padding: 11px 20px; border-radius: 12px; }
 </style>

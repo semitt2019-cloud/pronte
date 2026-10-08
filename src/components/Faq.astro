@@ -14,8 +14,12 @@ const { items } = Astro.props;
 </div>
 
 <style>
-  .faq { display: grid; gap: 8px; }
-  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
-  summary { font-weight: 600; cursor: pointer; }
-  details p { margin: 8px 0 2px; color: var(--muted); }
+  .faq { display: grid; gap: 10px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; box-shadow: var(--shadow); }
+  details[open] { border-color: var(--lime); }
+  summary { font-weight: 500; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; color: var(--lime-ink); font-weight: 600; font-size: 1.2rem; line-height: 1.2; }
+  details[open] summary::after { content: '−'; }
+  details p { margin: 10px 0 2px; color: var(--muted); }
 </style>
