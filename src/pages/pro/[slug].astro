@@ -1,0 +1,237 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import PkgCard from '../../components/PkgCard.astro';
+import { AIS, perDay, speedLabel, type Pkg } from '../../data/ais';
+import { SALES, USES, useLevel, salesByCode, type SalesPage } from '../../data/sales';
+import { ussd, telHref, SITE } from '../../config';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return SALES.map((s) => {
+    const pkg = AIS.find((p) => p.code === s.code);
+    if (!pkg) throw new Error(`ไม่พบรหัสแพ็กเกจ ${s.code} ใน ais.ts`);
+    return { params: { slug: s.slug }, props: { s, pkg } };
+  });
+}
+
+const { s, pkg } = Astro.props as { s: SalesPage; pkg: Pkg };
+const href = telHref(pkg.code);
+const code = ussd(pkg.code);
+const pd = perDay(pkg);
+
+// ---- เปรียบเทียบอัตโนมัติจากข้อมูลจริง ----
+// 1) ถ้าซื้อโปรรายวันความเร็วเท่ากันซ้ำ ๆ
+const daily = AIS.filter((p) => p.days === 1 && p.mbps === pkg.mbps && p.net === pkg.net).sort((a, b) => a.price - b.price)[0];
+const dailyTotal = daily && pkg.days > 1 ? daily.price * pkg.days : 0;
+// 2) โปรระยะเวลาเท่ากัน เร็วกว่าขั้นถัดไป / ถูกกว่าขั้นก่อนหน้า
+const sameDays = AIS.filter((p) => p.days === pkg.days && p.code !== pkg.code);
+const faster = sameDays.filter((p) => p.mbps > pkg.mbps).sort((a, b) => a.price - b.price)[0];
+const cheaper = sameDays.filter((p) => p.price < pkg.price).sort((a, b) => b.price - a.price)[0];
+// 3) โปรยาวกว่า ความเร็วเท่ากัน ราคาต่อวันถูกกว่า
+const longer = AIS.filter((p) => p.days > pkg.days && p.mbps === pkg.mbps && perDay(p) < pd).sort((a, b) => perDay(a) - perDay(b))[0];
+
+const related = [faster, cheaper, longer].filter(Boolean) as Pkg[];
+const relatedUnique = related.filter((p, i) => related.findIndex((q) => q.code === p.code) === i);
+const otherSales = SALES.filter((x) => x.slug !== s.slug);
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: s.title,
+  description: s.description,
+  brand: { '@type': 'Brand', name: 'AIS' },
+  category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
+  offers: {
+    '@type': 'Offer',
+    price: pkg.price,
+    priceCurrency: 'THB',
+    availability: 'https://schema.org/InStock',
+    url: new URL(`/pro/${s.slug}/`, SITE.url).href,
+  },
+};
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], [`โปร ${pkg.days} วัน`, `/ais-${pkg.days}-day/`], [s.keyword, `/pro/${s.slug}/`]]),
+  productSchema,
+  faqSchema(s.faq),
+];
+const lvl = ['ไม่แนะนำ', 'พอได้', 'สบาย'];
+---
+<Base title={s.title} description={s.description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <a href={`/ais-${pkg.days}-day/`}>โปร {pkg.days} วัน</a> › <span>{pkg.price} บาท</span>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <span class="badge">{pkg.net} · ไม่อั้น ไม่ลดสปีด</span>
+      <h1>{s.title}</h1>
+      <p class="tag">{s.tagline}</p>
+    </div>
+    <div class="offer">
+      <div class="o-price"><small>฿</small>{pkg.price.toLocaleString('th-TH')}</div>
+      <div class="o-meta">{pkg.days} วัน · {speedLabel(pkg.mbps)} · เฉลี่ย {pd} บาท/วัน</div>
+      {pkg.bonus && <ul class="o-bonus">{pkg.bonus.map((b) => <li>{b}</li>)}</ul>}
+      <code class="o-code">{code}</code>
+      <a class="o-btn" href={href} data-pkg={pkg.code}>กดสมัครเลย</a>
+      <div class="o-tax">ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม</div>
+    </div>
+  </section>
+
+  <p class="intro">{s.intro}</p>
+
+  <h2>สรุปโปร {pkg.price} บาท</h2>
+  <div class="tbl">
+    <table>
+      <tbody>
+        <tr><th scope="row">ราคา</th><td>{pkg.price.toLocaleString('th-TH')} บาท (รวมภาษี)</td></tr>
+        <tr><th scope="row">ระยะเวลา</th><td>{pkg.days} วัน{pkg.days <= 2 ? ` (${pkg.days * 24} ชั่วโมง)` : ''}</td></tr>
+        <tr><th scope="row">ความเร็ว</th><td>{pkg.net} {speedLabel(pkg.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด</td></tr>
+        <tr><th scope="row">ของแถม</th><td>{pkg.bonus ? pkg.bonus.join(', ') : '–'}</td></tr>
+        <tr><th scope="row">เฉลี่ยต่อวัน</th><td>{pd} บาท</td></tr>
+        <tr><th scope="row">รหัสสมัคร</th><td><code>{code}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>ความเร็ว {speedLabel(pkg.mbps)} ใช้ทำอะไรได้บ้าง</h2>
+  <div class="uses">
+    {USES.map((u) => {
+      const l = useLevel(pkg.mbps, u);
+      return <div class={`use l${l}`}><span class="dot" aria-hidden="true"></span><b>{u.label}</b><em>{lvl[l]}</em></div>;
+    })}
+  </div>
+  <p class="small">ประเมินจากความเร็วตามโปร ความเร็วจริงขึ้นกับสัญญาณในพื้นที่ <a href="/speed-guide/">อ่านเพิ่มเรื่องความเร็วแต่ละระดับ</a></p>
+
+  <div class="two">
+    <div class="box yes">
+      <h3>เหมาะกับใคร</h3>
+      <ul>{s.forWho.map((x) => <li>{x}</li>)}</ul>
+    </div>
+    <div class="box no">
+      <h3>อาจไม่เหมาะถ้า…</h3>
+      <ul>{s.notFor.map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </div>
+
+  <h2>โปรนี้คุ้มไหม?</h2>
+  <p class="verdict">{s.verdict}</p>
+  <ul class="facts">
+    {dailyTotal > 0 && (
+      <li>ถ้าซื้อโปรรายวัน {daily.net} {speedLabel(daily.mbps)} ({daily.price} บาท) ครบ {pkg.days} วัน จะจ่าย {dailyTotal.toLocaleString('th-TH')} บาท
+        {dailyTotal > pkg.price ? <> · <strong>โปรนี้ประหยัดกว่า {(dailyTotal - pkg.price).toLocaleString('th-TH')} บาท</strong></> : null}</li>
+    )}
+    {faster && <li>เพิ่มอีก {faster.price - pkg.price} บาท ได้ความเร็ว {faster.net} {speedLabel(faster.mbps)} ({faster.price} บาท / {faster.days} วัน)</li>}
+    {cheaper && <li>ถ้าอยากประหยัดกว่านี้ มีโปร {cheaper.price} บาท {cheaper.net} {speedLabel(cheaper.mbps)} ในระยะเวลาเท่ากัน</li>}
+    {longer && <li>ถ้าใช้ต่อเนื่อง โปร {longer.price} บาท {longer.days} วัน ความเร็วเท่ากัน เฉลี่ยเหลือวันละ {perDay(longer)} บาท</li>}
+  </ul>
+
+  <h2>วิธีสมัครโปร {pkg.price} บาท</h2>
+  <ol class="steps">
+    <li><b>เช็กเงินในซิม</b> ต้องมีอย่างน้อย {pkg.price} บาท กด <code>*121#</code> แล้วโทรออก</li>
+    <li><b>กดรหัส</b> <code>{code}</code> แล้วโทรออก หรือกดปุ่ม "กดสมัครเลย" บนหน้านี้</li>
+    <li><b>รอ SMS ยืนยัน</b> ตรวจราคาและระยะเวลาให้ตรง แล้วเริ่มใช้งานได้ทันที</li>
+  </ol>
+
+  <Faq items={s.faq} />
+
+  {relatedUnique.length > 0 && (
+    <>
+      <h2>โปรใกล้เคียงที่น่าสนใจ</h2>
+      <div class="grid">
+        {relatedUnique.map((p) => <PkgCard p={p} />)}
+      </div>
+    </>
+  )}
+
+  <h2>ดูโปรยอดนิยมอื่น</h2>
+  <ul class="links">
+    {otherSales.map((x) => <li><a href={`/pro/${x.slug}/`}>{x.keyword}</a></li>)}
+  </ul>
+
+  <div class="sticky">
+    <div><b>{pkg.price} บาท</b> / {pkg.days} วัน · {speedLabel(pkg.mbps)}</div>
+    <a href={href} data-pkg={pkg.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--lime-ink); }
+
+  .hero {
+    display: grid; gap: 18px; border-radius: 24px; padding: 24px; color: #fff; position: relative; overflow: hidden;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.7rem; margin: 12px 0 8px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .tag { margin: 0; color: rgba(255,255,255,.95); font-size: 1.02rem; }
+  .offer { background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; box-shadow: 0 16px 30px -18px rgba(30,70,10,.6); }
+  .o-price { font-size: 2.6rem; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+  .o-price small { font-size: 1.2rem; color: var(--muted); font-weight: 500; vertical-align: 12px; margin-right: 2px; }
+  .o-meta { color: var(--muted); font-size: .9rem; margin: 8px 0 10px; }
+  .o-bonus { margin: 0 0 12px; padding-left: 18px; font-size: .9rem; color: #8a5a00; }
+  .o-code { display: block; text-align: center; padding: 10px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; font-size: 1rem; }
+  .o-btn {
+    display: block; text-align: center; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 1.1rem;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;
+    text-shadow: 0 1px 1px rgba(40,80,10,.35); box-shadow: 0 8px 18px -8px rgba(110,170,40,.9);
+  }
+  .o-tax { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 8px; }
+  @media (min-width: 760px) {
+    .hero { grid-template-columns: 1.3fr 1fr; align-items: center; padding: 36px; }
+    .hero h1 { font-size: 2.1rem; }
+  }
+
+  .intro { font-size: 1.05rem; margin: 24px 0 0; }
+  .tbl th { width: 34%; }
+
+  .uses { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .use { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+  .use b { flex: 1; font-weight: 500; }
+  .use em { font-style: normal; font-size: .82rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .l2 .dot { background: #5fae2e; } .l2 em { background: var(--lime-soft); color: var(--lime-ink); }
+  .l1 .dot { background: #f5a623; } .l1 em { background: #fff4dc; color: #8a5a00; }
+  .l0 .dot { background: #d9534f; } .l0 em { background: #fdecea; color: #a12a26; }
+  .l0 b { color: var(--muted); }
+
+  .two { display: grid; gap: 12px; margin-top: 28px; }
+  @media (min-width: 680px) { .two { grid-template-columns: 1fr 1fr; } }
+  .box { background: var(--card); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border-top: 4px solid; }
+  .box h3 { margin-top: 0; }
+  .box ul { margin: 0; padding-left: 20px; }
+  .box li { margin: 4px 0; }
+  .yes { border-top-color: var(--lime); }
+  .no { border-top-color: #f5a623; }
+
+  .verdict { font-size: 1.05rem; background: var(--lime-soft); border-left: 4px solid var(--lime); padding: 14px 18px; border-radius: 0 14px 14px 0; margin: 0 0 12px; }
+  .facts li { margin: 6px 0; }
+  .facts strong { color: var(--lime-ink); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime));
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem;
+  }
+  .sticky a {
+    flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600;
+    text-decoration: none; padding: 10px 22px; border-radius: 12px; text-shadow: 0 1px 1px rgba(40,80,10,.35);
+  }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

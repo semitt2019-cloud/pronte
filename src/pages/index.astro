@@ -4,6 +4,7 @@ import PkgList from '../components/PkgList.astro';
 import Faq from '../components/Faq.astro';
 import { AIS, byDays } from '../data/ais';
 import { LIST_PAGES } from '../data/pages';
+import { SALES } from '../data/sales';
 import { faqSchema, offersSchema } from '../lib/seo';
 import { SITE } from '../config';
 
@@ -40,6 +41,11 @@ const faq: [string, string][] = [
       <p><a href={`/${slug}/`}>ดูรายละเอียดและคำแนะนำโปร {d} วัน →</a></p>
     </section>
   ))}
+
+  <h2>รีวิวโปรแนะนำ</h2>
+  <ul class="links">
+    {SALES.map((x) => <li><a href={`/pro/${x.slug}/`}>{x.keyword}</a></li>)}
+  </ul>
 
   <h2>เลือกโปรตามการใช้งาน</h2>
   <ul class="links">

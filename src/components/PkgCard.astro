@@ -1,10 +1,12 @@
 ---
 import { ussd, telHref } from '../config';
 import { type Pkg, perDay, speedLabel } from '../data/ais';
+import { salesByCode } from '../data/sales';
 
 interface Props { p: Pkg }
 const { p } = Astro.props;
 const code = ussd(p.code);
+const sp = salesByCode(p.code);
 ---
 <article class:list={['pkg', { hot: p.popular }]}>
   {p.popular && <span class="ribbon">ยอดนิยม</span>}
@@ -26,7 +28,10 @@ const code = ussd(p.code);
     <code class="ussd">{code}</code>
     <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
   </div>
-  <div class="tax">ราคารวมภาษีแล้ว</div>
+  <div class="foot-row">
+    {sp ? <a class="more" href={`/pro/${sp.slug}/`}>ดูรายละเอียดโปรนี้ →</a> : <span></span>}
+    <span class="tax">ราคารวมภาษีแล้ว</span>
+  </div>
 </article>
 
 <style>
@@ -77,5 +82,8 @@ const code = ussd(p.code);
     box-shadow: 0 6px 16px -8px rgba(110,170,40,.9);
   }
   .btn:active { transform: translateY(1px); }
-  .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
+  .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; }
+  .more { font-size: .85rem; font-weight: 500; color: var(--lime-ink); text-decoration: none; }
+  .more:hover { text-decoration: underline; }
+  .tax { font-size: .72rem; color: var(--muted); }
 </style>
