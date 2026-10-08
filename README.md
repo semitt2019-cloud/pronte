@@ -57,3 +57,10 @@ src/
   pages/ais-shortcodes.astro เบอร์ลัด
   pages/about.astro          เกี่ยวกับเรา / ข้อสงวนสิทธิ์
 ```
+
+## เว็บแอป (PWA) — เปิดได้แม้เน็ตหมด
+- ลูกค้าติดตั้งได้จากแถบ "ติดตั้งแอป" บนเว็บ หรือหน้า `/app/`
+- `src/pages/sw.js.ts` สร้าง `/sw.js` ตอน build เก็บทุกหน้าไว้ในเครื่อง (รายชื่อหน้าอยู่ใน `src/lib/routes.ts`)
+- เพิ่มหน้าใหม่ประเภทใหม่ → เพิ่ม path ใน `src/lib/routes.ts` ด้วย
+- iPhone กดรหัสที่มี * # อัตโนมัติไม่ได้ เว็บจะคัดลอกรหัสและแสดงวิธีวางให้เอง (`src/components/AppShell.astro`)
+- ไอคอนแอปอยู่ใน `public/icons/`, ชื่อแอปและสีอยู่ใน `public/manifest.webmanifest`

@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const title = 'แอปสมัครเน็ต AIS ใช้ได้แม้เน็ตหมด ติดตั้งฟรี';
+const description = 'ติดตั้งแอปโปรเน็ต AIS สุดคุ้มลงมือถือฟรี ไม่ต้องโหลดจาก Store เปิดได้แม้เน็ตหมดหรือไม่มีสัญญาณเน็ต ดูรหัสและกดสมัครโปรเน็ตได้ทันที รองรับ Android และ iPhone';
+const faq: [string, string][] = [
+  ['ทำไมเน็ตหมดแล้วยังสมัครโปรได้?', 'การกดรหัสสมัครโปร (รหัสที่ขึ้นต้นด้วย *) ใช้สัญญาณโทรศัพท์ ไม่ได้ใช้อินเทอร์เน็ต ขอแค่มีสัญญาณโทรและมีเงินในซิมพอ'],
+  ['ต้องโหลดจาก Play Store หรือ App Store ไหม?', 'ไม่ต้อง ติดตั้งจากหน้าเว็บนี้ได้เลย ไม่เสียเงิน และไม่กินพื้นที่เครื่องเหมือนแอปทั่วไป'],
+  ['แอปอัปเดตราคาโปรเองไหม?', 'อัปเดตเองทุกครั้งที่เปิดแอปตอนมีเน็ต ถ้าเปิดตอนไม่มีเน็ตจะแสดงข้อมูลล่าสุดที่เคยโหลดไว้'],
+  ['บน iPhone กดสมัครแล้วไม่โทรออกเอง?', 'iPhone ไม่อนุญาตให้แอปหรือเว็บกดรหัสที่มี * หรือ # ให้อัตโนมัติ แอปจะคัดลอกรหัสให้ แล้วนำไปวางในแอปโทรศัพท์และกดโทรออก'],
+  ['ลบแอปยังไง?', 'กดค้างที่ไอคอนบนหน้าจอ แล้วเลือกลบหรือถอนการติดตั้ง เหมือนแอปทั่วไป'],
+];
+---
+<Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], ['ติดตั้งแอป', '/app/']]), faqSchema(faq)]}>
+  <section class="hero">
+    <img src="/icons/icon-192.png" width="72" height="72" alt="ไอคอนแอปโปรเน็ต AIS สุดคุ้ม" class="ico" />
+    <h1>แอปสมัครเน็ต AIS<br /><em>เน็ตหมดก็สมัครได้</em></h1>
+    <p>ติดตั้งไว้ในมือถือครั้งเดียว ถึงเน็ตหมดหรือสัญญาณเน็ตหลุด ก็เปิดแอปดูโปรและกดรหัสสมัครได้ทันที ไม่ต้องจำรหัส</p>
+    <button type="button" id="app-install" class="btn-install">ติดตั้งแอปฟรี</button>
+    <p id="app-done" class="done" hidden>✓ คุณเปิดผ่านแอปอยู่แล้ว</p>
+  </section>
+
+  <h2>ทำไมต้องติดตั้งแอป</h2>
+  <div class="why">
+    <div><b>เปิดได้ตอนเน็ตหมด</b><span>ทุกหน้าถูกเก็บไว้ในเครื่อง ไม่ต้องใช้เน็ตก็เปิดได้</span></div>
+    <div><b>สมัครโปรด้วยสัญญาณโทร</b><span>การกดรหัสสมัครไม่ใช้อินเทอร์เน็ต ขอแค่มีสัญญาณโทรศัพท์</span></div>
+    <div><b>ไม่ต้องจำรหัส</b><span>เลือกโปรแล้วกดปุ่มเดียว หรือคัดลอกรหัสไปวาง</span></div>
+    <div><b>ฟรี ไม่ต้องโหลดจาก Store</b><span>ติดตั้งจากหน้าเว็บ ไม่กินพื้นที่ อัปเดตราคาเอง</span></div>
+  </div>
+
+  <h2>วิธีติดตั้งบน Android</h2>
+  <ol class="steps">
+    <li>เปิดเว็บนี้ด้วย <b>Chrome</b></li>
+    <li>กดปุ่ม <b>ติดตั้งแอปฟรี</b> ด้านบน หรือกดเมนู <b>⋮</b> มุมขวาบน แล้วเลือก <b>ติดตั้งแอป</b> / <b>เพิ่มลงในหน้าจอหลัก</b></li>
+    <li>กด <b>ติดตั้ง</b> ไอคอนจะขึ้นบนหน้าจอหลัก</li>
+  </ol>
+
+  <h2>วิธีติดตั้งบน iPhone</h2>
+  <ol class="steps">
+    <li>เปิดเว็บนี้ด้วย <b>Safari</b></li>
+    <li>กดปุ่ม <b>แชร์</b> (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ที่แถบด้านล่าง</li>
+    <li>เลื่อนหาแล้วเลือก <b>เพิ่มไปยังหน้าจอโฮม</b> จากนั้นกด <b>เพิ่ม</b></li>
+  </ol>
+  <p class="note"><strong>หลังติดตั้ง:</strong> เปิดแอป 1 ครั้งตอนมีเน็ต เพื่อให้แอปเก็บข้อมูลโปรทั้งหมดไว้ในเครื่อง หลังจากนั้นเปิดได้แม้ไม่มีเน็ต</p>
+
+  <Faq items={faq} />
+  <p><a href="/">ดูโปรเน็ต AIS ทั้งหมด →</a></p>
+
+  <script is:inline>
+    (function () {
+      var b = document.getElementById('app-install');
+      if (window.pronteStandalone) { b.hidden = true; document.getElementById('app-done').hidden = false; }
+      b.addEventListener('click', function () { if (window.pronteInstall) window.pronteInstall(); });
+    })();
+  </script>
+</Base>
+
+<style>
+  .hero {
+    text-align: center; color: #fff; border-radius: 24px; padding: 32px 22px; margin-top: 14px;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .ico { border-radius: 18px; box-shadow: 0 10px 24px -8px rgba(30,70,10,.6); }
+  .hero h1 { font-size: 1.8rem; margin: 14px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .hero p { color: rgba(255,255,255,.95); max-width: 480px; margin: 0 auto 18px; }
+  .btn-install {
+    border: 0; font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--lime-ink); background: #fff;
+    padding: 13px 28px; border-radius: 14px; cursor: pointer; box-shadow: 0 10px 24px -10px rgba(30,70,10,.6);
+  }
+  .btn-install[hidden], .done[hidden] { display: none; }
+  .done { font-weight: 600; }
+  .why { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .why div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .why b { display: block; color: var(--lime-ink); }
+  .why span { font-size: .9rem; color: var(--muted); }
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime));
+  }
+</style>

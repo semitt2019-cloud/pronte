@@ -1,0 +1,185 @@
+---
+// ส่วนของ "เว็บแอป": แถบชวนติดตั้ง, หน้าต่างคัดลอกรหัสบน iPhone, แจ้งเตือนออฟไลน์
+---
+<div id="install" class="install" hidden>
+  <div class="i-ico" aria-hidden="true">
+    <img src="/icons/icon-192.png" width="40" height="40" alt="" />
+  </div>
+  <div class="i-txt">
+    <b>ติดตั้งแอปไว้ในมือถือ</b>
+    <span>เน็ตหมดก็เปิดดูรหัสและกดสมัครได้</span>
+  </div>
+  <button type="button" id="i-go" class="i-go">ติดตั้ง</button>
+  <button type="button" id="i-x" class="i-x" aria-label="ปิด">×</button>
+</div>
+
+<div id="offline" class="offline" hidden>ออฟไลน์อยู่ · ยังกดรหัสสมัครได้ตามปกติ</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="s-card" role="dialog" aria-modal="true" aria-labelledby="s-title">
+    <h3 id="s-title">คัดลอกรหัสแล้ว</h3>
+    <code id="s-code" class="s-code"></code>
+    <p class="s-why">iPhone ไม่อนุญาตให้เว็บกดรหัสที่มี * หรือ # ให้อัตโนมัติ ทำตามนี้ได้เลย</p>
+    <ol class="s-steps">
+      <li>เปิดแอป <b>โทรศัพท์</b> แล้วไปที่ <b>ปุ่มกด</b></li>
+      <li><b>แตะค้าง</b>ที่ช่องตัวเลขด้านบน แล้วเลือก <b>วาง</b></li>
+      <li>กดปุ่มโทรออกสีเขียว</li>
+    </ol>
+    <button type="button" id="s-close" class="s-close">เข้าใจแล้ว</button>
+  </div>
+</div>
+
+<div id="ios-help" class="sheet" hidden>
+  <div class="s-card" role="dialog" aria-modal="true" aria-labelledby="h-title">
+    <h3 id="h-title">ติดตั้งแอปบน iPhone</h3>
+    <ol class="s-steps">
+      <li>เปิดหน้านี้ใน <b>Safari</b></li>
+      <li>กดปุ่ม <b>แชร์</b> <span class="share" aria-hidden="true">⬆︎</span> ที่แถบด้านล่าง</li>
+      <li>เลือก <b>เพิ่มไปยังหน้าจอโฮม</b> แล้วกด <b>เพิ่ม</b></li>
+    </ol>
+    <button type="button" class="s-close" data-close="ios-help">ปิด</button>
+  </div>
+</div>
+
+<script is:inline>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ls = {
+    get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+  };
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+  // ---------- Service Worker (เก็บหน้าไว้ในเครื่อง) ----------
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  }
+
+  // ---------- คัดลอก ----------
+  async function copy(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+    try {
+      const t = document.createElement('textarea');
+      t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); t.setSelectionRange(0, 99);
+      const ok = document.execCommand('copy'); t.remove(); return ok;
+    } catch (e) { return false; }
+  }
+  let toastTimer;
+  function toast(msg) {
+    const el = $('toast'); el.textContent = msg; el.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => (el.hidden = true), 2200);
+  }
+  const ussdFromHref = (href) => decodeURIComponent(href.replace(/^tel:/, ''));
+
+  document.addEventListener('click', async (e) => {
+    // ปุ่มกดสมัคร (tel:) — iPhone: คัดลอกแล้วแสดงวิธีวาง
+    const a = e.target.closest('a[href^="tel:"]');
+    if (a) {
+      const code = ussdFromHref(a.getAttribute('href'));
+      if (isIOS && /[*#]/.test(code)) {
+        e.preventDefault();
+        await copy(code);
+        $('s-code').textContent = code;
+        $('sheet').hidden = false;
+      }
+      return;
+    }
+    // แตะที่กล่องรหัส = คัดลอก
+    const c = e.target.closest('code.ussd, code.o-code, .a-code code, .act code');
+    if (c) {
+      const ok = await copy(c.textContent.trim());
+      toast(ok ? 'คัดลอกรหัสแล้ว ไปวางในแอปโทรศัพท์ได้เลย' : 'คัดลอกไม่สำเร็จ กดค้างที่รหัสเพื่อคัดลอก');
+      return;
+    }
+    if (e.target.id === 's-close' || e.target.closest('#sheet') === e.target) $('sheet').hidden = true;
+    const dc = e.target.getAttribute && e.target.getAttribute('data-close');
+    if (dc) $(dc).hidden = true;
+    if (e.target.id === 'ios-help') $('ios-help').hidden = true;
+  });
+
+  // ---------- แถบชวนติดตั้ง ----------
+  let deferred = null;
+  const showInstall = () => {
+    if (standalone || ls.get('pronte-install-x')) return;
+    $('install').hidden = false;
+  };
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; showInstall(); });
+  if (isIOS) showInstall();
+  $('i-go').addEventListener('click', async () => {
+    if (deferred) {
+      deferred.prompt();
+      const r = await deferred.userChoice.catch(() => null);
+      deferred = null;
+      if (r && r.outcome === 'accepted') $('install').hidden = true;
+    } else if (isIOS) {
+      $('ios-help').hidden = false;
+    } else {
+      location.href = '/app/';
+    }
+  });
+  $('i-x').addEventListener('click', () => { $('install').hidden = true; ls.set('pronte-install-x', '1'); });
+  window.addEventListener('appinstalled', () => { $('install').hidden = true; toast('ติดตั้งแอปแล้ว'); });
+
+  // ---------- สถานะออฟไลน์ ----------
+  const net = () => { $('offline').hidden = navigator.onLine; };
+  window.addEventListener('online', net); window.addEventListener('offline', net); net();
+
+  // ปุ่มบนหน้า /app/
+  window.pronteInstall = () => $('i-go').click();
+  window.pronteIsIOS = isIOS;
+  window.pronteStandalone = standalone;
+})();
+</script>
+
+<style>
+  .install {
+    display: flex; align-items: center; gap: 12px; margin: 14px 0 0; padding: 10px 12px;
+    background: #fff; border: 1px solid #d6ebb8; border-radius: 16px; box-shadow: var(--shadow);
+  }
+  .install[hidden], .offline[hidden], .toast[hidden], .sheet[hidden] { display: none; }
+  .i-ico img { display: block; border-radius: 10px; }
+  .i-txt { flex: 1; line-height: 1.35; }
+  .i-txt b { display: block; font-size: .95rem; }
+  .i-txt span { font-size: .82rem; color: var(--muted); }
+  .i-go {
+    border: 0; font: inherit; font-weight: 600; color: #fff; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c);
+  }
+  .i-x { border: 0; background: none; font-size: 1.4rem; color: var(--muted); cursor: pointer; padding: 0 4px; line-height: 1; }
+
+  .offline {
+    position: fixed; bottom: 78px; left: 50%; transform: translateX(-50%); z-index: 40;
+    background: #fff4dc; color: #8a5a00; border: 1px solid #f5d48a; font-size: .82rem; padding: 6px 14px; border-radius: 999px;
+    box-shadow: 0 6px 16px -8px rgba(0,0,0,.3); white-space: nowrap;
+  }
+  .toast {
+    position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%); z-index: 50;
+    background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 12px; font-size: .9rem;
+    box-shadow: 0 10px 24px -10px rgba(0,0,0,.5); max-width: calc(100% - 32px); text-align: center;
+  }
+  .sheet {
+    position: fixed; inset: 0; z-index: 60; background: rgba(14,23,16,.45);
+    display: flex; align-items: flex-end; justify-content: center; padding: 16px;
+  }
+  .s-card {
+    background: #fff; width: 100%; max-width: 420px; border-radius: 22px; padding: 20px 20px 16px;
+    box-shadow: 0 -10px 40px -10px rgba(0,0,0,.35);
+  }
+  .s-card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+  .s-code {
+    display: block; text-align: center; font-size: 1.5rem; font-weight: 700; padding: 12px; margin-bottom: 10px;
+    background: var(--lime-soft); border: 1px dashed #b9dc8c; border-radius: 12px; color: var(--lime-ink);
+  }
+  .s-why { font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
+  .s-steps { margin: 0 0 14px; padding-left: 20px; }
+  .s-steps li { margin: 6px 0; }
+  .share { display: inline-block; color: #0a84ff; font-weight: 700; }
+  .s-close {
+    width: 100%; border: 0; font: inherit; font-weight: 600; color: #fff; padding: 12px; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c);
+  }
+  @media (min-width: 640px) { .sheet { align-items: center; } }
+</style>
