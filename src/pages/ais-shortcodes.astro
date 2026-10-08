@@ -1,31 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
-import { breadcrumb } from '../lib/seo';
+import { breadcrumb, faqSchema } from '../lib/seo';
+import { HOWTO } from '../data/howto';
+import { SITE } from '../config';
 
-const title = 'รวมเบอร์ลัด AIS เช็กเงิน เช็กโปร เปิด-ปิดเน็ต';
-const description = 'รวมรหัสลัด AIS ที่ใช้บ่อย เช็กยอดเงิน เช็กเบอร์ตัวเอง เช็กโปรเน็ตที่ใช้อยู่ เปิดและปิดสัญญาณเน็ต กดโทรออกได้ทันที';
-const codes: [string, string][] = [
-  ['เช็กยอดเงินคงเหลือ', '*121#'],
-  ['เช็กเบอร์ตัวเอง', '*545#'],
-  ['เช็กโปรเน็ตที่ใช้อยู่', '*121*32#'],
-  ['ปิดสัญญาณเน็ต', '*129*1#'],
-  ['เปิดสัญญาณเน็ต', '*129*2#'],
-  ['ติดต่อ AIS Call Center', '1175'],
-];
+const title = 'รวมเบอร์ลัด AIS เช็คเงิน เช็คเบอร์ เช็คโปร เปิด-ปิดเน็ต';
+const description = 'รวมรหัสลัด AIS ที่ใช้บ่อย เช็คเงิน *121# เช็คเบอร์ตัวเอง *545# เช็คโปรเน็ต ปิดเน็ต *129*1# เปิดเน็ต *129*2# และ Call Center 1175 กดโทรออกได้ทันที';
+const faq: [string, string][] = HOWTO.map((h) => [`${h.keyword} กดอะไร?`, h.answer]);
 ---
-<Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], [title, '/ais-shortcodes/']])]}>
+<Base title={title} description={description} schema={[breadcrumb([['หน้าแรก', '/'], ['เบอร์ลัด AIS', '/ais-shortcodes/']]), faqSchema(faq)]}>
   <h1>{title}</h1>
-  <p class="lead">กดที่รหัสเพื่อโทรออกได้ทันทีจากมือถือ</p>
+  <p class="lead">กดรหัสเพื่อโทรออกได้ทันทีจากมือถือ หรือกดชื่อหัวข้อเพื่อดูวิธีใช้และวิธีแก้ปัญหา · อัปเดต {SITE.updated}</p>
   <div class="tbl">
     <table>
       <thead><tr><th>ใช้ทำอะไร</th><th>กดรหัส</th></tr></thead>
       <tbody>
-        {codes.map(([label, c]) => (
-          <tr><td>{label}</td><td><a href={'tel:' + c.replace(/#/g, '%23')}><code>{c}</code></a></td></tr>
+        {HOWTO.map((h) => (
+          <tr>
+            <td><a href={`/ais/${h.slug}/`}>{h.keyword}</a></td>
+            <td><a href={'tel:' + h.code.replace(/#/g, '%23')}><code>{h.code}</code></a></td>
+          </tr>
         ))}
       </tbody>
     </table>
   </div>
-  <p class="small">รหัสอาจเปลี่ยนแปลงตามประกาศของผู้ให้บริการ หากใช้ไม่ได้ ติดต่อ 1175</p>
+  <p class="small">รหัสอาจเปลี่ยนแปลงตามประกาศของผู้ให้บริการ หากใช้ไม่ได้ ติดต่อ 1175 · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+
+  <h2>คำถามยอดฮิต</h2>
+  <ul class="links">
+    {HOWTO.map((h) => <li><a href={`/ais/${h.slug}/`}>{h.keyword} กดอะไร?</a></li>)}
+  </ul>
   <p><a href="/">ดูโปรเน็ต AIS ทั้งหมด →</a></p>
 </Base>

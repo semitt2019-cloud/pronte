@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import PkgCard from '../../components/PkgCard.astro';
+import { AIS } from '../../data/ais';
+import { HOWTO, type HowTo } from '../../data/howto';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return HOWTO.map((h) => ({ params: { slug: h.slug }, props: { h } }));
+}
+const { h } = Astro.props as { h: HowTo };
+const tel = 'tel:' + h.code.replace(/#/g, '%23');
+const others = HOWTO.filter((x) => x.slug !== h.slug);
+const picks = ['7721', '7629', '7790'].map((c) => AIS.find((p) => p.code === c)!).filter(Boolean);
+
+const howtoSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: h.title,
+  description: h.description,
+  step: h.steps.map((t, i) => ({ '@type': 'HowToStep', position: i + 1, text: t })),
+};
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เบอร์ลัด AIS', '/ais-shortcodes/'], [h.keyword, `/ais/${h.slug}/`]]),
+  howtoSchema,
+  faqSchema(h.faq),
+];
+---
+<Base title={h.title} description={h.description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <a href="/ais-shortcodes/">เบอร์ลัด AIS</a> › <span>{h.keyword}</span>
+  </nav>
+
+  <h1>{h.title}</h1>
+
+  <section class="answer">
+    <p class="a-text">{h.answer}</p>
+    <div class="a-code">
+      <code>{h.code}</code>
+      <a class="a-btn" href={tel}>กดโทรออกเลย</a>
+    </div>
+    <p class="a-hint">เปิดหน้านี้บนมือถือ แล้วกดปุ่มได้ทันที ไม่ต้องพิมพ์รหัสเอง</p>
+  </section>
+
+  <h2>วิธี{h.keyword}</h2>
+  <ol class="steps">
+    {h.steps.map((s) => <li>{s}</li>)}
+  </ol>
+  <p><strong>ผลที่ได้:</strong> {h.result}</p>
+
+  <h2>ปัญหาที่เจอบ่อยและวิธีแก้</h2>
+  <div class="tips">
+    {h.tips.map(([q, a]) => (
+      <div class="tip"><b>{q}</b><p>{a}</p></div>
+    ))}
+  </div>
+
+  <section class="next">
+    <p>{h.next.text}</p>
+    <a href={h.next.href}>{h.next.label} →</a>
+  </section>
+
+  <Faq items={h.faq} />
+
+  <h2>โปรเน็ตยอดนิยม</h2>
+  <div class="grid">
+    {picks.map((p) => <PkgCard p={p} />)}
+  </div>
+
+  <h2>เบอร์ลัด AIS อื่น ๆ</h2>
+  <ul class="links">
+    {others.map((x) => <li><a href={`/ais/${x.slug}/`}><code>{x.code}</code> {x.keyword}</a></li>)}
+  </ul>
+
+  <p class="small">ค้นหาด้วยคำว่า {h.alt.join(', ')} ก็เจอหน้านี้ · รหัสอาจเปลี่ยนตามประกาศของผู้ให้บริการ ข้อมูล ณ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin-bottom: 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .answer {
+    border-radius: 22px; padding: 20px; color: #fff; margin: 14px 0 6px;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .a-text { font-size: 1.08rem; margin: 0 0 14px; font-weight: 500; text-shadow: 0 1px 6px rgba(40,90,10,.25); }
+  .a-code { display: flex; gap: 10px; align-items: stretch; background: #fff; padding: 8px; border-radius: 16px; }
+  .a-code code { flex: 1; display: grid; place-items: center; font-size: 1.6rem; font-weight: 700; color: var(--ink); background: transparent; letter-spacing: 1px; }
+  .a-btn {
+    flex: none; display: grid; place-items: center; padding: 12px 20px; border-radius: 12px; font-weight: 600;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;
+    text-shadow: 0 1px 1px rgba(40,80,10,.35);
+  }
+  .a-hint { font-size: .8rem; margin: 10px 0 0; color: rgba(255,255,255,.9); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime));
+  }
+  .tips { display: grid; gap: 10px; }
+  .tip { background: var(--card); border-left: 4px solid #f5a623; border-radius: 0 14px 14px 0; padding: 12px 16px; box-shadow: var(--shadow); }
+  .tip p { margin: 4px 0 0; color: var(--muted); }
+  .next { margin-top: 28px; background: var(--lime-soft); border: 1px solid #d6ebb8; border-radius: 18px; padding: 16px 18px; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+  .next p { margin: 0; font-weight: 500; }
+  .next a { background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .links code { margin-right: 6px; }
+</style>
