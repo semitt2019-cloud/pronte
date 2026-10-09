@@ -26,7 +26,8 @@ const firstHalf = parts.slice(0, cut).join('');
 const secondHalf = parts.slice(cut).join('');
 
 const image = meta.image ?? `/og/blog/${slug}.jpg`;
-const others = POSTS.filter((p) => p.slug !== slug).slice(0, 4);
+const idx = POSTS.findIndex((p) => p.slug === slug);
+const others = [1, 2, 3, 4].map((k) => POSTS[(idx + k) % POSTS.length]).filter((p) => p.slug !== slug);
 const pick = NEW_SIM[1];
 
 const schema = [
