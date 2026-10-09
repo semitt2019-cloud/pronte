@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../config';
+import { SITE, GA_ID } from '../config';
 import AppShell from '../components/AppShell.astro';
 
 interface Props {
@@ -58,6 +58,30 @@ const path = Astro.url.pathname;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  {GA_ID && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+      <script is:inline define:vars={{ GA_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+        // นับการกดปุ่มสมัคร / เปิดแอป myAIS / ติดตั้งแอป
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a');
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          if (href.indexOf('tel:') === 0) {
+            gtag('event', 'subscribe_click', { pkg_code: a.getAttribute('data-pkg') || '', ussd: decodeURIComponent(href.slice(4)), page: location.pathname });
+          } else if (href.indexOf('adldigitalservice.com') > -1) {
+            gtag('event', 'open_myais', { page: location.pathname });
+          }
+        }, true);
+        window.addEventListener('appinstalled', function () { gtag('event', 'pwa_installed'); });
+      </script>
+    </>
+  )}
 </head>
 <body>
   <header class="top">
