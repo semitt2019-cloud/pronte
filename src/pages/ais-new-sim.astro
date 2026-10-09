@@ -1,0 +1,228 @@
+---
+// ============================================================
+//  หน้า "เปิดซิมใหม่ AIS" — Landing page เฉพาะลูกค้าเปิดซิมใหม่
+//  คีย์เวิร์ดหลัก: เปิดซิมใหม่ AIS
+//  คีย์เวิร์ดรอง: โปรซิมใหม่ AIS, แพ็กเสริมเน็ตซิมใหม่ AIS, ซิมใหม่ AIS เน็ตไม่อั้น,
+//               เปิดเบอร์ใหม่ AIS, ซิม AIS One-2-Call ใหม่, คุ้มยกแก๊ง
+// ============================================================
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { NEW_SIM } from '../data/newsim';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/ais-new-sim/';
+const title = 'เปิดซิมใหม่ AIS โปรเน็ต 200–350 บาท เน็ตรวม 100GB โทรฟรี';
+const description = 'เปิดซิมใหม่ AIS สมัครแพ็กเสริมเน็ตได้ภายใน 7 วัน ราคา 200–350 บาท/30 วัน เน็ตรวมสูงสุด 100GB โทรฟรีทุกเครือข่าย ดู PLAY ฟรี พร้อมรหัสกดสมัคร';
+const best = NEW_SIM[0];
+
+const steps: [string, string][] = [
+  ['ซื้อซิม AIS เติมเงิน', 'ซื้อซิมใหม่ AIS One-2-Call ได้ที่ AIS Shop, ร้าน AIS Telewiz, ตัวแทนจำหน่าย หรือร้านสะดวกซื้อที่มีจำหน่าย'],
+  ['ลงทะเบียนซิมด้วยบัตรประชาชน', 'ซิมใหม่ทุกเบอร์ต้องลงทะเบียนตัวตนก่อนใช้งานตามกฎหมาย ทำได้ที่ร้านที่ซื้อ ชาวต่างชาติใช้พาสปอร์ต'],
+  ['เติมเงินให้พอกับราคาแพ็ก', 'เช่น เลือกแพ็ก 300 บาท ต้องมีเงินในซิมอย่างน้อย 300 บาท เช็คยอดเงินด้วย *121#'],
+  ['กดรหัสสมัครภายใน 7 วัน', 'เลือกแพ็กด้านบน แล้วกดปุ่ม "กดสมัคร" หรือกดรหัสบนแป้นโทรศัพท์แล้วโทรออก ต้องสมัครภายใน 7 วันนับจากวันเปิดซิม'],
+  ['รอ SMS ยืนยัน แล้วใช้งานได้ทันที', 'ตรวจราคาและรายละเอียดใน SMS ให้ตรง จากนั้นเริ่มใช้เน็ตและโทรได้เลย'],
+];
+
+const faq: [string, string][] = [
+  ['เปิดซิมใหม่ AIS แล้วสมัครโปรเน็ตอะไรดี?', `ถ้าใช้เน็ตทุกวัน แนะนำแพ็ก 300 หรือ 350 บาท เพราะเน็ตเร็วหมดแล้วยังใช้ต่อที่ 1 Mbps ได้ไม่จำกัด และโทรฟรีทุกเครือข่าย ถ้าใช้น้อยเลือก 200 หรือ 250 บาท`],
+  ['ต้องสมัครแพ็กภายในกี่วันหลังเปิดซิม?', 'ภายใน 7 วันนับจากวันที่เปิดซิมใหม่ ถ้าเกินกำหนดจะสมัครแพ็กชุดนี้ไม่ได้'],
+  ['ใช้ AIS อยู่แล้ว สมัครแพ็กซิมใหม่ได้ไหม?', 'ไม่ได้ แพ็กชุดนี้สำหรับซิมใหม่หรือย้ายค่ายเบอร์เดิมมา AIS เท่านั้น ลูกค้าเดิมดูโปรเน็ตไม่อั้นไม่ลดสปีดได้ที่หน้าแรกของเว็บนี้'],
+  ['ย้ายค่ายเบอร์เดิมมา AIS สมัครได้ไหม?', 'ได้ ลูกค้าที่ย้ายค่ายเบอร์เดิมมาใช้ AIS เติมเงินสมัครแพ็กชุดนี้ได้เหมือนซิมใหม่ ภายใน 7 วันหลังย้ายสำเร็จ'],
+  ['เปิดซิมใหม่ AIS ต้องใช้อะไรบ้าง?', 'บัตรประชาชนตัวจริงสำหรับลงทะเบียนซิม (ชาวต่างชาติใช้พาสปอร์ต) และมือถือที่ปลดล็อกใช้ได้ทุกค่าย ถ้าต้องการใช้ 5G มือถือต้องรองรับ 5G'],
+  ['แพ็ก 350 กับ 300 บาทต่างกันยังไง?', 'แพ็ก 350 บาทได้เน็ตเร็ว 10 Mbps มากกว่า 20GB (80GB กับ 60GB) และแถม YouTube Premium 2 เดือน ส่วนเน็ต 5G เต็มสปีด โทรฟรี และ PLAY Family เหมือนกัน'],
+  ['เน็ตหมดปริมาณแล้วยังใช้ได้ไหม?', 'ใช้ได้ไม่จำกัดแต่ความเร็วลดลง แพ็ก 300–350 บาทเหลือ 1 Mbps ยังเล่น LINE และ Facebook ได้ แพ็ก 250 บาทเหลือ 384 Kbps และแพ็ก 200 บาทเหลือ 64 Kbps'],
+  ['เช็คเบอร์ซิมใหม่ AIS ยังไง?', 'กด *545# แล้วโทรออก หน้าจอจะแสดงเบอร์ของซิมที่เพิ่งเปิด'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เปิดซิมใหม่ AIS', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'แพ็กเสริมเน็ต AIS สำหรับเปิดซิมใหม่',
+    itemListElement: NEW_SIM.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'Product',
+        name: `แพ็กเสริมเน็ต AIS ซิมใหม่ ${p.price} บาท 30 วัน เน็ตรวม ${p.totalGB}GB`,
+        description: [...p.net, p.after, p.call].join(' · '),
+        brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href },
+      },
+    })),
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'HowTo', name: 'วิธีเปิดซิมใหม่ AIS และสมัครแพ็กเสริมเน็ต',
+    step: steps.map(([n, t], i) => ({ '@type': 'HowToStep', position: i + 1, name: n, text: t })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/new-sim.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>เปิดซิมใหม่ AIS</span></nav>
+
+  <section class="hero">
+    <span class="badge">สำหรับเปิดซิมใหม่ AIS เติมเงิน</span>
+    <h1>เปิดซิมใหม่ AIS<br /><em>สมัครแพ็กเสริมเน็ตคุ้มยกแก๊ง</em></h1>
+    <p class="lead-w">เน็ตรวมสูงสุด 100GB · โทรฟรีทุกเครือข่าย · ดู PLAY Family ฟรี · เริ่ม 200 บาท/30 วัน</p>
+    <div class="hero-cta">
+      <a class="cta" href="#packages">ดูแพ็กทั้ง 4 แบบ ↓</a>
+      <a class="cta-2" href={telHref(best.code)}>สมัครแพ็ก {best.price} บาท</a>
+    </div>
+  </section>
+
+  <section class="answer">
+    <b>สรุปสั้น:</b> เปิดซิมใหม่ AIS แล้วสมัครแพ็กเสริมเน็ต 30 วันได้ <b>ภายใน 7 วัน</b> มี 4 แพ็ก ราคา 200, 250, 300 และ 350 บาท
+    แพ็กที่คุ้มที่สุดคือ <b>350 บาท เน็ตรวม 100GB</b> กดสมัคร <code>{ussd(best.code)}</code>
+  </section>
+
+  <h2 id="packages">แพ็กเสริมเน็ตสำหรับซิมใหม่ 30 วัน</h2>
+  <div class="grid">
+    {NEW_SIM.map((p) => (
+      <article class:list={['card', { hot: p.tag }]} id={`pkg-${p.price}`}>
+        {p.tag && <span class="ribbon">{p.tag}</span>}
+        <div class="head">
+          <h3 class="price"><small>฿</small>{p.price}<span>/30 วัน</span></h3>
+          <div class="gb"><b>{p.totalGB}GB</b><span>เน็ตรวม</span></div>
+        </div>
+        <ul>
+          {p.net.map((n) => <li>{n}</li>)}
+          <li class="muted">หมดแล้ว{p.after}</li>
+          <li>{p.call}</li>
+          <li>AIS Super WiFi ไม่อั้น</li>
+        </ul>
+        <div class="gifts">{p.gifts.map((g) => <span>🎁 {g}</span>)}</div>
+        <div class="act">
+          <code class="ussd">{ussd(p.code)}</code>
+          <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+        </div>
+        <div class="tax">ราคารวม VAT แล้ว</div>
+      </article>
+    ))}
+  </div>
+
+  <h2>เทียบแพ็กซิมใหม่ AIS ทั้ง 4 แบบ</h2>
+  <div class="tbl">
+    <table class="cmp">
+      <thead><tr><th>ราคา/30 วัน</th><th>เน็ตรวม</th><th>เน็ตความเร็วสูง</th><th>หมดแล้วเหลือ</th><th>โทร</th><th>ดูฟรี</th></tr></thead>
+      <tbody>
+        {NEW_SIM.map((p) => (
+          <tr>
+            <td><b>{p.price} บาท</b></td>
+            <td>{p.totalGB}GB</td>
+            <td>{p.net.join(' + ')}</td>
+            <td>{p.after.replace('ใช้ต่อที่ความเร็ว ', '').replace(' ไม่จำกัด', '')}</td>
+            <td>{p.call.replace(' (ครั้งละ 15 นาที)', '')}</td>
+            <td>{p.gifts.some((g) => g.includes('PLAY')) ? (p.gifts.some((g) => g.includes('YouTube')) ? 'PLAY + YouTube' : 'PLAY Family') : '–'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>เปิดซิมใหม่ เลือกแพ็กไหนดี?</h2>
+  <div class="picks">
+    <div><b>ดูคลิป YouTube / TikTok ทุกวัน</b><span>แพ็ก <a href="#pkg-350">350 บาท</a> เน็ตเร็วรวม 90GB + YouTube Premium</span></div>
+    <div><b>เล่นโซเชียลทั้งวัน โทรบ่อย</b><span>แพ็ก <a href="#pkg-300">300 บาท</a> เน็ตหมดยังได้ 1 Mbps โทรฟรีทุกเครือข่าย</span></div>
+    <div><b>ใช้เน็ตปานกลาง</b><span>แพ็ก <a href="#pkg-250">250 บาท</a> เน็ต 8 Mbps 40GB + โทร 100 นาที</span></div>
+    <div><b>ซิมสำรอง / ผู้สูงอายุ</b><span>แพ็ก <a href="#pkg-200">200 บาท</a> เน็ต 4 Mbps 20GB + โทร 50 นาที</span></div>
+  </div>
+
+  <h2>ขั้นตอนเปิดซิมใหม่ AIS และสมัครแพ็ก</h2>
+  <ol class="steps">
+    {steps.map(([n, t]) => <li><b>{n}</b><span>{t}</span></li>)}
+  </ol>
+
+  <h2>เปิดซิมใหม่ต้องเตรียมอะไรบ้าง</h2>
+  <ul class="prep">
+    <li><b>บัตรประชาชนตัวจริง</b> สำหรับลงทะเบียนซิม (ชาวต่างชาติใช้พาสปอร์ต)</li>
+    <li><b>มือถือที่ใช้ได้ทุกค่าย</b> ถ้าต้องการเน็ต 5G มือถือต้องรองรับ 5G</li>
+    <li><b>เงินในซิมพอกับราคาแพ็ก</b> 200–350 บาท (ราคารวม VAT)</li>
+  </ul>
+
+  <p class="note">ใช้ AIS อยู่แล้ว? แพ็กชุดนี้สมัครไม่ได้ ดู <a href="/">โปรเน็ตไม่อั้นสำหรับลูกค้าเดิม</a> หรือ <a href="/chooser/">ให้เราช่วยเลือกโปร</a></p>
+
+  <Faq items={faq} />
+
+  <h2>บทความที่เกี่ยวข้อง</h2>
+  <ul class="links">
+    <li><a href="/ais/check-number/">เช็คเบอร์ซิมใหม่ AIS (*545#)</a></li>
+    <li><a href="/ais/check-balance/">เช็คเงิน AIS (*121#)</a></li>
+    <li><a href="/ais/turn-on-internet/">สมัครแล้วเน็ตไม่ขึ้น แก้ยังไง</a></li>
+    <li><a href="/app/">ติดตั้งแอป เน็ตหมดก็สมัครได้</a></li>
+  </ul>
+
+  <p class="small">ข้อมูลจากใบโปรแพ็กเสริมเน็ตสำหรับลูกค้าเปิดซิมใหม่หรือย้ายค่ายเบอร์เดิมของ AIS One-2-Call · ตรวจข้อมูล {SITE.updated} · เงื่อนไขและระยะเวลาโปรเป็นไปตามที่ผู้ให้บริการกำหนด ตรวจราคาใน SMS ยืนยันก่อนสมัคร · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+
+  <div class="sticky">
+    <div><b>เปิดซิมใหม่</b> · แพ็ก {best.price} บาท {best.totalGB}GB</div>
+    <a href={telHref(best.code)} data-pkg={best.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero {
+    border-radius: 24px; padding: 26px 22px; color: #fff; margin-top: 6px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.85rem; margin: 12px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .lead-w { margin: 0 0 18px; color: rgba(255,255,255,.95); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta { background: #fff; color: var(--lime-ink); font-weight: 600; text-decoration: none; padding: 11px 18px; border-radius: 12px; box-shadow: 0 10px 24px -10px rgba(30,70,10,.6); }
+  .cta-2 { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.55); color: #fff; font-weight: 600; text-decoration: none; padding: 11px 18px; border-radius: 12px; }
+  @media (min-width: 720px) { .hero { padding: 42px; } .hero h1 { font-size: 2.5rem; } }
+
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; scroll-margin-top: 130px; }
+  .card.hot { border: 1.5px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(140deg, var(--lime-2), var(--lime) 50%, #f5c04a) border-box; }
+  .ribbon { position: absolute; top: -11px; right: 16px; background: linear-gradient(140deg, #ffd36b, #f5a623); color: #5a3700; font-size: .72rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .price { font-size: 2.1rem; font-weight: 700; line-height: 1; margin: 0; }
+  .price small { font-size: 1.1rem; color: var(--muted); font-weight: 500; vertical-align: 8px; margin-right: 2px; }
+  .price span { font-size: .85rem; color: var(--muted); font-weight: 500; margin-left: 3px; }
+  .gb { text-align: center; background: var(--lime-soft); border: 1px solid #d6ebb8; border-radius: 12px; padding: 6px 12px; line-height: 1.15; }
+  .gb b { display: block; color: var(--lime-ink); font-size: 1.15rem; }
+  .gb span { font-size: .7rem; color: #6aa62c; }
+  .card ul { list-style: none; padding: 0; margin: 14px 0 10px; font-size: .92rem; flex: 1; }
+  .card li { position: relative; padding-left: 20px; margin: 4px 0; }
+  .card li::before { content: '✓'; position: absolute; left: 0; color: #5fae2e; font-weight: 700; }
+  .card li.muted { color: var(--muted); font-size: .85rem; }
+  .card li.muted::before { content: '↳'; color: var(--muted); }
+  .gifts { display: flex; flex-direction: column; gap: 4px; background: #fdf6e3; border-radius: 12px; padding: 8px 10px; margin-bottom: 12px; font-size: .84rem; color: #6b4600; }
+  .act { display: flex; gap: 8px; }
+  .ussd { flex: 1; text-align: center; padding: 11px 6px; background: #f5f7f3; border: 1px dashed #cfd8c8; font-size: .92rem; overflow-wrap: anywhere; }
+  .btn { flex: none; display: grid; place-items: center; padding: 0 18px; border-radius: 12px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35); }
+  .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
+
+  .cmp { font-size: .88rem; min-width: 640px; }
+  .cmp td:first-child { white-space: nowrap; }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .picks div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: var(--shadow); display: grid; gap: 4px; }
+  .picks span { font-size: .9rem; color: var(--muted); }
+  .picks a { font-weight: 600; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; display: grid; gap: 2px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+  .steps span { font-size: .9rem; color: var(--muted); }
+  .prep li { margin: 6px 0; }
+
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem;
+  }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

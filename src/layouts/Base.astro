@@ -6,8 +6,10 @@ interface Props {
   title: string;
   description: string;
   schema?: object[];
+  image?: string; // รูปตอนแชร์ลิงก์ (1200x630)
 }
-const { title, description, schema = [] } = Astro.props;
+const { title, description, schema = [], image = '/og/default.jpg' } = Astro.props;
+const ogImage = new URL(image, Astro.site ?? SITE.url).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
 
@@ -16,6 +18,7 @@ const nav = [
   ['/ais-1-day/', 'รายวัน'],
   ['/ais-7-day/', '7 วัน'],
   ['/ais-30-day/', '30 วัน'],
+  ['/ais-new-sim/', 'เปิดซิมใหม่'],
   ['/chooser/', 'ช่วยเลือกโปร'],
   ['/ais-shortcodes/', 'เบอร์ลัด AIS'],
 ];
@@ -35,6 +38,13 @@ const path = Astro.url.pathname;
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
   <meta name="theme-color" content="#8dc63f" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.webmanifest" />
@@ -82,6 +92,7 @@ const path = Astro.url.pathname;
       </a>
       <p>รวบรวมโปรเน็ตมือถือเติมเงิน ไม่อั้น ไม่ลดสปีด อัปเดตราคาทุกเดือน</p>
       <p class="flinks">
+        <a href="/ais-new-sim/">เปิดซิมใหม่ AIS</a>
         <a href="/ais-shortcodes/">เบอร์ลัด AIS</a>
         <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับ</a>
         <a href="/chooser/">ช่วยเลือกโปร</a>
