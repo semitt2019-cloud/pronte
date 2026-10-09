@@ -1,0 +1,184 @@
+---
+// ============================================================
+//  หน้า "ลงทะเบียน / เปิดใช้ซิม AIS ด้วยตัวเอง ผ่านแอป myAIS"
+//  คีย์เวิร์ดหลัก: ลงทะเบียนซิม AIS ด้วยตัวเอง
+//  คีย์เวิร์ดรอง: เปิดใช้ซิม AIS ผ่านแอป, ยืนยันตัวตนซิม AIS, ลงทะเบียนซิมใหม่ AIS myAIS,
+//               เปิดซิม AIS เอง, ซื้อซิม AIS มาเอง ลงทะเบียนยังไง
+//  ที่มาขั้นตอน: notebookspec.com (บทความวิธีลงทะเบียนซิม) — ตรวจกับแอปจริงทุกครั้งที่อัปเดต
+// ============================================================
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { NEW_SIM } from '../data/newsim';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/ais-sim-register/';
+const MYAIS = 'https://mws.adldigitalservice.com/openWebToApp?URI=myais%3A%2F%2FHome';
+const title = 'ลงทะเบียนซิม AIS ด้วยตัวเอง ผ่านแอป myAIS ทำเองได้ใน 5 นาที';
+const description = 'ซื้อซิม AIS มาเอง ลงทะเบียนเปิดใช้ซิมด้วยตัวเองผ่านแอป myAIS ได้เลย ใช้บัตรประชาชนกับสแกนใบหน้า ไม่ต้องไปร้าน พร้อมขั้นตอนทีละขั้นและแพ็กเน็ตสำหรับซิมใหม่';
+
+const steps: [string, string][] = [
+  ['ดาวน์โหลดและเปิดแอป myAIS', 'กดปุ่ม "เปิดแอป myAIS" บนหน้านี้ ถ้ายังไม่มีแอป ระบบจะพาไปดาวน์โหลดก่อน (มีทั้ง Android และ iPhone)'],
+  ['เลือกเมนู "เปิดใช้ซิม"', 'อยู่ที่หน้าแรกของแอป ถ้าไม่เห็น ให้ดูในเมนู "เพิ่มเติม" หรือ Quick Menu'],
+  ['สแกนบาร์โค้ดหรือใส่เลขซิม 13 หลัก', 'เลขซิมพิมพ์อยู่ใต้บาร์โค้ดบนการ์ดซิม หรือใช้กล้องสแกนบาร์โค้ดก็ได้'],
+  ['ใส่เบอร์มือถือ แล้วเริ่มยืนยันตัวตน', 'ใส่เบอร์ของซิมใหม่ (มักพิมพ์อยู่บนการ์ดซิม) แล้วกดเริ่มยืนยันตัวตน'],
+  ['ถ่ายรูปบัตรประชาชนหน้า-หลัง', 'วางบัตรบนพื้นเรียบ ที่แสงสว่างพอ ให้ตัวหนังสือชัดและไม่มีแสงสะท้อน'],
+  ['สแกนใบหน้า', 'มองกล้องตรง ๆ ถอดแว่นและหมวก แล้วทำตามที่แอปบอก เช่น กะพริบตาหรือหันหน้า'],
+  ['ตรวจข้อมูลแล้วกดยืนยัน', 'ตรวจชื่อและข้อมูลให้ถูกต้อง กดยอมรับเงื่อนไข แล้วกดเสร็จสิ้น ซิมพร้อมใช้งาน'],
+];
+
+const faq: [string, string][] = [
+  ['ซื้อซิม AIS มาเอง ต้องไปร้านเพื่อลงทะเบียนไหม?', 'ไม่จำเป็น ลงทะเบียนเปิดใช้ซิมด้วยตัวเองผ่านแอป myAIS ได้ ใช้บัตรประชาชนตัวจริงและสแกนใบหน้า ถ้าทำในแอปไม่ผ่านค่อยไปที่ AIS Shop หรือร้านตัวแทน'],
+  ['ลงทะเบียนซิมผ่านแอปต้องใช้อะไรบ้าง?', 'การ์ดซิมที่มีเลขซิม 13 หลัก, บัตรประชาชนตัวจริง, มือถือที่มีกล้องและต่อเน็ตได้ (ใช้ Wi-Fi ได้) และแอป myAIS'],
+  ['ซิมใหม่ยังไม่มีเน็ต จะโหลดแอปยังไง?', 'ต่อ Wi-Fi หรือใช้เน็ตจากซิมเครื่องอื่นแชร์ฮอตสปอตมาก่อน แล้วค่อยดาวน์โหลดแอป myAIS'],
+  ['สแกนหน้าไม่ผ่าน ทำยังไง?', 'ถอดแว่น หมวก และหน้ากาก ไปที่ที่แสงสว่างพอ ไม่ย้อนแสง แล้วลองใหม่ ถ้ายังไม่ผ่านให้ไปลงทะเบียนที่ AIS Shop พร้อมบัตรประชาชน'],
+  ['ลงทะเบียนซิมให้คนอื่นได้ไหม?', 'ควรลงทะเบียนในชื่อของคนที่ใช้ซิมจริง เพราะซิมจะผูกกับตัวตนของผู้ลงทะเบียน และเกี่ยวข้องกับการใช้บริการธนาคารผ่านมือถือด้วย'],
+  ['เช็กยังไงว่ามีซิมกี่เบอร์อยู่ในชื่อเรา?', 'กด *179*เลขบัตรประชาชน 13 หลัก# แล้วโทรออก ระบบจะแจ้งจำนวนเบอร์ที่ลงทะเบียนในชื่อคุณ'],
+  ['ลงทะเบียนเสร็จแล้วควรทำอะไรต่อ?', 'สมัครแพ็กเสริมเน็ตสำหรับซิมใหม่ภายใน 7 วันหลังเปิดซิม ราคา 200–350 บาท/30 วัน เน็ตรวมสูงสุด 100GB โทรฟรีทุกเครือข่าย'],
+  ['ชาวต่างชาติลงทะเบียนผ่านแอปได้ไหม?', 'ขึ้นกับเมนูในแอป ณ ขณะนั้น ถ้าแอปไม่รองรับ ให้นำพาสปอร์ตไปลงทะเบียนที่ AIS Shop หรือร้านตัวแทน'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เปิดซิมใหม่ AIS', '/ais-new-sim/'], ['ลงทะเบียนซิมด้วยตัวเอง', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'HowTo',
+    name: 'วิธีลงทะเบียนเปิดใช้ซิม AIS ด้วยตัวเองผ่านแอป myAIS',
+    totalTime: 'PT5M',
+    supply: [{ '@type': 'HowToSupply', name: 'การ์ดซิม AIS' }, { '@type': 'HowToSupply', name: 'บัตรประชาชนตัวจริง' }],
+    tool: [{ '@type': 'HowToTool', name: 'แอป myAIS' }],
+    step: steps.map(([n, t], i) => ({ '@type': 'HowToStep', position: i + 1, name: n, text: t })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/sim-register.jpg">
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <a href="/ais-new-sim/">เปิดซิมใหม่ AIS</a> › <span>ลงทะเบียนซิมด้วยตัวเอง</span>
+  </nav>
+
+  <section class="hero">
+    <span class="badge">ซื้อซิมมาเอง · ไม่ต้องไปร้าน</span>
+    <h1>ลงทะเบียนซิม AIS ด้วยตัวเอง<br /><em>ผ่านแอป myAIS ใน 5 นาที</em></h1>
+    <p>ใช้แค่บัตรประชาชนกับสแกนใบหน้า เปิดใช้ซิมได้ทันที แล้วสมัครแพ็กเน็ตซิมใหม่ต่อได้เลย</p>
+    <a class="cta" href={MYAIS} target="_blank" rel="noopener">เปิดแอป myAIS →</a>
+    <span class="hint">ยังไม่มีแอป? กดปุ่มนี้แล้วระบบจะพาไปดาวน์โหลด</span>
+  </section>
+
+  <section class="answer">
+    <b>สรุปสั้น:</b> ลงทะเบียนซิม AIS ด้วยตัวเอง ให้เปิดแอป <b>myAIS</b> → เมนู <b>เปิดใช้ซิม</b> → สแกนเลขซิม 13 หลัก →
+    ถ่ายรูปบัตรประชาชน → สแกนใบหน้า → กดยืนยัน ซิมก็พร้อมใช้งาน
+  </section>
+
+  <h2>เตรียมให้พร้อมก่อนเริ่ม</h2>
+  <div class="prep">
+    <div><span class="i">💳</span><b>การ์ดซิม</b><small>มีเลขซิม 13 หลักใต้บาร์โค้ด</small></div>
+    <div><span class="i">🪪</span><b>บัตรประชาชนตัวจริง</b><small>ไม่ใช้สำเนาหรือรูปถ่าย</small></div>
+    <div><span class="i">📶</span><b>เน็ตหรือ Wi-Fi</b><small>สำหรับโหลดแอปและส่งข้อมูล</small></div>
+    <div><span class="i">💡</span><b>ที่แสงสว่างพอ</b><small>ช่วยให้สแกนบัตรและหน้าผ่านง่าย</small></div>
+  </div>
+
+  <h2>วิธีลงทะเบียนซิม AIS ด้วยตัวเอง 7 ขั้นตอน</h2>
+  <ol class="steps">
+    {steps.map(([n, t]) => <li><b>{n}</b><span>{t}</span></li>)}
+  </ol>
+  <p class="center"><a class="cta-g" href={MYAIS} target="_blank" rel="noopener">เปิดแอป myAIS เพื่อลงทะเบียน →</a></p>
+
+  <h2>ลงทะเบียนไม่ผ่าน แก้ยังไง</h2>
+  <div class="tips">
+    <div class="tip"><b>หาเมนู "เปิดใช้ซิม" ไม่เจอ</b><p>ดูในเมนู "เพิ่มเติม" หรือ Quick Menu และอัปเดตแอป myAIS เป็นเวอร์ชันล่าสุด</p></div>
+    <div class="tip"><b>สแกนบัตรไม่ผ่าน</b><p>เช็ดบัตรให้สะอาด วางบนพื้นสีเข้ม หลีกเลี่ยงแสงสะท้อนบนบัตร และให้บัตรอยู่ในกรอบทั้งใบ</p></div>
+    <div class="tip"><b>สแกนใบหน้าไม่ผ่าน</b><p>ถอดแว่น หมวก หน้ากาก ไม่ยืนย้อนแสง และถือมือถือระดับสายตา</p></div>
+    <div class="tip"><b>ลองหลายครั้งแล้วยังไม่ได้</b><p>นำบัตรประชาชนและซิมไปที่ AIS Shop หรือร้านตัวแทน หรือโทร 1175</p></div>
+  </div>
+
+  <section class="next">
+    <span class="ns-tag">ขั้นต่อไปหลังลงทะเบียน</span>
+    <h2 class="nh">สมัครแพ็กเน็ตซิมใหม่ ภายใน 7 วัน</h2>
+    <p>ซิมใหม่สมัครแพ็กเสริมเน็ต 30 วันราคาพิเศษได้ เฉพาะ 7 วันแรกหลังเปิดซิม</p>
+    <div class="mini">
+      {NEW_SIM.map((p) => (
+        <a class="m" href={telHref(p.code)} data-pkg={p.code}>
+          <b>{p.price}฿</b><span>{p.totalGB}GB</span><small>{ussd(p.code)}</small>
+        </a>
+      ))}
+    </div>
+    <a class="more" href="/ais-new-sim/">ดูรายละเอียดแพ็กซิมใหม่ทั้งหมด →</a>
+  </section>
+
+  <Faq items={faq} />
+
+  <h2>บทความที่เกี่ยวข้อง</h2>
+  <ul class="links">
+    <li><a href="/ais-new-sim/">เปิดซิมใหม่ AIS แพ็กเสริมเน็ต 200–350 บาท</a></li>
+    <li><a href="/ais/check-number/">เช็คเบอร์ซิมใหม่ AIS (*545#)</a></li>
+    <li><a href="/ais/turn-on-internet/">เปิดเน็ต AIS / เน็ตไม่ขึ้นแก้ยังไง</a></li>
+    <li><a href="/ais/call-center/">ติดต่อ AIS Call Center 1175</a></li>
+  </ul>
+
+  <p class="small">ขั้นตอนอ้างอิงจากเมนูในแอป myAIS ซึ่งอาจเปลี่ยนแปลงได้ตามการอัปเดตของผู้ให้บริการ · ตรวจข้อมูล {SITE.updated} · ปุ่ม "เปิดแอป myAIS" ลิงก์ไปยังหน้าเปิดแอปของ AIS โดยตรง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS และไม่เก็บข้อมูลบัตรประชาชนหรือใบหน้าของคุณ</p>
+
+  <div class="sticky">
+    <div><b>ลงทะเบียนซิม</b> ด้วยตัวเอง</div>
+    <a href={MYAIS} target="_blank" rel="noopener">เปิด myAIS</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero {
+    border-radius: 24px; padding: 26px 22px; color: #fff; margin-top: 6px;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .hero p { margin: 0 0 18px; color: rgba(255,255,255,.95); }
+  .cta { display: inline-block; background: #fff; color: var(--lime-ink); font-weight: 600; text-decoration: none; padding: 12px 22px; border-radius: 14px; box-shadow: 0 10px 24px -10px rgba(30,70,10,.6); }
+  .hint { display: block; font-size: .8rem; margin-top: 8px; color: rgba(255,255,255,.9); }
+  @media (min-width: 720px) { .hero { padding: 42px; } .hero h1 { font-size: 2.4rem; } }
+
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .prep { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .prep div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; box-shadow: var(--shadow); display: grid; gap: 2px; }
+  .prep .i { font-size: 1.5rem; }
+  .prep small { color: var(--muted); font-size: .82rem; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; display: grid; gap: 2px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+  .steps span { font-size: .9rem; color: var(--muted); }
+  .center { text-align: center; margin-top: 16px; }
+  .cta-g { display: inline-block; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 12px 22px; border-radius: 14px; text-shadow: 0 1px 1px rgba(40,80,10,.35); box-shadow: 0 8px 18px -8px rgba(110,170,40,.9); }
+
+  .tips { display: grid; gap: 10px; }
+  .tip { background: var(--card); border-left: 4px solid #f5a623; border-radius: 0 14px 14px 0; padding: 12px 16px; box-shadow: var(--shadow); }
+  .tip p { margin: 4px 0 0; color: var(--muted); }
+
+  .next { margin-top: 32px; padding: 20px; border-radius: 20px; background: linear-gradient(120deg, #fff8e1, #fdf0c8); border: 1px solid #f5d48a; }
+  .ns-tag { font-size: .78rem; font-weight: 600; color: #8a5a00; }
+  .nh { margin: 6px 0 4px; }
+  .nh::before { display: none; }
+  .next p { margin: 0 0 12px; color: #6b4600; }
+  .mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 520px) { .mini { grid-template-columns: repeat(2, 1fr); } }
+  .m { background: #fff; border-radius: 14px; padding: 10px; text-align: center; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .m b { font-size: 1.3rem; color: var(--lime-ink); }
+  .m span { font-weight: 600; }
+  .m small { font-size: .72rem; color: var(--muted); overflow-wrap: anywhere; }
+  .more { display: inline-block; margin-top: 12px; font-weight: 600; }
+
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem;
+  }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

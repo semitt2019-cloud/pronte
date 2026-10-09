@@ -11,6 +11,7 @@ export const ALL_ROUTES: string[] = [
   '/about/',
   '/app/',
   '/ais-new-sim/',
+  '/ais-sim-register/',
   ...LIST_PAGES.map((p) => `/${p.slug}/`),
   ...SALES.map((s) => `/pro/${s.slug}/`),
   ...HOWTO.map((h) => `/ais/${h.slug}/`),
