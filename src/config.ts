@@ -5,8 +5,8 @@
 export const SITE = {
   // ชื่อเว็บ (แสดงบนหัวเว็บและในผลค้นหา)
   name: 'โปรเน็ต AIS สุดคุ้ม',
-  // โดเมนจริงของคุณ ต้องแก้ใน astro.config.mjs ด้วย
-  url: 'https://example.com',
+  // โดเมนจริงของเว็บ (ใช้ใน sitemap, canonical, รูปแชร์)
+  url: 'https://pronetmobile.com',
   // เดือนที่ตรวจราคาโปรล่าสุด (แก้ทุกครั้งที่อัปเดต)
   updated: 'ตุลาคม 2026',
 };

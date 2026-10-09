@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# แก้ example.com เป็นโดเมนจริงของคุณ
-Sitemap: https://example.com/sitemap-index.xml
+Sitemap: https://pronetmobile.com/sitemap-index.xml
