@@ -98,7 +98,7 @@ const schema = [
     <div class="mini">
       {NEW_SIM.map((p) => (
         <a class="m" href={telHref(p.code)} data-pkg={p.code}>
-          <b>{p.price}฿</b><span>{p.totalGB}GB</span><small>{ussd(p.code)}</small>
+          <b>{p.price}฿</b><span>{p.totalGB}GB</span><small>{ussd(p.code)}</small><em class="go">กดสมัคร</em>
         </a>
       ))}
     </div>
@@ -170,6 +170,12 @@ const schema = [
   .m b { font-size: 1.3rem; color: var(--lime-ink); }
   .m span { font-weight: 600; }
   .m small { font-size: .72rem; color: var(--muted); overflow-wrap: anywhere; }
+  .m:hover { transform: translateY(-1px); }
+  .m .go {
+    font-style: normal; margin-top: 6px; padding: 7px 0; border-radius: 10px; font-weight: 600; font-size: .9rem; color: #fff;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35);
+    box-shadow: 0 6px 14px -8px rgba(110,170,40,.9);
+  }
   .more { display: inline-block; margin-top: 12px; font-weight: 600; }
 
   .sticky {
