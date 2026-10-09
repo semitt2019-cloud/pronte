@@ -1,0 +1,154 @@
+---
+// หน้าบทความ — สร้างอัตโนมัติจากไฟล์ใน src/content/blog/*.md
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import NewSimCta from '../../components/NewSimCta.astro';
+import { POSTS, readMinutes, thaiDate, type Post } from '../../lib/blog';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+import { SITE } from '../../config';
+import { NEW_SIM } from '../../data/newsim';
+import { ussd, telHref } from '../../config';
+
+export function getStaticPaths() {
+  return POSTS.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+const { post } = Astro.props as { post: Post };
+const { meta, mod, slug } = post;
+const path = `/blog/${slug}/`;
+const html: string = await mod.compiledContent();
+const minutes = readMinutes(html);
+const toc = mod.getHeadings().filter((h) => h.depth === 2);
+
+// แทรกกล่องสมัครแพ็กไว้กลางบทความ (ก่อนหัวข้อ H2 ที่ 3)
+const parts = html.split(/(?=<h2[\s>])/);
+const cut = Math.min(3, parts.length);
+const firstHalf = parts.slice(0, cut).join('');
+const secondHalf = parts.slice(cut).join('');
+
+const image = meta.image ?? `/og/blog/${slug}.jpg`;
+const others = POSTS.filter((p) => p.slug !== slug).slice(0, 4);
+const pick = NEW_SIM[1];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['บทความ', '/blog/'], [meta.h1, path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'Article',
+    headline: meta.h1, description: meta.description,
+    image: [new URL(image, SITE.url).href],
+    datePublished: meta.date, dateModified: meta.updated ?? meta.date,
+    inLanguage: 'th-TH',
+    mainEntityOfPage: new URL(path, SITE.url).href,
+    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icons/icon-512.png', SITE.url).href } },
+  },
+  ...(meta.faq?.length ? [faqSchema(meta.faq)] : []),
+];
+---
+<Base title={meta.title} description={meta.description} schema={schema} image={image} ogType="article">
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <a href="/blog/">บทความ</a> › <span>{meta.keyword}</span>
+  </nav>
+
+  <article>
+    <header class="ah">
+      <span class="kw">เปิดซิมใหม่ AIS</span>
+      <h1>{meta.h1}</h1>
+      <p class="by">
+        <time datetime={meta.updated ?? meta.date}>อัปเดต {thaiDate(meta.updated ?? meta.date)}</time>{' · '}อ่าน {minutes} นาที
+      </p>
+    </header>
+
+    <section class="answer"><b>สรุปสั้น:</b> <Fragment set:html={meta.summary} /></section>
+
+    {toc.length > 2 && (
+      <nav class="toc" aria-label="สารบัญ">
+        <b>ในบทความนี้</b>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text.replace(/^\d+\.\s*/, '')}</a></li>)}</ol>
+      </nav>
+    )}
+
+    <div class="prose">
+      <Fragment set:html={firstHalf} />
+      <NewSimCta />
+      <Fragment set:html={secondHalf} />
+    </div>
+  </article>
+
+  {meta.faq?.length && <Faq items={meta.faq} />}
+
+  <NewSimCta heading="พร้อมแล้ว? เลือกแพ็กเน็ตให้ซิมใหม่เลย" text="กดปุ่มสมัคร มือถือจะโทรออกด้วยรหัสสมัครให้ทันที รอ SMS ยืนยันจาก AIS แล้วตอบรับตามขั้นตอน" />
+
+  {meta.related?.length && (
+    <>
+      <h2>อ่านต่อ</h2>
+      <ul class="links">
+        {meta.related.map(([t, u]) => <li><a href={u}>{t}</a></li>)}
+      </ul>
+    </>
+  )}
+
+  <h2>บทความอื่นเกี่ยวกับซิมใหม่</h2>
+  <div class="cards">
+    {others.map((p) => (
+      <a class="pc" href={`/blog/${p.slug}/`}><b>{p.meta.h1}</b><span>{p.meta.description.slice(0, 70)}…</span></a>
+    ))}
+  </div>
+
+  {meta.sources?.length && (
+    <p class="small src">
+      แหล่งอ้างอิง: {meta.sources.map(([t, u], i) => <>{i > 0 && ' · '}<a href={u} target="_blank" rel="noopener nofollow">{t}</a></>)}
+    </p>
+  )}
+  <p class="small">ข้อมูลอาจเปลี่ยนแปลงตามประกาศของผู้ให้บริการและ กสทช. ตรวจเงื่อนไขใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+
+  <div class="sticky">
+    <div><b>ซิมใหม่</b> {pick.price}฿ เน็ต {pick.totalGB}GB</div>
+    <a href={telHref(pick.code)} data-pkg={pick.code} aria-label={`สมัคร ${ussd(pick.code)}`}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .ah { margin-top: 8px; padding: 24px 20px; border-radius: 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75); }
+  .kw { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .ah h1 { font-size: 1.65rem; line-height: 1.3; margin: 12px 0 8px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .by { margin: 0; font-size: .85rem; color: rgba(255,255,255,.92); }
+  @media (min-width: 720px) { .ah { padding: 36px 40px; } .ah h1 { font-size: 2.15rem; } }
+
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .toc { margin-top: 18px; background: var(--lime-soft); border-radius: 16px; padding: 14px 18px; }
+  .toc ol { margin: 8px 0 0; padding-left: 22px; display: grid; gap: 4px; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  .prose { font-size: 1.02rem; line-height: 1.85; }
+  .prose :global(h2) { scroll-margin-top: 120px; }
+  .prose :global(h3) { margin: 22px 0 6px; font-size: 1.1rem; }
+  .prose :global(p) { margin: 10px 0; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 22px; }
+  .prose :global(li) { margin: 4px 0; }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .92rem; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); display: block; overflow-x: auto; }
+  .prose :global(th) { background: var(--lime-soft); text-align: left; }
+  .prose :global(th), .prose :global(td) { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; min-width: 110px; }
+  .prose :global(blockquote) { margin: 14px 0; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f5a623; border-radius: 0 14px 14px 0; }
+  .prose :global(blockquote p) { margin: 0; }
+  .prose :global(code) { background: var(--lime-soft); color: var(--lime-ink); padding: 1px 6px; border-radius: 6px; font-weight: 600; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .pc { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; text-decoration: none; color: var(--ink); display: grid; gap: 4px; box-shadow: var(--shadow); }
+  .pc span { font-size: .85rem; color: var(--muted); }
+  .pc:hover { border-color: var(--lime); }
+  .src a { color: var(--muted); }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

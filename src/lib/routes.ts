@@ -2,6 +2,7 @@
 import { LIST_PAGES } from '../data/pages';
 import { SALES } from '../data/sales';
 import { HOWTO } from '../data/howto';
+import { POSTS } from './blog';
 
 export const ALL_ROUTES: string[] = [
   '/',
@@ -12,7 +13,9 @@ export const ALL_ROUTES: string[] = [
   '/app/',
   '/ais-new-sim/',
   '/ais-sim-register/',
+  '/blog/',
   ...LIST_PAGES.map((p) => `/${p.slug}/`),
   ...SALES.map((s) => `/pro/${s.slug}/`),
   ...HOWTO.map((h) => `/ais/${h.slug}/`),
+  ...POSTS.map((p) => `/blog/${p.slug}/`),
 ];

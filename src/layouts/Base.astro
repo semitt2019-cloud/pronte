@@ -7,8 +7,9 @@ interface Props {
   description: string;
   schema?: object[];
   image?: string; // รูปตอนแชร์ลิงก์ (1200x630)
+  ogType?: string; // website | article
 }
-const { title, description, schema = [], image = '/og/default.jpg' } = Astro.props;
+const { title, description, schema = [], image = '/og/default.jpg', ogType = 'website' } = Astro.props;
 const ogImage = new URL(image, Astro.site ?? SITE.url).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
@@ -19,6 +20,7 @@ const nav = [
   ['/ais-7-day/', '7 วัน'],
   ['/ais-30-day/', '30 วัน'],
   ['/ais-new-sim/', 'เปิดซิมใหม่'],
+  ['/blog/', 'บทความ'],
   ['/chooser/', 'ช่วยเลือกโปร'],
   ['/ais-shortcodes/', 'เบอร์ลัด AIS'],
 ];
@@ -32,7 +34,7 @@ const path = Astro.url.pathname;
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:locale" content="th_TH" />
   <meta property="og:site_name" content={SITE.name} />
   <meta property="og:title" content={fullTitle} />
@@ -96,7 +98,7 @@ const path = Astro.url.pathname;
     </div>
     <nav class="wrap nav" aria-label="เมนูหลัก">
       {nav.map(([href, label]) => (
-        <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>
+        <a href={href} aria-current={path === href || (href === '/blog/' && path.startsWith('/blog/')) ? 'page' : undefined}>{label}</a>
       ))}
     </nav>
   </header>
@@ -118,6 +120,7 @@ const path = Astro.url.pathname;
       <p class="flinks">
         <a href="/ais-new-sim/">เปิดซิมใหม่ AIS</a>
         <a href="/ais-sim-register/">ลงทะเบียนซิมด้วยตัวเอง</a>
+        <a href="/blog/">บทความเปิดซิมใหม่</a>
         <a href="/ais-shortcodes/">เบอร์ลัด AIS</a>
         <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับ</a>
         <a href="/chooser/">ช่วยเลือกโปร</a>

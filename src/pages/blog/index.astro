@@ -1,0 +1,56 @@
+---
+// หน้ารวมบทความ
+import Base from '../../layouts/Base.astro';
+import NewSimCta from '../../components/NewSimCta.astro';
+import { POSTS, thaiDate } from '../../lib/blog';
+import { breadcrumb } from '../../lib/seo';
+import { SITE } from '../../config';
+
+const title = 'บทความเปิดซิมใหม่ AIS ซื้อซิม ลงทะเบียน เอกสาร แก้ปัญหา';
+const description = 'รวมบทความเรื่องเปิดซิมใหม่ AIS ซื้อซิมที่ไหน ใช้เอกสารอะไร เติมเงินหรือรายเดือนดี ใส่ซิมแล้วต้องทำอะไร และวิธีแก้ซิมไม่มีสัญญาณ อ่านง่าย ทำตามได้ทันที';
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['บทความ', '/blog/']]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: title,
+    itemListElement: POSTS.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/blog/${p.slug}/`, SITE.url).href, name: p.meta.h1 })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>บทความ</span></nav>
+  <section class="hero">
+    <h1>บทความเปิดซิมใหม่ AIS</h1>
+    <p>ทุกเรื่องที่ต้องรู้ก่อนและหลังเปิดซิมใหม่ ตั้งแต่ซื้อซิม ลงทะเบียน จนถึงสมัครแพ็กเน็ตให้คุ้มที่สุด</p>
+  </section>
+
+  <div class="list">
+    {POSTS.map((p, i) => (
+      <a class="post" href={`/blog/${p.slug}/`}>
+        <span class="n">{String(i + 1).padStart(2, '0')}</span>
+        <div>
+          <b>{p.meta.h1}</b>
+          <p>{p.meta.description}</p>
+          <small>{thaiDate(p.meta.updated ?? p.meta.date)}</small>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <NewSimCta />
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 22px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%); }
+  .hero h1 { margin: 0 0 8px; font-size: 1.8rem; }
+  .hero p { margin: 0; }
+  .list { display: grid; gap: 10px; margin-top: 18px; }
+  .post { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); }
+  .post:hover { border-color: var(--lime); }
+  .n { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+  .post b { font-size: 1.05rem; }
+  .post p { margin: 4px 0; color: var(--muted); font-size: .9rem; }
+  .post small { color: var(--muted); font-size: .78rem; }
+</style>

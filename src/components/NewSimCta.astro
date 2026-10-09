@@ -1,0 +1,42 @@
+---
+// กล่องสมัครแพ็กเน็ตซิมใหม่ (ใช้ในบทความทุกเรื่อง) — กดสมัครได้ทันที + ลิงก์ไปหน้าเปิดซิมใหม่
+import { NEW_SIM } from '../data/newsim';
+import { ussd, telHref } from '../config';
+
+interface Props { heading?: string; text?: string }
+const {
+  heading = 'เปิดซิมใหม่แล้ว สมัครแพ็กเน็ตราคาพิเศษได้เลย',
+  text = 'แพ็กเสริมเน็ต 30 วันสำหรับซิมใหม่ AIS สมัครได้ภายใน 7 วันแรกหลังเปิดซิม กดปุ่มแล้วโทรออกเพื่อสมัคร',
+} = Astro.props;
+---
+<aside class="nsc" aria-label="สมัครแพ็กเน็ตซิมใหม่">
+  <span class="tag">โปรสำหรับซิมใหม่ AIS</span>
+  <p class="h">{heading}</p>
+  <p class="t">{text}</p>
+  <div class="grid">
+    {NEW_SIM.map((p) => (
+      <a class="m" href={telHref(p.code)} data-pkg={p.code}>
+        {p.tag && <i class="flag">{p.tag}</i>}
+        <b>{p.price}฿</b><span>เน็ตรวม {p.totalGB}GB</span><small>{ussd(p.code)}</small><em class="go">กดสมัคร</em>
+      </a>
+    ))}
+  </div>
+  <a class="more" href="/ais-new-sim/">เทียบแพ็กซิมใหม่ทั้ง 4 แบบ →</a>
+</aside>
+
+<style>
+  .nsc { margin: 26px 0; padding: 18px; border-radius: 20px; background: linear-gradient(120deg, #fff8e1, #fdf0c8); border: 1px solid #f5d48a; }
+  .tag { font-size: .78rem; font-weight: 600; color: #8a5a00; }
+  .h { margin: 4px 0 2px; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+  .t { margin: 0 0 12px; color: #6b4600; font-size: .92rem; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .m { position: relative; background: #fff; border-radius: 14px; padding: 12px 8px 10px; text-align: center; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .m b { font-size: 1.35rem; color: var(--lime-ink); }
+  .m span { font-weight: 600; font-size: .9rem; }
+  .m small { font-size: .72rem; color: var(--muted); overflow-wrap: anywhere; }
+  .flag { position: absolute; top: -8px; right: 8px; font-style: normal; font-size: .68rem; font-weight: 600; color: #fff; background: #f08c00; padding: 1px 8px; border-radius: 999px; }
+  .go { font-style: normal; margin-top: 6px; padding: 7px 0; border-radius: 10px; font-weight: 600; font-size: .9rem; color: #fff;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35); box-shadow: 0 6px 14px -8px rgba(110,170,40,.9); }
+  .more { display: inline-block; margin-top: 12px; font-weight: 600; }
+</style>
