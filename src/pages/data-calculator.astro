@@ -1,0 +1,276 @@
+---
+// เครื่องคำนวณ: ใช้เน็ตเดือนละกี่ GB + แนะนำโปร AIS ที่เหมาะ
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { AIS, speedLabel } from '../data/ais';
+import { NEW_SIM } from '../data/newsim';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/data-calculator/';
+const title = 'คำนวณเน็ตมือถือ ใช้เดือนละกี่ GB? เครื่องคิดเลขพร้อมแนะนำโปร AIS';
+const description = 'เครื่องคำนวณเน็ตมือถือ ใส่ชั่วโมงที่ดู TikTok YouTube เรียน Zoom เล่นเกมต่อวัน แล้วรู้ทันทีว่าใช้เน็ตวันละ เดือนละกี่ GB ต้องใช้ความเร็วเท่าไร และโปร AIS แบบไหนคุ้มที่สุด';
+
+// การใช้งาน: [id, ชื่อ, ไอคอน, GB ต่อชั่วโมง, ความเร็วที่ควรมี (Mbps), ที่มา]
+const ACTS: [string, string, string, number, number, string][] = [
+  ['tiktok', 'TikTok / Reels', '🎵', 0.32, 2, 'SlashGear ทดสอบ 323 MB/ชม.'],
+  ['social', 'Facebook / IG (มีวิดีโอในฟีด)', '📱', 0.3, 2, 'ประมาณการ ใกล้เคียงวิดีโอสั้น'],
+  ['yt480', 'YouTube 480p', '▶️', 0.5, 2, 'WhistleOut'],
+  ['yt720', 'YouTube 720p / HD', '📺', 1.5, 4, 'WhistleOut'],
+  ['netflix', 'Netflix / ซีรีส์ (โหมดอัตโนมัติ)', '🎬', 0.25, 2, 'Netflix: 1 GB ต่อ 4 ชม.'],
+  ['classv', 'เรียน Zoom / Meet เปิดวิดีโอ', '🎥', 0.8, 4, 'Zoom: 0.8–1.0 Mbps ขึ้น/ลง'],
+  ['classa', 'เรียนออนไลน์ ฟังเสียงอย่างเดียว', '🎧', 0.05, 1, 'Zoom: เสียง 60–80 kbps'],
+  ['game', 'เกมออนไลน์ (Free Fire, PUBG, RoV)', '🎮', 0.03, 2, 'AFK Gaming (ไม่รวมอัปเดตเกม)'],
+  ['music', 'ฟังเพลงออนไลน์', '🎶', 0.07, 1, 'คุณภาพปกติ ~160 kbps'],
+  ['chat', 'LINE แชต อ่านข่าว ค้นข้อมูล', '💬', 0.05, 0.5, 'ประมาณการ'],
+];
+const DEF: Record<string, number> = { tiktok: 2, social: 1, yt480: 1, game: 1, chat: 1 };
+const PRESETS: [string, Record<string, number>][] = [
+  ['สายดูคลิป', { tiktok: 3, social: 1.5, yt480: 2, chat: 1 }],
+  ['เรียนออนไลน์', { classv: 4, tiktok: 1, yt480: 1, chat: 1 }],
+  ['เกมเมอร์', { game: 4, tiktok: 1, yt720: 1, chat: 1 }],
+  ['ใช้น้อย', { chat: 2, social: 0.5, music: 1 }],
+];
+
+// โปรที่ใช้แนะนำ (คำนวณ ussd/tel ฝั่งเซิร์ฟเวอร์ เพื่อให้รหัสตัวแทนติดไปด้วย)
+const pick = (code: string) => {
+  const p = AIS.find((x) => x.code === code)!;
+  return { code, price: p.price, days: p.days, mbps: p.mbps, speed: speedLabel(p.mbps), ussd: ussd(code), tel: telHref(code) };
+};
+const PK = {
+  month: { 2: pick('7789'), 4: pick('7790'), 6: pick('7211') },
+  day: { 0.5: pick('7017'), 2: pick('7381'), 4: pick('7721'), 6: pick('7209') },
+  week: pick('7629'),
+  newsim: [...NEW_SIM].sort((a, b) => a.totalGB - b.totalGB).map((n) => ({ code: n.code, price: n.price, gb: n.totalGB, after: n.after, ussd: ussd(n.code), tel: telHref(n.code) })),
+};
+
+const faq: [string, string][] = [
+  ['ใช้เน็ตเดือนละกี่ GB ถึงจะพอ?', 'ขึ้นกับวิดีโอเป็นหลัก ถ้าดู TikTok/YouTube วันละ 2–3 ชั่วโมง จะใช้ราว 20–50 GB ต่อเดือน ถ้าเรียน Zoom เปิดวิดีโอวันละ 4 ชั่วโมงจะเพิ่มอีกราว 70–100 GB ใช้เครื่องคำนวณด้านบนใส่ชั่วโมงจริงของตัวเองจะแม่นที่สุด'],
+  ['โปรเน็ตไม่อั้นต้องดู GB ไหม?', 'โปรไม่อั้นแบบจำกัดความเร็วไม่ต้องกังวลเรื่อง GB เพราะใช้ได้ไม่จำกัด สิ่งที่ต้องดูคือความเร็ว ให้พอกับงานที่ใช้หนักที่สุด เช่น เรียน Zoom เปิดกล้องควรใช้ 4 Mbps'],
+  ['ตัวเลขในเครื่องคำนวณแม่นแค่ไหน?', 'เป็นค่าประมาณจากข้อมูลของผู้ให้บริการและการทดสอบที่อ้างอิงไว้ในตาราง การใช้งานจริงขึ้นกับความละเอียดวิดีโอ แอป และสัญญาณ ควรเผื่อไว้อีก 10–20%'],
+  ['ดูยังไงว่าเดือนนี้ใช้เน็ตไปเท่าไรแล้ว?', 'Android ดูที่ ตั้งค่า → การเชื่อมต่อ → การใช้ข้อมูล ส่วน iPhone ดูที่ ตั้งค่า → เซลลูลาร์ ซึ่งแสดงปริมาณแยกตามแอป'],
+  ['เปิดซิมใหม่ควรเลือกแพ็กกี่ GB?', 'ดูผลจากเครื่องคำนวณ แล้วเลือกแพ็กซิมใหม่ที่ GB รวมมากกว่าที่ใช้จริงเล็กน้อย แพ็กซิมใหม่ AIS มีตั้งแต่ 30–100 GB และสมัครได้ภายใน 7 วันแรกหลังเปิดซิม'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตนักเรียน นักศึกษา', '/students/'], ['คำนวณเน็ตต่อเดือน', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication', name: 'เครื่องคำนวณเน็ตมือถือต่อเดือน',
+    url: SITE.url + path, applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', inLanguage: 'th',
+    offers: { '@type': 'Offer', price: 0, priceCurrency: 'THB' },
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/data-calculator.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/students/">โปรเน็ตนักเรียน นักศึกษา</a> › <span>คำนวณเน็ตต่อเดือน</span></nav>
+
+  <section class="hero">
+    <span class="badge">🧮 เครื่องคำนวณ · ใช้ฟรี</span>
+    <h1>คำนวณเน็ตมือถือ <em>ใช้เดือนละกี่ GB?</em></h1>
+    <p>เลื่อนใส่ชั่วโมงที่ใช้แต่ละแอปต่อวัน แล้วดูผลด้านล่างทันที พร้อมโปร AIS ที่คุ้มที่สุดสำหรับคุณ</p>
+  </section>
+
+  <section class="calc" id="calc">
+    <div class="presets">
+      <span>ลองแบบสำเร็จรูป:</span>
+      {PRESETS.map(([n], i) => <button type="button" data-preset={i}>{n}</button>)}
+      <button type="button" data-preset="clear" class="ghost">ล้างค่า</button>
+    </div>
+
+    <div class="acts">
+      {ACTS.map(([id, label, icon, gb]) => (
+        <label class="act">
+          <span class="ic">{icon}</span>
+          <span class="nm">{label}<small>≈ {gb >= 0.1 ? gb + ' GB' : Math.round(gb * 1000) + ' MB'}/ชม.</small></span>
+          <input type="range" min="0" max="8" step="0.5" value={DEF[id] ?? 0} data-act={id} aria-label={`ชั่วโมงต่อวัน: ${label}`} />
+          <output data-out={id}>{DEF[id] ?? 0} ชม.</output>
+        </label>
+      ))}
+    </div>
+
+    <label class="act days">
+      <span class="ic">📅</span>
+      <span class="nm">ใช้กี่วันต่อเดือน<small>เช่น ใช้เฉพาะวันเรียน ≈ 22 วัน</small></span>
+      <input type="range" min="1" max="30" step="1" value="30" id="days" aria-label="จำนวนวันที่ใช้ต่อเดือน" />
+      <output id="daysOut">30 วัน</output>
+    </label>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="big">
+      <div><small>ใช้ต่อวัน</small><b id="rDay">–</b></div>
+      <div class="main"><small>ใช้ต่อเดือน</small><b id="rMonth">–</b><span>รวมเผื่ออัปเดตแอป 10%</span></div>
+      <div><small>ความเร็วที่ควรมี</small><b id="rSpeed">–</b></div>
+    </div>
+    <div id="rBars" class="bars"></div>
+    <p id="rNote" class="rnote"></p>
+  </section>
+
+  <h2>โปร AIS ที่แนะนำจากผลคำนวณ</h2>
+  <div id="recs" class="recs"></div>
+
+  <h2>เครื่องคำนวณนี้คิดยังไง</h2>
+  <p>นำ <b>ชั่วโมงที่ใช้ต่อวัน × ปริมาณเน็ตต่อชั่วโมง</b> ของแต่ละแอปมารวมกัน ได้เป็นเน็ตต่อวัน แล้วคูณจำนวนวันที่ใช้ต่อเดือน และเผื่ออีก 10% สำหรับการอัปเดตแอปและการใช้งานเบื้องหลัง</p>
+  <p>ส่วน <b>ความเร็วที่ควรมี</b> ดูจากแอปที่ต้องการความเร็วสูงที่สุดที่คุณใช้ เช่น ถ้าเรียน Zoom เปิดวิดีโอ หรือดู YouTube HD ควรมีอย่างน้อย 4 Mbps เพราะโปรไม่อั้นจำกัดที่ความเร็ว ไม่ใช่ที่ปริมาณ</p>
+
+  <h2>ปริมาณเน็ตต่อชั่วโมงที่ใช้คำนวณ</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>การใช้งาน</th><th>ต่อ 1 ชม.</th><th>ความเร็วแนะนำ</th><th>ที่มา</th></tr></thead>
+      <tbody>{ACTS.map(([, l, , gb, mb, src]) => <tr><td>{l}</td><td><b>{gb >= 0.1 ? `≈ ${gb} GB` : `≈ ${Math.round(gb * 1000)} MB`}</b></td><td>{speedLabel(mb)}</td><td class="src">{src}</td></tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2>ตัวอย่างการใช้งานจริง</h2>
+  <div class="ex">
+    <div><b>นักเรียนสายดูคลิป</b><p>TikTok 3 ชม. + YouTube 480p 2 ชม. + โซเชียล 1.5 ชม. ต่อวัน</p><span>≈ 80 GB/เดือน · 2 Mbps พอ</span></div>
+    <div><b>นักศึกษาเรียนออนไลน์</b><p>Zoom เปิดวิดีโอ 4 ชม. + TikTok 1 ชม. + YouTube 1 ชม. ต่อวัน 22 วัน</p><span>≈ 97 GB/เดือน · ควรมี 4 Mbps</span></div>
+    <div><b>ใช้น้อย</b><p>LINE อ่านข่าว 2 ชม. + โซเชียล 30 นาที + ฟังเพลง 1 ชม.</p><span>≈ 11 GB/เดือน · 2 Mbps เหลือเฟือ</span></div>
+  </div>
+
+  <h2>อ่านต่อ</h2>
+  <div class="links">
+    <a href="/students/">โปรเน็ตนักเรียน นักศึกษา</a>
+    <a href="/blog/online-class-monthly-data/">เรียนออนไลน์ทั้งเดือนใช้เน็ตกี่ GB</a>
+    <a href="/blog/zoom-data-usage/">Zoom 1 ชั่วโมงใช้เน็ตกี่ GB</a>
+    <a href="/blog/tiktok-data-usage/">TikTok 1 ชั่วโมงใช้เน็ตกี่ GB</a>
+    <a href="/blog/youtube-data-usage/">YouTube 1 ชั่วโมงใช้เน็ตกี่ GB</a>
+    <a href="/blog/save-mobile-data-students/">12 วิธีประหยัดเน็ตมือถือ</a>
+    <a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับใช้ทำอะไรได้</a>
+    <a href="/ais-new-sim/">แพ็กเปิดซิมใหม่ AIS</a>
+  </div>
+
+  <Faq items={faq} />
+
+  <p class="small">ตัวเลขเป็นค่าประมาณเพื่อช่วยวางแผน ราคาโปรตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+</Base>
+
+<script is:inline define:vars={{ ACTS, PRESETS, PK }}>
+  const $ = (s) => document.querySelector(s);
+  const ranges = [...document.querySelectorAll('[data-act]')];
+  const days = $('#days');
+  const fmt = (gb) => gb < 1 ? Math.round(gb * 1000) + ' MB' : (gb < 10 ? gb.toFixed(1) : Math.round(gb)) + ' GB';
+  const sp = (m) => m < 1 ? m * 1000 + ' Kbps' : m + ' Mbps';
+  const card = (tag, title, price, sub, why, p, best) =>
+    `<div class="rc${best ? ' best' : ''}"><span class="tg">${tag}</span><b class="t">${title}</b><div class="pr">${price}</div><div class="sb">${sub}</div><p>${why}</p><code>${p.ussd}</code><a class="go" href="${p.tel}" data-pkg="${p.code}">กดสมัคร</a></div>`;
+
+  function calc() {
+    const hrs = {}; ranges.forEach((r) => { hrs[r.dataset.act] = +r.value; document.querySelector(`[data-out="${r.dataset.act}"]`).textContent = r.value + ' ชม.'; });
+    const d = +days.value; $('#daysOut').textContent = d + ' วัน';
+    let perDay = 0, need = 0; const parts = [];
+    for (const [id, label, icon, gb, mb] of ACTS) {
+      const h = hrs[id] || 0; if (!h) continue;
+      perDay += h * gb; need = Math.max(need, mb); parts.push([icon + ' ' + label, h * gb]);
+    }
+    const month = perDay * d * 1.1;
+    $('#rDay').textContent = perDay ? fmt(perDay) : '0';
+    $('#rMonth').textContent = perDay ? fmt(month) : '0';
+    const tier = need <= 2 ? 2 : need <= 4 ? 4 : 6;
+    $('#rSpeed').textContent = perDay ? sp(Math.max(need, 0.5)) : '–';
+
+    parts.sort((a, b) => b[1] - a[1]);
+    const max = parts[0]?.[1] || 1;
+    $('#rBars').innerHTML = parts.map(([l, v]) => `<div class="bar"><span>${l}</span><i><em style="width:${Math.max(3, v / max * 100)}%"></em></i><b>${fmt(v * d)}</b></div>`).join('');
+    const top = parts[0];
+    $('#rNote').textContent = !perDay ? 'เลื่อนแถบด้านบนเพื่อเริ่มคำนวณ'
+      : `ตัวที่กินเน็ตมากที่สุดคือ ${top[0].replace(/^\S+ /, '')} (${Math.round(top[1] / perDay * 100)}% ของทั้งหมด)` + (top[1] / perDay > .5 ? ' ลดความละเอียดวิดีโอลงจะประหยัดได้มาก' : '');
+
+    // แนะนำโปร
+    if (!perDay) { $('#recs').innerHTML = ''; return; }
+    const m = PK.month[tier];
+    const dk = need <= 0.5 ? 0.5 : tier;
+    const dp = PK.day[dk];
+    const dailyCost = dp.price * d;
+    const out = [];
+    const monthWhy = `ไม่อั้น ${m.speed} ใช้ได้ทั้งเดือน ไม่ต้องนับ GB` + (dailyCost > m.price ? ` ถูกกว่ากดรายวัน ${d} วัน (${dailyCost.toLocaleString()}฿) ถึง ${(dailyCost - m.price).toLocaleString()} บาท` : '');
+    if (dailyCost < m.price) {
+      out.push(card('คุ้มที่สุดสำหรับคุณ', `กดรายวันเฉพาะวันที่ใช้`, `${dp.price}฿ <small>/ วัน</small>`, `ไม่อั้น ${dp.speed} · ${d} วัน ≈ ${dailyCost.toLocaleString()}฿/เดือน`, `ใช้แค่ ${d} วันต่อเดือน กดรายวันถูกกว่าโปร 30 วัน (${m.price}฿)`, dp, true));
+      out.push(card('ถ้าเริ่มใช้บ่อยขึ้น', `โปร 30 วัน`, `${m.price}฿ <small>/ 30 วัน</small>`, `ไม่อั้น ${m.speed}`, monthWhy, m, false));
+    } else {
+      out.push(card('คุ้มที่สุดสำหรับคุณ', `โปร 30 วัน`, `${m.price}฿ <small>/ 30 วัน</small>`, `ไม่อั้น ${m.speed} · ตกวันละ ${Math.round(m.price / 30)}฿`, monthWhy, m, true));
+      if (tier <= 2) out.push(card('ใช้หนักแค่บางสัปดาห์', `โปร 7 วัน`, `${PK.week.price}฿ <small>/ 7 วัน</small>`, `ไม่อั้น ${PK.week.speed}`, 'ช่วงสอบหรือช่วงงานเยอะ กดเฉพาะสัปดาห์นั้น', PK.week, false));
+      else out.push(card('วันส่งงาน / วันสอบ', `โปรรายวัน`, `${dp.price}฿ <small>/ วัน</small>`, `ไม่อั้น ${dp.speed}`, 'สำรองไว้สำหรับวันที่ต้องใช้หนักจริง', dp, false));
+    }
+    const ns = PK.newsim.find((n) => n.gb >= month) || PK.newsim[PK.newsim.length - 1];
+    out.push(card('เพิ่งเปิดซิมใหม่ (ภายใน 7 วัน)', `แพ็กซิมใหม่ ${ns.gb} GB`, `${ns.price}฿ <small>/ 30 วัน</small>`, `เน็ตรวม ${ns.gb} GB`, (ns.gb >= month ? `พอกับที่คุณใช้ (≈ ${fmt(month)})` : `ใช้เกิน ${ns.gb} GB แล้ว ${ns.after}`) + ' สมัครได้เฉพาะซิมใหม่', ns, false));
+    $('#recs').innerHTML = out.join('');
+  }
+
+  ranges.forEach((r) => r.addEventListener('input', calc));
+  days.addEventListener('input', calc);
+  document.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => {
+    const p = b.dataset.preset === 'clear' ? {} : PRESETS[+b.dataset.preset][1];
+    ranges.forEach((r) => { r.value = p[r.dataset.act] || 0; });
+    days.value = b.dataset.preset === '1' ? 22 : 30;
+    calc();
+    if (typeof gtag === 'function') gtag('event', 'calc_preset', { preset: b.textContent });
+  }));
+  calc();
+</script>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; }
+  .hero h1 em { font-style: normal; color: #fff6c2; display: block; }
+  .hero p { margin: 0; }
+
+  .calc { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; box-shadow: var(--shadow); }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; font-size: .88rem; color: var(--muted); }
+  .presets button { font: inherit; font-weight: 600; color: var(--lime-ink); background: var(--lime-soft); border: 1px solid var(--lime); border-radius: 999px; padding: 5px 14px; cursor: pointer; }
+  .presets button.ghost { background: transparent; border-color: var(--line); color: var(--muted); }
+  .acts { display: grid; gap: 4px; }
+  @media (min-width: 820px) { .acts { grid-template-columns: 1fr 1fr; column-gap: 22px; } }
+  .act { display: grid; grid-template-columns: 34px 1fr 64px; grid-template-areas: 'ic nm out' 'ic rg rg'; align-items: center; column-gap: 10px; padding: 8px 4px; border-bottom: 1px solid var(--line); }
+  .act .ic { grid-area: ic; font-size: 1.4rem; text-align: center; }
+  .act .nm { grid-area: nm; font-weight: 600; font-size: .92rem; }
+  .act .nm small { display: block; font-weight: 400; color: var(--muted); font-size: .76rem; }
+  .act input { grid-area: rg; width: 100%; accent-color: #6aae2c; height: 28px; }
+  .act output { grid-area: out; text-align: right; font-weight: 700; color: var(--lime-ink); }
+  .act.days { border-bottom: 0; margin-top: 6px; background: #f7faf2; border-radius: 14px; padding: 10px; }
+
+  .result { margin-top: 14px; background: linear-gradient(160deg, #f4fbe8, #e4f4cc); border: 1px solid #b9df7c; border-radius: 22px; padding: 16px; box-shadow: 0 16px 30px -18px rgba(60,120,20,.6); }
+  .big { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 8px; text-align: center; }
+  .big div { display: grid; }
+  .big small { font-size: .78rem; color: var(--muted); }
+  .big b { font-size: 1.35rem; color: var(--lime-ink); }
+  .big .main b { font-size: 2.1rem; line-height: 1.1; }
+  .big .main span { font-size: .7rem; color: var(--muted); }
+  .bars { display: grid; gap: 6px; margin-top: 12px; }
+  .bars :global(.bar) { display: grid; grid-template-columns: minmax(0, 1.4fr) 1fr 64px; gap: 8px; align-items: center; font-size: .82rem; }
+  .bars :global(span) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bars :global(i) { height: 10px; background: #fff; border-radius: 99px; overflow: hidden; }
+  .bars :global(em) { display: block; height: 100%; background: linear-gradient(90deg, #b4e05a, #6aae2c); border-radius: 99px; }
+  .bars :global(b) { text-align: right; }
+  .rnote { margin: 10px 0 0; font-size: .85rem; }
+
+  .recs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .recs :global(.rc) { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; align-content: start; box-shadow: var(--shadow); }
+  .recs :global(.rc.best) { border: 2px solid var(--lime); background: var(--lime-soft); }
+  .recs :global(.tg) { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .recs :global(.t) { font-size: 1.05rem; }
+  .recs :global(.pr) { font-size: 1.7rem; font-weight: 800; color: var(--lime-ink); }
+  .recs :global(.pr small) { font-size: .85rem; font-weight: 400; color: var(--muted); }
+  .recs :global(.sb) { font-weight: 600; font-size: .9rem; }
+  .recs :global(p) { margin: 0; font-size: .86rem; color: var(--muted); }
+  .recs :global(code) { text-align: center; padding: 8px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; font-size: .85rem; }
+  .recs :global(.go) { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .9rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  td.src { font-size: .76rem; color: var(--muted); }
+  .ex { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .ex div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; box-shadow: var(--shadow); }
+  .ex p { margin: 6px 0; font-size: .88rem; color: var(--muted); }
+  .ex span { font-weight: 700; color: var(--lime-ink); font-size: .9rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .links a { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; text-decoration: none; color: var(--ink); font-size: .88rem; }
+  .links a:hover { border-color: var(--lime); }
+</style>

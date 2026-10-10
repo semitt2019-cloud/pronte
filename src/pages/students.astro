@@ -78,6 +78,7 @@ const schema = [
     </table>
   </div>
   <p class="small">ปริมาณของ Zoom และ Google Meet คำนวณจากความเร็วที่ผู้ให้บริการระบุ (ขาขึ้น + ขาลง) ส่วนโปรแบบ "ไม่อั้น" ไม่ต้องกังวลเรื่องปริมาณ แต่ควรเลือกความเร็วให้พอกับงาน</p>
+  <a class="calc-cta" href="/data-calculator/"><span>🧮</span><b>คำนวณเน็ตของคุณเอง</b><small>ใส่ชั่วโมงที่ใช้แต่ละแอป รู้ทันทีว่าเดือนละกี่ GB และโปรไหนคุ้ม →</small></a>
 
   <NewSimCta heading="เพิ่งได้ซิมใหม่? เดือนแรกใช้แพ็กนี้คุ้มกว่า" text="ซิมใหม่ AIS สมัครแพ็กเสริมเน็ต 30 วันได้ภายใน 7 วันแรก เน็ตรวม 30–100GB พร้อมสิทธิ์โทร" />
 
@@ -133,6 +134,9 @@ const schema = [
   th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
   td.src { font-size: .78rem; color: var(--muted); }
 
+  .calc-cta { display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; align-items: center; margin-top: 14px; background: var(--lime-soft); border: 2px solid var(--lime); border-radius: 18px; padding: 14px 16px; text-decoration: none; color: var(--ink); }
+  .calc-cta span { grid-row: span 2; font-size: 2rem; }
+  .calc-cta small { color: var(--muted); }
   .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
   .posts a { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
   .posts a:hover { border-color: var(--lime); }

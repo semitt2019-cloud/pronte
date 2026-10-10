@@ -17,6 +17,7 @@ export const ALL_ROUTES: string[] = [
   '/blog/',
   '/ber-mongkol/',
   '/students/',
+  '/data-calculator/',
   ...LIST_PAGES.map((p) => `/${p.slug}/`),
   ...SALES.map((s) => `/pro/${s.slug}/`),
   ...HOWTO.map((h) => `/ais/${h.slug}/`),
