@@ -1,0 +1,151 @@
+---
+// เครื่องดูดวงเบอร์โทรศัพท์ (วิเคราะห์คู่เลข + ผลรวม + เกรด)
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { luckySorted, fmtNum } from '../../data/lucky';
+import { analyze } from '../../data/numerology';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+import { SITE } from '../../config';
+
+const path = '/ber-mongkol/check/';
+const title = 'ดูดวงเบอร์โทรศัพท์ฟรี วิเคราะห์คู่เลข ผลรวม พร้อมเกรดเบอร์';
+const description = 'ดูดวงเบอร์โทรศัพท์ฟรี ใส่เบอร์ 10 หลัก รู้ทันทีว่ามีคู่เลขดี คู่เลขเสียอะไร ผลรวมเท่าไร หมายถึงอะไร พร้อมคะแนนและเกรดเบอร์ A+ ถึง D ตามตำราเลขศาสตร์ที่นิยม';
+const mine = luckySorted().filter((n) => !n.sold).map((n) => ({ n, a: analyze(n.num)! }));
+
+const faq: [string, string][] = [
+  ['ดูดวงเบอร์โทรศัพท์ดูจากอะไร?', 'ส่วนใหญ่ดู 2 อย่าง คือคู่เลข (โดยเฉพาะ 7 ตัวท้าย) และผลรวมของเลขทั้ง 10 หลัก เครื่องนี้อ่าน 7 ตัวท้ายเป็นคู่ซ้อนกัน 6 คู่ และให้น้ำหนักคู่ท้ายมากที่สุด'],
+  ['ทำไมไม่ดู 3 ตัวแรก?', '3 ตัวแรก เช่น 081, 082, 065 เป็นรหัสที่ค่ายกำหนด เลือกเองไม่ได้ ตำราส่วนใหญ่จึงให้ความสำคัญกับเลขที่ตามมามากกว่า แต่ผลรวมยังนับทั้ง 10 หลัก'],
+  ['เกรดเบอร์คิดยังไง?', 'คู่ดีได้คะแนนบวก คู่เสียได้คะแนนลบ คู่กลางไม่มีผล คูณน้ำหนักตามตำแหน่ง (คู่ท้ายสุดหนักสุด) รวมกับผลรวม แล้วแปลงเป็นคะแนน 0–100 และเกรด A+ ถึง D'],
+  ['เบอร์ได้เกรดต่ำ ต้องเปลี่ยนเบอร์ไหม?', 'ไม่จำเป็น ความหมายเบอร์เป็นความเชื่อ แต่ละตำราตีความต่างกัน ถ้าเบอร์เดิมผูกกับธนาคารและคนติดต่อจำนวนมาก การเปลี่ยนเบอร์มีภาระมาก ควรตัดสินใจจากความสบายใจของตัวเอง'],
+  ['ข้อมูลเบอร์ที่กรอกถูกเก็บไหม?', 'ไม่เก็บ การคำนวณทำในเบราว์เซอร์ของคุณทั้งหมด ไม่มีการส่งเบอร์ไปที่เซิร์ฟเวอร์'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เบอร์มงคล AIS', '/ber-mongkol/'], ['ดูดวงเบอร์โทรศัพท์', path]]),
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'ดูดวงเบอร์โทรศัพท์', url: SITE.url + path, applicationCategory: 'LifestyleApplication', operatingSystem: 'Any', inLanguage: 'th', offers: { '@type': 'Offer', price: 0, priceCurrency: 'THB' } },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/lucky/check.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/ber-mongkol/">เบอร์มงคล AIS</a> › <span>ดูดวงเบอร์โทรศัพท์</span></nav>
+
+  <section class="hero">
+    <span class="badge">🔮 ฟรี · ไม่เก็บข้อมูลเบอร์</span>
+    <h1>ดูดวงเบอร์โทรศัพท์ <em>เบอร์คุณได้เกรดอะไร?</em></h1>
+    <form id="f" class="box" autocomplete="off">
+      <input id="in" type="tel" inputmode="numeric" maxlength="12" placeholder="เช่น 0812345678" aria-label="เบอร์โทรศัพท์ 10 หลัก" />
+      <button type="submit">ดูผล</button>
+    </form>
+    <p id="err" class="err" hidden>กรุณาใส่เบอร์มือถือ 10 หลัก</p>
+  </section>
+
+  <section id="out" class="out" hidden aria-live="polite"></section>
+
+  <h2>เบอร์มงคลที่เรามีขาย พร้อมเกรด</h2>
+  <p>ซิม AIS ใหม่ ยังไม่ลงทะเบียน ราคาตามเกรด เริ่มต้น {Math.min(...mine.map((x) => x.n.price))} บาท กดดูการวิเคราะห์เต็มของแต่ละเบอร์ได้</p>
+  <div class="mine">
+    {mine.map(({ n, a }) => (
+      <a href={`/ber-mongkol/${n.num}/`}>
+        <span class={`g ${a.cls}`}>{a.grade}</span>
+        <b>{fmtNum(n.num)}</b>
+        <small>ผลรวม {a.sum} · คู่ดี {a.good} คู่ · {a.label}</small>
+        <em>{n.price}฿ →</em>
+      </a>
+    ))}
+  </div>
+
+  <h2>เครื่องนี้วิเคราะห์ยังไง</h2>
+  <ol class="how">
+    <li><b>อ่านคู่เลข 7 ตัวท้าย</b> แบ่งเป็นคู่ซ้อนกัน 6 คู่ เช่น 871-3245 อ่านเป็น 87, 71, 13, 32, 24, 45</li>
+    <li><b>ให้น้ำหนักตามตำแหน่ง</b> คู่ท้ายสุดสำคัญที่สุด (×3) รองลงมา (×2) เพราะเป็นส่วนที่คนจำและพูดถึงบ่อยที่สุด</li>
+    <li><b>รวมผลรวมทั้ง 10 หลัก</b> ผลรวมดีได้คะแนนเพิ่ม ผลรวมเสียถูกหักคะแนน</li>
+    <li><b>แปลงเป็นคะแนน 0–100 และเกรด</b> A+ (80 ขึ้นไป) A (70) B+ (62) B (55) C (45) และ D</li>
+  </ol>
+  <p>ดูความหมายเต็มของทุกคู่ได้ที่ <a href="/ber-mongkol/pairs/">ความหมายคู่เลข 00–99</a> และผลรวมทุกค่าได้ที่ <a href="/ber-mongkol/sum/">ความหมายผลรวมเบอร์</a></p>
+
+  <Faq items={faq} />
+
+  <p class="small">ผลวิเคราะห์เป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม แต่ละตำราตีความต่างกัน ใช้ประกอบการตัดสินใจเท่านั้น ไม่ใช่การรับประกันผล</p>
+</Base>
+
+<script>
+  import { analyze } from '../../data/numerology';
+  const $ = (s: string) => document.querySelector(s) as HTMLElement;
+  const fmt = (d: string) => `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`;
+  const cls = (t: string) => (t === 'ดี' ? 'good' : t === 'เสีย' ? 'bad' : 'mid');
+  $('#f').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const a = analyze(($('#in') as HTMLInputElement).value);
+    $('#err').hidden = !!a;
+    if (!a) { $('#out').hidden = true; return; }
+    const out = $('#out');
+    out.innerHTML = `
+      <div class="sum-card">
+        <div class="gbig ${a.cls}"><b>${a.grade}</b><span>${a.label}</span></div>
+        <div class="meta">
+          <div class="num">${fmt(a.digits)}</div>
+          <div class="row"><span>คะแนน <b>${a.score}</b>/100</span><span>ผลรวม <b>${a.sum}</b></span><span>คู่ดี <b>${a.good}</b></span><span>คู่เสีย <b>${a.bad}</b></span></div>
+          ${a.topics.length ? `<div class="tp">เด่นด้าน: ${a.topics.map((t) => `<i>${t}</i>`).join('')}</div>` : ''}
+        </div>
+      </div>
+      <h3>คู่เลขใน 7 ตัวท้าย</h3>
+      <div class="plist">${a.pairs.map((p) => `<a class="pr ${cls(p.tone)}" href="/ber-mongkol/pairs/#p${p.pair}"><b>${p.pair}</b><span>${p.text}${p.weight > 1 ? ` <small>(น้ำหนัก ×${p.weight})</small>` : ''}</span><em>${p.tone === 'ดี' ? 'คู่ดี' : p.tone === 'เสีย' ? 'คู่เสีย' : 'คู่กลาง'}</em></a>`).join('')}</div>
+      <h3>ผลรวม ${a.sum}</h3>
+      <p class="pr ${cls(a.sumInfo.tone)} sumrow"><b>${a.sum}</b><span>${a.sumInfo.text}</span><em>${a.sumInfo.tone === 'ดี' ? 'ผลรวมดี' : a.sumInfo.tone === 'เสีย' ? 'ผลรวมเสีย' : 'ผลรวมกลาง'}</em></p>
+      <p class="hint">${a.score >= 70 ? 'เบอร์นี้ได้คะแนนดีตามตำราที่นิยม' : 'อยากได้เบอร์ที่คู่ท้ายดีกว่านี้? ดูเบอร์มงคลที่เรามีขายด้านล่าง'}</p>`;
+    out.hidden = false;
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // @ts-ignore
+    if (typeof gtag === 'function') gtag('event', 'check_number', { grade: a.grade });
+  });
+</script>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 14px; }
+  .hero h1 em { font-style: normal; color: #fff6c2; display: block; }
+  .box { display: flex; gap: 8px; max-width: 460px; }
+  .box input { flex: 1; min-width: 0; font: inherit; font-size: 1.3rem; letter-spacing: 1px; padding: 12px 16px; border-radius: 14px; border: 0; color: var(--ink); }
+  .box button { font: inherit; font-weight: 700; font-size: 1.05rem; padding: 0 22px; border-radius: 14px; border: 0; background: #fff6c2; color: #3b5a10; cursor: pointer; }
+  .err { margin: 8px 0 0; color: #fff6c2; font-weight: 600; }
+
+  .out { margin-top: 18px; scroll-margin-top: 130px; }
+  .out :global(.sum-card) { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--shadow); }
+  .out :global(.gbig) { border-radius: 18px; aspect-ratio: 1; display: grid; place-content: center; text-align: center; color: #fff; }
+  .out :global(.gbig b) { font-size: 2.8rem; line-height: 1; }
+  .out :global(.gbig span) { font-size: .85rem; margin-top: 4px; }
+  .out :global(.num) { font-size: 1.6rem; font-weight: 800; letter-spacing: .5px; }
+  .out :global(.row) { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .out :global(.row b) { color: var(--ink); }
+  .out :global(.tp) { margin-top: 8px; font-size: .88rem; }
+  .out :global(.tp i) { font-style: normal; background: var(--lime-soft); color: var(--lime-ink); padding: 2px 10px; border-radius: 999px; margin-left: 6px; }
+  .out :global(.plist) { display: grid; gap: 8px; }
+  .out :global(.pr) { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; text-decoration: none; color: var(--ink); margin: 0; }
+  .out :global(.pr b) { font-size: 1.45rem; text-align: center; }
+  .out :global(.pr small) { color: var(--muted); }
+  .out :global(.pr em) { font-style: normal; font-size: .75rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+  .out :global(.hint) { background: #fff8e6; border-radius: 14px; padding: 12px 14px; font-size: .92rem; }
+  @media (max-width: 480px) { .out :global(.sum-card) { grid-template-columns: 92px 1fr; } .out :global(.gbig b) { font-size: 2.2rem; } .out :global(.num) { font-size: 1.25rem; } }
+
+  :global(.gbig.a), .g.a { background: linear-gradient(140deg, #8fd14f, #3f8f1c); }
+  :global(.gbig.b), .g.b { background: linear-gradient(140deg, #b6d84e, #7aa62a); }
+  :global(.gbig.c), .g.c { background: linear-gradient(140deg, #f5c04a, #d89412); }
+  :global(.gbig.d), .g.d { background: linear-gradient(140deg, #f08a6c, #c9502f); }
+  .out :global(.good b) { color: var(--lime-ink); } .out :global(.good em) { background: var(--lime-soft); color: var(--lime-ink); }
+  .out :global(.mid b) { color: #b07400; } .out :global(.mid em) { background: #fff3d6; color: #8a5a00; }
+  .out :global(.bad b) { color: #c0392b; } .out :global(.bad em) { background: #fde4df; color: #a5301f; }
+
+  .mine { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .mine a { display: grid; grid-template-columns: 48px 1fr; column-gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); }
+  .mine a:hover { border-color: var(--lime); }
+  .g { grid-row: span 3; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 1.2rem; }
+  .mine b { font-size: 1.15rem; }
+  .mine small { color: var(--muted); font-size: .8rem; }
+  .mine em { font-style: normal; font-weight: 700; color: var(--lime-ink); }
+  .how { padding-left: 20px; display: grid; gap: 6px; }
+</style>

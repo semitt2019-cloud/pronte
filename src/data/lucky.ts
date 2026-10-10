@@ -2,14 +2,29 @@
 //  เบอร์มงคล AIS (ซิมใหม่ ยังไม่ลงทะเบียน) — หน้า /ber-mongkol/
 //  เพิ่มเบอร์ใหม่: คัดลอก 1 ก้อนแล้วแก้ข้อมูล + ใส่รูปที่ public/lucky/<เบอร์>.jpg
 //  ขายแล้ว: เปลี่ยน sold เป็น true (หน้าเว็บจะขึ้น "ขายแล้ว" อัตโนมัติ)
+//  ราคา: คิดจากเกรดเบอร์อัตโนมัติ (ตาราง PRICE_BY_GRADE ด้านล่าง)
+//        ถ้าอยากตั้งราคาเองเฉพาะเบอร์ ใส่ price: 199 ในก้อนของเบอร์นั้น
 //  หมายเหตุ: ความหมายเลขเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม ไม่ใช่การรับประกันผล
 // ============================================================
+
+import { analyze } from './numerology';
+
+// ราคาตามเกรด (บาท) — แก้ตรงนี้ที่เดียว ทุกเบอร์ที่ไม่ได้ตั้งราคาเองจะเปลี่ยนตาม
+export const PRICE_BY_GRADE: Record<string, number> = {
+  'A+': 399,
+  'A': 149,
+  'B+': 99,
+  'B': 99,
+  'C': 79,
+  'D': 59,
+};
 
 export type PairNote = { pair: string; meaning: string; tone: 'ดี' | 'กลาง' };
 
 export type LuckyNumber = {
   num: string;          // 10 หลัก ไม่มีขีด
-  price: number;
+  price: number;        // คำนวณจากเกรดอัตโนมัติ (ตั้งเองได้ด้วย price ใน RAW)
+  grade: string;
   sold?: boolean;
   rank: number;         // ลำดับแสดงผล (น้อย = แสดงก่อน)
   badge?: string;       // ป้าย เช่น 'แนะนำ'
@@ -25,9 +40,11 @@ export type LuckyNumber = {
 
 export const LUCKY_PACK = 'ซิม AIS One-2-Call 5G ชุด Super Social (ซิม 3 ขนาด 3-in-1)';
 
-export const LUCKY: LuckyNumber[] = [
+type RawLucky = Omit<LuckyNumber, 'price' | 'grade'> & { price?: number };
+
+const RAW: RawLucky[] = [
   {
-    num: '0828713245', price: 99, rank: 1, badge: 'ดีที่สุดในชุด',
+    num: '0828713245', rank: 1, badge: 'ดีที่สุดในชุด',
     headline: 'ปิดท้ายด้วยคู่ 24 และ 45 เด่นด้านการเงิน เสน่ห์ และการเจรจา',
     focus: ['การเงิน', 'เสน่ห์', 'การเจรจา'],
     pairs: [
@@ -49,7 +66,7 @@ export const LUCKY: LuckyNumber[] = [
     ],
   },
   {
-    num: '0828712941', price: 99, rank: 2, badge: 'แนะนำ',
+    num: '0828712941', rank: 2, badge: 'แนะนำ',
     headline: 'คู่ 29 และ 41 เด่นด้านความคิด การงาน และผู้ใหญ่อุปถัมภ์',
     focus: ['การงาน', 'ความคิด', 'ผู้ใหญ่อุปถัมภ์'],
     pairs: [
@@ -71,7 +88,7 @@ export const LUCKY: LuckyNumber[] = [
     ],
   },
   {
-    num: '0828712924', price: 99, rank: 3,
+    num: '0828712924', rank: 3,
     headline: 'มีคู่ 29, 92 และ 24 ครบทั้งชุด ผสมความคิดกับเสน่ห์',
     focus: ['ความคิด', 'เสน่ห์', 'การเงิน'],
     pairs: [
@@ -93,7 +110,7 @@ export const LUCKY: LuckyNumber[] = [
     ],
   },
   {
-    num: '0828712877', price: 99, rank: 4,
+    num: '0828712877', rank: 4,
     headline: 'ผลรวม 50 มีคู่ 28 และ 87 ปิดท้ายด้วย 77 จำง่าย',
     focus: ['การค้า', 'ผลรวมดี', 'จำง่าย'],
     pairs: [
@@ -115,6 +132,11 @@ export const LUCKY: LuckyNumber[] = [
     ],
   },
 ];
+
+export const LUCKY: LuckyNumber[] = RAW.map((n) => {
+  const grade = analyze(n.num)!.grade;
+  return { ...n, grade, price: n.price ?? PRICE_BY_GRADE[grade] ?? 99 };
+});
 
 export const fmtNum = (n: string) => `${n.slice(0, 3)}-${n.slice(3, 6)}-${n.slice(6)}`;
 export const digitSum = (n: string) => n.split('').reduce((a, d) => a + Number(d), 0);

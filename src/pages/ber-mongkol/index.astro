@@ -3,19 +3,22 @@
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
-import { luckySorted, fmtNum, digitSum, LUCKY_PACK } from '../../data/lucky';
+import { luckySorted, fmtNum, digitSum, LUCKY_PACK, PRICE_BY_GRADE } from '../../data/lucky';
 import { faqSchema, breadcrumb } from '../../lib/seo';
+import { analyze } from '../../data/numerology';
 import { SITE, CONTACT, lineHref } from '../../config';
 
-const list = luckySorted();
+const list = luckySorted().map((n) => ({ ...n, a: analyze(n.num)! }));
+const topics = [...new Set(list.flatMap((n) => n.focus))];
 const avail = list.filter((n) => !n.sold);
 const minPrice = Math.min(...avail.map((n) => n.price));
-const title = `เบอร์มงคล AIS ราคา ${minPrice} บาท ซิมใหม่ เลือกเบอร์ได้ พร้อมความหมาย`;
-const description = `ขายเบอร์มงคล AIS ซิมใหม่ยังไม่ลงทะเบียน ราคาเบอร์ละ ${minPrice} บาท ดูผลรวมและความหมายคู่เลขทุกเบอร์ เปิดซิมในชื่อตัวเองได้ทันที แล้วสมัครโปรเน็ตซิมใหม่ 200–350 บาทต่อได้เลย`;
+const title = `เบอร์มงคล AIS ราคาเริ่มต้น ${minPrice} บาท ซิมใหม่ เลือกเบอร์ได้ พร้อมเกรดและความหมาย`;
+const tiers = Object.entries(PRICE_BY_GRADE).reduce<[string[], number][]>((acc, [g, p]) => { const last = acc[acc.length - 1]; if (last && last[1] === p) last[0].push(g); else acc.push([[g], p]); return acc; }, []);
+const description = `ขายเบอร์มงคล AIS ซิมใหม่ยังไม่ลงทะเบียน ราคาตามเกรดเบอร์ เริ่มต้น ${minPrice} บาท ดูเกรด ผลรวมและความหมายคู่เลขทุกเบอร์ เปิดซิมในชื่อตัวเองได้ทันที แล้วสมัครโปรเน็ตซิมใหม่ 200–350 บาทต่อได้เลย`;
 
 const faq: [string, string][] = [
   ['ซิมที่ขายลงทะเบียนแล้วหรือยัง?', 'ยังไม่ลงทะเบียน ผู้ซื้อลงทะเบียนในชื่อตัวเองได้ทันทีผ่านแอป myAIS หรือที่ AIS Shop ด้วยบัตรประชาชนและสแกนใบหน้า เบอร์จึงเป็นของคุณอย่างถูกต้อง ใช้กับแอปธนาคารได้'],
-  [`ราคา ${minPrice} บาท รวมอะไรบ้าง?`, `รวมซิม ${LUCKY_PACK} 1 ใบ เบอร์ตามที่เลือก ค่าส่ง ${CONTACT.shipBy} ${CONTACT.shipping} บาทต่อเบอร์ รวม ${minPrice + CONTACT.shipping} บาท`],
+  ['ราคาเบอร์คิดยังไง รวมอะไรบ้าง?', `ราคาตั้งตามเกรดเบอร์ (${tiers.map(([g, p]) => `${g.join('/')} ${p} บาท`).join(', ')}) รวมซิม ${LUCKY_PACK} 1 ใบ ค่าส่ง ${CONTACT.shipBy} ${CONTACT.shipping} บาทต่อเบอร์ จ่ายแยก`],
   ['สั่งซื้อเบอร์ยังไง?', `กดปุ่มสั่งซื้อทาง LINE OA แล้วแจ้งเบอร์ที่ต้องการ แอดมินจะแจ้งวิธีชำระเงิน และจัดส่งซิมทาง ${CONTACT.shipBy}`],
   ['ซิมมีวันหมดอายุไหม?', 'ซิมใหม่ต้องลงทะเบียนก่อนวันหมดอายุที่ระบุบนสติกเกอร์ และหลังยืนยันตัวตนแล้วต้องเปิดใช้งานภายใน 60 วัน ตามที่พิมพ์ไว้บนการ์ดซิม'],
   ['ได้ซิมแล้วสมัครโปรเน็ตอะไรดี?', 'ซิมใหม่สมัครแพ็กเสริมเน็ตสำหรับซิมใหม่ได้ภายใน 7 วันแรก ราคา 200–350 บาท เน็ตรวม 30–100GB กดสมัครได้จากหน้ารายละเอียดของแต่ละเบอร์'],
@@ -37,20 +40,30 @@ const schema = [
 
   <section class="hero">
     <span class="badge">ซิมใหม่ AIS · ยังไม่ลงทะเบียน</span>
-    <h1>เบอร์มงคล AIS <em>ราคาเบอร์ละ {minPrice} บาท</em></h1>
+    <h1>เบอร์มงคล AIS <em>ราคาตามเกรด เริ่มต้น {minPrice} บาท</em></h1>
     <p>เลือกเบอร์ที่ชอบ ดูผลรวมและความหมายคู่เลข แล้วเปิดซิมในชื่อตัวเองได้ทันที ต่อด้วยโปรเน็ตซิมใหม่สุดคุ้ม</p>
-    <div class="stats"><span><b>{avail.length}</b> เบอร์ว่าง</span><span><b>{minPrice}฿</b> ต่อเบอร์</span><span><b>{CONTACT.shipBy}</b> ค่าส่ง {CONTACT.shipping}฿</span><span><b>5G</b> ซิม 3 ขนาด</span></div>
+    <div class="stats"><span><b>{avail.length}</b> เบอร์ว่าง</span><span>เริ่ม <b>{minPrice}฿</b></span><span><b>{CONTACT.shipBy}</b> ค่าส่ง {CONTACT.shipping}฿</span><span><b>5G</b> ซิม 3 ขนาด</span></div>
     <a class="lineb" href={lineHref()} target="_blank" rel="noopener" data-buy="all">สั่งซื้อทาง LINE OA</a>
   </section>
 
+  <div class="tools">
+    <a href="/ber-mongkol/check/"><span>🔮</span><b>ดูดวงเบอร์โทรศัพท์</b><small>ใส่เบอร์ของคุณ ดูเกรดและคู่เลขฟรี</small></a>
+    <a href="/ber-mongkol/pairs/"><span>🔢</span><b>ความหมายคู่เลข 00–99</b><small>คู่เลขดี คู่เลขเสีย</small></a>
+    <a href="/ber-mongkol/sum/"><span>➕</span><b>ความหมายผลรวมเบอร์</b><small>ผลรวม 25–70 ดีหรือไม่ดี</small></a>
+  </div>
+
   <h2>เบอร์มงคลที่ว่างตอนนี้</h2>
+  <div class="chips" role="group" aria-label="กรองตามด้านที่เด่น">
+    <button type="button" data-f="" class="on">ทั้งหมด</button>
+    {topics.map((t) => <button type="button" data-f={t}>{t}</button>)}
+  </div>
   <div class="grid">
     {list.map((n) => (
-      <a class={`card ${n.sold ? 'is-sold' : ''}`} href={`/ber-mongkol/${n.num}/`}>
-        <div class="img"><img src={`/lucky/${n.num}.jpg`} alt={`ซิม AIS เบอร์มงคล ${fmtNum(n.num)}`} width="360" height="480" loading="lazy" decoding="async" />{n.badge && !n.sold && <i class="flag">{n.badge}</i>}{n.sold && <i class="flag sold">ขายแล้ว</i>}</div>
+      <a class={`card ${n.sold ? 'is-sold' : ''}`} href={`/ber-mongkol/${n.num}/`} data-topics={n.focus.join('|')}>
+        <div class="img"><img src={`/lucky/${n.num}.jpg`} alt={`ซิม AIS เบอร์มงคล ${fmtNum(n.num)}`} width="360" height="480" loading="lazy" decoding="async" />{n.badge && !n.sold && <i class="flag">{n.badge}</i>}{n.sold && <i class="flag sold">ขายแล้ว</i>}<i class={`grd ${n.a.cls}`}>{n.a.grade}<small>{n.a.label}</small></i></div>
         <div class="body">
           <b class="num">{fmtNum(n.num)}</b>
-          <span class="sum">ผลรวม {digitSum(n.num)}</span>
+          <span class="sum">ผลรวม {digitSum(n.num)} · {n.a.score} คะแนน</span>
           <p>{n.headline}</p>
           <div class="tags">{n.focus.map((f) => <span>{f}</span>)}</div>
           <div class="cfoot"><b class="price">{n.price}฿</b><em>ดูรายละเอียด →</em></div>
@@ -58,6 +71,13 @@ const schema = [
       </a>
     ))}
   </div>
+
+  <h2>ราคาตามเกรดเบอร์</h2>
+  <p>ทุกเบอร์ตั้งราคาตามเกรดที่คิดจากคู่เลขใน 7 ตัวท้ายและผลรวม ใช้เกณฑ์เดียวกันทุกเบอร์ (<a href="/ber-mongkol/check/">ดูวิธีคิดเกรด</a>)</p>
+  <div class="tiers">
+    {tiers.map(([g, p]) => <div><b>{g.join(' / ')}</b><span>{p}฿</span></div>)}
+  </div>
+  <p class="small">ค่าส่ง {CONTACT.shipBy} {CONTACT.shipping} บาทต่อเบอร์ ทุกเกรด</p>
 
   <h2>ซื้อเบอร์แล้วทำยังไงต่อ</h2>
   <ol class="steps">
@@ -69,14 +89,15 @@ const schema = [
   <NewSimCta heading="ได้ซิมแล้ว สมัครโปรเน็ตซิมใหม่ได้เลย" />
 
   <h2>เลือกเบอร์มงคลดูจากอะไร</h2>
-  <p>คนเลือกเบอร์มงคลส่วนใหญ่ดู 2 อย่าง คือ <b>ผลรวม</b> (บวกเลขทั้ง 10 หลัก) และ <b>คู่เลข</b> โดยเฉพาะ 4 ตัวท้ายซึ่งเป็นส่วนที่คนจำและพูดถึงบ่อยที่สุด ทุกเบอร์ในหน้านี้ขึ้นต้นด้วย 082-871 เหมือนกัน จึงเปรียบเทียบกันที่ตัวท้ายได้ง่าย อ่านหลักการเพิ่มเติมได้ที่ <a href="/blog/lucky-number-ais/">วิธีเลือกเบอร์มงคล AIS</a></p>
+  <p>คนเลือกเบอร์มงคลส่วนใหญ่ดู 2 อย่าง คือ <b>ผลรวม</b> (บวกเลขทั้ง 10 หลัก) และ <b>คู่เลข</b> โดยเฉพาะ 4 ตัวท้ายซึ่งเป็นส่วนที่คนจำและพูดถึงบ่อยที่สุด ทุกเบอร์ในหน้านี้ขึ้นต้นด้วย 082-871 เหมือนกัน จึงเปรียบเทียบกันที่ตัวท้ายได้ง่าย อ่านหลักการเพิ่มเติมได้ที่ <a href="/blog/lucky-number-ais/">วิธีเลือกเบอร์มงคล AIS</a> หรือเปิดดู <a href="/ber-mongkol/pairs/">ความหมายคู่เลข</a> และ <a href="/ber-mongkol/sum/">ความหมายผลรวม</a></p>
+  <p><b>เกรดเบอร์คิดยังไง:</b> อ่าน 7 ตัวท้ายเป็นคู่ซ้อนกัน 6 คู่ คู่ดีได้คะแนน คู่เสียถูกหักคะแนน คู่ท้ายมีน้ำหนักมากที่สุด แล้วรวมกับผลรวมทั้ง 10 หลัก แปลงเป็นคะแนน 0–100 และเกรด A+ ถึง D (<a href="/ber-mongkol/check/">ลองกับเบอร์ของคุณ</a>)</p>
 
   <div class="cmp">
     <table>
-      <thead><tr><th>เบอร์</th><th>ผลรวม</th><th>คู่เด่น</th><th>เหมาะกับ</th></tr></thead>
+      <thead><tr><th>เบอร์</th><th>เกรด</th><th>ผลรวม</th><th>คู่เด่น</th><th>เหมาะกับ</th></tr></thead>
       <tbody>
         {list.map((n) => (
-          <tr><td><a href={`/ber-mongkol/${n.num}/`}>{fmtNum(n.num)}</a></td><td>{digitSum(n.num)}</td><td>{n.pairs.filter((p) => p.tone === 'ดี').map((p) => p.pair).join(', ') || '–'}</td><td>{n.focus.join(' · ')}</td></tr>
+          <tr><td><a href={`/ber-mongkol/${n.num}/`}>{fmtNum(n.num)}</a></td><td><b>{n.a.grade}</b></td><td>{digitSum(n.num)}</td><td>{n.pairs.filter((p) => p.tone === 'ดี').map((p) => p.pair).join(', ') || '–'}</td><td>{n.focus.join(' · ')}</td></tr>
         ))}
       </tbody>
     </table>
@@ -87,7 +108,33 @@ const schema = [
   <p class="small">ความหมายเบอร์มงคลเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม ไม่ใช่การรับประกันผล · ซิมเป็นซิม AIS ของแท้ ยังไม่ลงทะเบียน ผู้ซื้อลงทะเบียนในชื่อตัวเอง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
 </Base>
 
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.chips button');
+  btns.forEach((b) => b.addEventListener('click', () => {
+    btns.forEach((x) => x.classList.toggle('on', x === b));
+    const f = b.dataset.f || '';
+    document.querySelectorAll<HTMLElement>('.grid .card').forEach((c) => { c.hidden = !!f && !(c.dataset.topics || '').split('|').includes(f); });
+  }));
+</script>
+
 <style>
+  .tiers { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .tiers div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; display: grid; }
+  .tiers b { font-size: 1.05rem; }
+  .tiers span { font-size: 1.4rem; font-weight: 800; color: var(--lime-ink); }
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 16px; }
+  .tools a { display: grid; grid-template-columns: 40px 1fr; column-gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); }
+  .tools a:hover { border-color: var(--lime); }
+  .tools span { grid-row: span 2; font-size: 1.7rem; }
+  .tools small { color: var(--muted); font-size: .8rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .chips button { font: inherit; font-size: .85rem; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px; cursor: pointer; color: var(--ink); }
+  .chips button.on { background: var(--lime-soft); border-color: var(--lime); color: var(--lime-ink); font-weight: 600; }
+  .card[hidden] { display: none; }
+  .grd { position: absolute; right: 10px; bottom: 10px; font-style: normal; color: #fff; font-weight: 800; font-size: 1.15rem; padding: 4px 12px; border-radius: 12px; display: grid; text-align: center; line-height: 1.1; box-shadow: 0 6px 14px -6px rgba(0,0,0,.4); }
+  .grd small { font-size: .62rem; font-weight: 600; }
+  .grd.a { background: linear-gradient(140deg, #8fd14f, #3f8f1c); } .grd.b { background: linear-gradient(140deg, #b6d84e, #7aa62a); }
+  .grd.c { background: linear-gradient(140deg, #f5c04a, #d89412); } .grd.d { background: linear-gradient(140deg, #f08a6c, #c9502f); }
   .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
   .crumb a { color: var(--muted); text-decoration: none; }
   .hero { border-radius: 24px; padding: 26px 22px; color: #fff; margin-top: 6px;

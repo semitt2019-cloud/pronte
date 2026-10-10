@@ -7,6 +7,7 @@ import AllPkgTable from '../../components/AllPkgTable.astro';
 import BuyBox from '../../components/BuyBox.astro';
 import { LUCKY, luckySorted, fmtNum, digitSum, LUCKY_PACK, type LuckyNumber } from '../../data/lucky';
 import { faqSchema, breadcrumb } from '../../lib/seo';
+import { analyze } from '../../data/numerology';
 import { SITE, CONTACT } from '../../config';
 
 export function getStaticPaths() {
@@ -19,6 +20,9 @@ const path = `/ber-mongkol/${n.num}/`;
 const last4 = n.num.slice(6);
 const title = `เบอร์มงคล ${f} ผลรวม ${sum} ${n.focus[0]} ${n.focus[1]} ราคา ${n.price} บาท`;
 const description = `เบอร์ AIS ${f} ผลรวม ${sum} ${n.headline} ซิมใหม่ยังไม่ลงทะเบียน ราคา ${n.price} บาท พร้อมวิธีเปิดซิมและโปรเน็ตซิมใหม่`;
+const a = analyze(n.num)!;
+const earlyBad = a.pairs.filter((p) => p.tone === 'เสีย' && p.weight === 1).map((p) => p.pair);
+const toneCls = (t: string) => (t === 'ดี' ? 'good' : t === 'เสีย' ? 'bad' : 'mid');
 const others = luckySorted().filter((x) => x.num !== n.num);
 
 const faq: [string, string][] = [
@@ -60,6 +64,7 @@ const schema = [
       <h1>เบอร์มงคล <span class="num">{f}</span></h1>
       <p class="hl">{n.headline}</p>
       <div class="facts">
+        <div class={`gr ${a.cls}`}><small>เกรดเบอร์</small><b>{a.grade}</b><span>{a.label}</span></div>
         <div><small>ผลรวม</small><b>{sum}</b></div>
         <div><small>4 ตัวท้าย</small><b>{last4}</b></div>
         <div><small>ราคา</small><b class="price">{n.price}฿</b></div>
@@ -79,7 +84,7 @@ const schema = [
   <p>{n.intro}</p>
 
   <h3>ผลรวม {sum}</h3>
-  <p>{n.sumNote}</p>
+  <p>{n.sumNote} (<a href={`/ber-mongkol/sum/#s${sum}`}>ดูความหมายผลรวมทั้งหมด</a>)</p>
 
   <h3>คู่เลขที่ควรรู้ในเบอร์นี้</h3>
   <div class="pairs">
@@ -87,6 +92,16 @@ const schema = [
       <div class={`pair ${p.tone === 'ดี' ? 'good' : 'mid'}`}><b>{p.pair}</b><span>{p.meaning}</span><em>{p.tone === 'ดี' ? 'คู่ดี' : 'คู่กลาง'}</em></div>
     ))}
   </div>
+
+  <h3>วิเคราะห์ครบทุกคู่ใน 7 ตัวท้าย · เกรด {a.grade} ({a.score}/100)</h3>
+  <p>อ่าน 7 ตัวท้าย <b>{n.num.slice(3)}</b> เป็นคู่ซ้อนกัน 6 คู่ ให้น้ำหนักคู่ท้ายมากที่สุด แล้วรวมกับผลรวม {sum} ได้ <b>{a.score} คะแนน เกรด {a.grade} ({a.label})</b></p>
+  <div class="all">
+    {a.pairs.map((p) => (
+      <a href={`/ber-mongkol/pairs/#p${p.pair}`} class={toneCls(p.tone)}><b>{p.pair}</b><span>{p.text}</span><em>{p.tone === 'ดี' ? 'ดี' : p.tone === 'เสีย' ? 'เสีย' : 'กลาง'}{p.weight > 1 ? ` ×${p.weight}` : ''}</em></a>
+    ))}
+  </div>
+  {earlyBad.length > 0 && <p class="note">คู่ {earlyBad.join(', ')} ที่ตำราจัดเป็นคู่เสีย อยู่ช่วงต้นของเบอร์ (ส่วนที่มาจากชุดเลขของค่าย ทุกเบอร์ในชุด 082-871 มีเหมือนกัน) จึงมีน้ำหนักน้อยกว่าคู่ท้าย</p>}
+  <p class="note">อยากเทียบกับเบอร์ที่ใช้อยู่? <a href="/ber-mongkol/check/">ดูดวงเบอร์โทรศัพท์ของคุณฟรี</a></p>
 
   <h3>วิเคราะห์ภาพรวม</h3>
   {n.reading.map((t) => <p>{t}</p>)}
@@ -115,7 +130,7 @@ const schema = [
   <div class="others">
     {others.map((o) => (
       <a href={`/ber-mongkol/${o.num}/`} class={o.sold ? 'is-sold' : ''}>
-        <b>{fmtNum(o.num)}</b><span>ผลรวม {digitSum(o.num)} · {o.focus.slice(0, 2).join(' · ')}</span><em>{o.sold ? 'ขายแล้ว' : `${o.price}฿`}</em>
+        <b>{fmtNum(o.num)}</b><span>เกรด {analyze(o.num)!.grade} · ผลรวม {digitSum(o.num)} · {o.focus.slice(0, 2).join(' · ')}</span><em>{o.sold ? 'ขายแล้ว' : `${o.price}฿`}</em>
       </a>
     ))}
   </div>
@@ -143,7 +158,20 @@ const schema = [
   .info h1 { margin: 0; font-size: 1.5rem; }
   .info h1 .num { display: block; font-size: 2.3rem; color: var(--lime-ink); letter-spacing: .5px; }
   .hl { margin: 0; color: var(--muted); }
-  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .facts .gr { color: #fff; border: 0; }
+  .facts .gr small { color: rgba(255,255,255,.85); }
+  .facts .gr span { display: block; font-size: .72rem; }
+  .facts .gr.a { background: linear-gradient(140deg, #8fd14f, #3f8f1c); } .facts .gr.b { background: linear-gradient(140deg, #b6d84e, #7aa62a); }
+  .facts .gr.c { background: linear-gradient(140deg, #f5c04a, #d89412); } .facts .gr.d { background: linear-gradient(140deg, #f08a6c, #c9502f); }
+  @media (max-width: 420px) { .facts { gap: 6px; } .facts div { padding: 8px 4px; } .facts b { font-size: 1.15rem; } }
+  .all { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+  .all a { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; text-decoration: none; color: var(--ink); font-size: .86rem; }
+  .all b { font-size: 1.25rem; text-align: center; }
+  .all em { font-style: normal; font-size: .72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .all .good b { color: var(--lime-ink); } .all .good em { background: var(--lime-soft); color: var(--lime-ink); }
+  .all .mid b { color: #b07400; } .all .mid em { background: #fff3d6; color: #8a5a00; }
+  .all .bad b { color: #c0392b; } .all .bad em { background: #fde4df; color: #a5301f; }
   .facts div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; }
   .facts small { display: block; color: var(--muted); font-size: .78rem; }
   .facts b { font-size: 1.4rem; }

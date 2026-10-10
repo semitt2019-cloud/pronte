@@ -1,0 +1,110 @@
+---
+// ความหมายคู่เลข 00–99
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { PAIR_LIST, type Tone } from '../../data/numerology';
+import { luckySorted, fmtNum } from '../../data/lucky';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+
+const path = '/ber-mongkol/pairs/';
+const title = 'ความหมายคู่เลข 00–99 คู่เลขดี คู่เลขเสีย สำหรับเลือกเบอร์มงคล';
+const description = 'รวมความหมายคู่เลขเบอร์โทรศัพท์ครบ 00–99 แยกคู่เลขดี คู่กลาง และคู่เลขเสีย เช่น 24 42 45 54 56 65 พร้อมความหมายเลข 0–9 ตามดาว ใช้ประกอบการเลือกเบอร์มงคล';
+const groups: [Tone, string, string][] = [
+  ['ดี', 'คู่เลขดี', 'คู่ที่ตำราส่วนใหญ่มองว่าส่งเสริม นิยมให้อยู่ใน 4 ตัวท้าย'],
+  ['กลาง', 'คู่เลขกลาง ๆ', 'ตำราตีความต่างกัน หรือมีทั้งด้านดีและด้านที่ต้องระวัง'],
+  ['เสีย', 'คู่เลขเสีย (ควรเลี่ยงตัวท้าย)', 'คู่ที่ตำราส่วนใหญ่ให้ระวัง ถ้าอยู่ช่วงต้นเบอร์จะมีน้ำหนักน้อยกว่า'],
+];
+const PLANETS: [string, string, string][] = [
+  ['0', 'ไม่มีดาวประจำ (ความว่าง)', 'ความว่างเปล่า เริ่มต้นใหม่'],
+  ['1', 'ดาวอาทิตย์', 'ความเป็นผู้นำ ความมั่นใจ เกียรติ'],
+  ['2', 'ดาวจันทร์', 'ความอ่อนโยน เสน่ห์ ความคิดสร้างสรรค์'],
+  ['3', 'ดาวอังคาร', 'ความกล้า พลัง ความใจร้อน'],
+  ['4', 'ดาวพุธ', 'การสื่อสาร การเจรจา การค้า'],
+  ['5', 'ดาวพฤหัสบดี', 'ความรู้ ปัญญา ผู้ใหญ่อุปถัมภ์'],
+  ['6', 'ดาวศุกร์', 'ความรัก ความสุข ความงาม การเงิน'],
+  ['7', 'ดาวเสาร์', 'ความอดทน ความหนักแน่น อุปสรรค'],
+  ['8', 'ดาวราหู', 'ความกล้าเสี่ยง ความทะเยอทะยาน ความไม่แน่นอน'],
+  ['9', 'ดาวเกตุ', 'ลางสังหรณ์ สิ่งศักดิ์สิทธิ์ ความเชื่อ'],
+];
+const stock = luckySorted().filter((n) => !n.sold);
+const inStock = (keys: string[]) => stock.filter((n) => keys.some((k) => n.num.slice(6).includes(k)));
+
+const faq: [string, string][] = [
+  ['คู่เลขอะไรดีที่สุด?', 'คู่ที่คนนิยมมากคือ 24/42 (เสน่ห์ การเงิน), 45/54 (การเจรจา), 56/65 (โชคลาภ), 36/63 (ความรัก) และ 14/41 (สติปัญญา) แต่ควรเลือกให้ตรงกับเรื่องที่อยากเสริม'],
+  ['คู่เลขกลับกัน เช่น 24 กับ 42 ความหมายเหมือนกันไหม?', 'ตำราส่วนใหญ่ให้ความหมายหลักเหมือนกัน เพราะเป็นดาวคู่เดียวกัน บางตำราแยกรายละเอียดเล็กน้อย'],
+  ['มีคู่เลขเสียในเบอร์ ต้องเปลี่ยนเบอร์ไหม?', 'ไม่จำเป็น ถ้าคู่เสียอยู่ช่วงต้นเบอร์ น้ำหนักจะน้อยกว่าตัวท้าย และความหมายเบอร์เป็นความเชื่อ ควรพิจารณาความสะดวกในการเปลี่ยนเบอร์ด้วย'],
+  ['ดูคู่เลขตรงไหนของเบอร์?', 'นิยมดู 7 ตัวท้ายเป็นคู่ซ้อนกัน และให้ความสำคัญกับ 4 ตัวท้ายมากที่สุด ลองใช้เครื่องดูดวงเบอร์ของเราเพื่อวิเคราะห์ทุกคู่อัตโนมัติ'],
+];
+const schema = [breadcrumb([['หน้าแรก', '/'], ['เบอร์มงคล AIS', '/ber-mongkol/'], ['ความหมายคู่เลข', path]]), faqSchema(faq)];
+---
+<Base title={title} description={description} schema={schema} image="/og/lucky/pairs.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/ber-mongkol/">เบอร์มงคล AIS</a> › <span>ความหมายคู่เลข</span></nav>
+  <h1>ความหมายคู่เลข 00–99 <small>คู่เลขดี คู่เลขเสีย สำหรับเลือกเบอร์มงคล</small></h1>
+  <p class="lead">คู่เลขคือเลข 2 ตัวที่อยู่ติดกันในเบอร์โทรศัพท์ ตำราเลขศาสตร์ที่นิยมผูกเลขแต่ละตัวกับดาว และอ่านความหมายจากดาวสองดวงที่มาคู่กัน ด้านล่างรวมครบทั้ง 100 คู่ แยกตามกลุ่ม (คู่กลับกัน เช่น 24 กับ 42 ใช้ความหมายเดียวกัน)</p>
+  <a class="tool" href="/ber-mongkol/check/">🔮 อยากรู้ว่าเบอร์ของคุณมีคู่อะไร? <b>ดูดวงเบอร์อัตโนมัติ →</b></a>
+
+  <nav class="jump">{groups.map(([t, h]) => <a href={`#g-${t}`}>{h}</a>)}<a href="#planets">เลข 0–9 ตามดาว</a></nav>
+
+  {groups.map(([tone, h, sub]) => (
+    <section id={`g-${tone}`} class="grp">
+      <h2>{h}</h2>
+      <p>{sub}</p>
+      <div class={`cards ${tone === 'ดี' ? 'good' : tone === 'เสีย' ? 'bad' : 'mid'}`}>
+        {PAIR_LIST.filter(([, t]) => t === tone).map(([keys, , text, topic]) => (
+          <div class="pc" id={`p${keys[0]}`}>
+            {keys[1] && <span id={`p${keys[1]}`} class="anc"></span>}
+            <b>{keys.join(' · ')}</b>
+            <span>{text}</span>
+            {topic && <i>{topic}</i>}
+            {tone === 'ดี' && inStock(keys).map((n) => <a href={`/ber-mongkol/${n.num}/`}>มีขาย: {fmtNum(n.num)}</a>)}
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <h2 id="planets">ความหมายเลข 0–9 ตามดาว</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>เลข</th><th>ดาว</th><th>ความหมาย</th></tr></thead>
+    <tbody>{PLANETS.map(([d, p, m]) => <tr><td><b>{d}</b></td><td>{p}</td><td>{m}</td></tr>)}</tbody>
+  </table></div>
+
+  <h2>ใช้คู่เลขเลือกเบอร์ยังไง</h2>
+  <ol>
+    <li><b>เลือกเรื่องที่อยากเสริม</b> เช่น ค้าขายเลือกคู่ 24, 45, 28 งานประจำเลือก 15, 29, 39</li>
+    <li><b>ให้คู่ดีอยู่ 4 ตัวท้าย</b> เพราะเป็นส่วนที่ตำราให้น้ำหนักมากที่สุด</li>
+    <li><b>เลี่ยงคู่เสียในตัวท้าย</b> ถ้าคู่เสียอยู่ช่วงต้น น้ำหนักจะน้อยกว่า</li>
+    <li><b>ดู<a href="/ber-mongkol/sum/">ผลรวม</a>ประกอบ</b> ผลรวมดีช่วยเสริมภาพรวมของเบอร์</li>
+  </ol>
+  <p>ดูเบอร์มงคล AIS ที่คัดคู่ท้ายไว้แล้ว ราคาเริ่มต้น {Math.min(...stock.map((n) => n.price))} บาท ได้ที่ <a href="/ber-mongkol/">เบอร์มงคล AIS</a></p>
+
+  <Faq items={faq} />
+  <p class="small">ความหมายคู่เลขเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม แต่ละตำราตีความต่างกัน ใช้ประกอบการตัดสินใจเท่านั้น</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  h1 small { display: block; font-size: 1rem; font-weight: 500; color: var(--muted); margin-top: 4px; }
+  .lead { color: var(--muted); }
+  .tool { display: block; background: var(--lime-soft); border: 2px solid var(--lime); border-radius: 16px; padding: 12px 16px; text-decoration: none; color: var(--ink); }
+  .tool b { color: var(--lime-ink); }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .jump a { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; text-decoration: none; color: var(--ink); font-size: .88rem; }
+  .grp { scroll-margin-top: 130px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .pc { position: relative; scroll-margin-top: 140px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; }
+  .pc:target, .pc:has(.anc:target) { outline: 3px solid var(--lime); }
+  .anc { position: absolute; top: -140px; }
+  .pc b { font-size: 1.4rem; }
+  .pc span { font-size: .9rem; }
+  .pc i { justify-self: start; font-style: normal; font-size: .72rem; background: var(--lime-soft); color: var(--lime-ink); padding: 1px 8px; border-radius: 999px; }
+  .pc a { font-size: .8rem; font-weight: 600; color: var(--lime-ink); }
+  .good b { color: var(--lime-ink); } .mid b { color: #b07400; } .bad b { color: #c0392b; }
+  .bad .pc { background: #fffaf9; }
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  #planets { scroll-margin-top: 130px; }
+</style>

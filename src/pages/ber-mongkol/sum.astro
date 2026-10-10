@@ -1,0 +1,74 @@
+---
+// ความหมายผลรวมเบอร์โทรศัพท์
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { SUM_LIST } from '../../data/numerology';
+import { luckySorted, fmtNum, digitSum } from '../../data/lucky';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+
+const path = '/ber-mongkol/sum/';
+const title = 'ผลรวมเบอร์ ความหมาย 25–70 ผลรวมเบอร์มงคลที่ดีมีอะไรบ้าง';
+const description = 'ความหมายผลรวมเบอร์โทรศัพท์ครบตั้งแต่ 25 ถึง 70 ผลรวมไหนดี ผลรวมไหนควรเลี่ยง เช่น ผลรวม 40 41 42 44 45 46 50 55 56 59 65 พร้อมวิธีคิดผลรวมเบอร์';
+const stock = luckySorted().filter((n) => !n.sold);
+const bySum = (s: number) => stock.filter((n) => digitSum(n.num) === s);
+const good = SUM_LIST.filter(([, t]) => t === 'ดี').map(([n]) => n);
+
+const faq: [string, string][] = [
+  ['ผลรวมเบอร์คิดยังไง?', 'นำเลขทั้ง 10 หลักมาบวกกัน เช่น 082-871-3245 คือ 0+8+2+8+7+1+3+2+4+5 = 40'],
+  ['ผลรวมเบอร์ที่ดีมีอะไรบ้าง?', `ตามตำราที่นิยม ผลรวมที่ดี ได้แก่ ${good.join(', ')}`],
+  ['ผลรวมสำคัญกว่าคู่เลขไหม?', 'ส่วนใหญ่ให้น้ำหนักคู่เลขท้ายมากกว่า ผลรวมใช้ดูภาพรวมของเบอร์ เบอร์ที่ดีควรมีทั้งคู่ท้ายดีและผลรวมไม่เสีย'],
+  ['ผลรวมเกิน 70 หรือน้อยกว่า 25 ได้ไหม?', 'เป็นไปได้แต่พบน้อยมากในเบอร์มือถือ 10 หลัก กรณีนี้ให้ดูคู่เลขเป็นหลัก'],
+];
+const schema = [breadcrumb([['หน้าแรก', '/'], ['เบอร์มงคล AIS', '/ber-mongkol/'], ['ความหมายผลรวมเบอร์', path]]), faqSchema(faq)];
+---
+<Base title={title} description={description} schema={schema} image="/og/lucky/sum.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/ber-mongkol/">เบอร์มงคล AIS</a> › <span>ความหมายผลรวมเบอร์</span></nav>
+  <h1>ผลรวมเบอร์ ความหมาย 25–70 <small>ผลรวมไหนดี ผลรวมไหนควรเลี่ยง</small></h1>
+  <p class="lead">ผลรวมเบอร์คือผลบวกของเลขทั้ง 10 หลัก ใช้ดูภาพรวมของเบอร์ประกอบกับคู่เลข ตารางด้านล่างครอบคลุมผลรวม 25–70 ซึ่งเป็นช่วงที่พบในเบอร์มือถือเกือบทั้งหมด</p>
+  <a class="tool" href="/ber-mongkol/check/">🔮 ไม่อยากบวกเอง? <b>ใส่เบอร์แล้วดูผลรวม + คู่เลขอัตโนมัติ →</b></a>
+
+  <div class="legend"><span class="good">ผลรวมดี</span><span class="mid">ผลรวมกลาง</span><span class="bad">ผลรวมเสีย</span></div>
+  <div class="grid">
+    {SUM_LIST.map(([n, tone, text]) => (
+      <div id={`s${n}`} class={`sc ${tone === 'ดี' ? 'good' : tone === 'เสีย' ? 'bad' : 'mid'}`}>
+        <b>{n}</b>
+        <span>{text}</span>
+        {bySum(n).map((x) => <a href={`/ber-mongkol/${x.num}/`}>มีขาย: {fmtNum(x.num)} · {x.price}฿</a>)}
+      </div>
+    ))}
+  </div>
+
+  <h2>วิธีคิดผลรวมเบอร์</h2>
+  <p>บวกเลขทุกหลักของเบอร์ เช่น <b>082-871-3245</b> = 0+8+2+8+7+1+3+2+4+5 = <b>40</b> ซึ่งตามตำราที่นิยมเป็นผลรวมที่ส่งเสริมความมั่นคง</p>
+  <h2>เลือกเบอร์จากผลรวมยังไงให้ดี</h2>
+  <ul>
+    <li>เลือกผลรวมที่อยู่ในกลุ่ม <b>ผลรวมดี</b> และตรงกับเรื่องที่อยากเสริม</li>
+    <li>ดู <a href="/ber-mongkol/pairs/">คู่เลข</a> ใน 4 ตัวท้ายประกอบ เพราะตำราส่วนใหญ่ให้น้ำหนักมากกว่าผลรวม</li>
+    <li>ถ้าผลรวมดีแต่คู่ท้ายเสีย ภาพรวมของเบอร์จะลดลง ลองใช้ <a href="/ber-mongkol/check/">เครื่องดูดวงเบอร์</a> ดูเกรดรวม</li>
+  </ul>
+  <p>ดูเบอร์มงคล AIS ราคาเริ่มต้น {Math.min(...stock.map((n) => n.price))} บาท ได้ที่ <a href="/ber-mongkol/">เบอร์มงคล AIS</a></p>
+
+  <Faq items={faq} />
+  <p class="small">ความหมายผลรวมเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม แต่ละตำราตีความต่างกัน ใช้ประกอบการตัดสินใจเท่านั้น</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  h1 small { display: block; font-size: 1rem; font-weight: 500; color: var(--muted); margin-top: 4px; }
+  .lead { color: var(--muted); }
+  .tool { display: block; background: var(--lime-soft); border: 2px solid var(--lime); border-radius: 16px; padding: 12px 16px; text-decoration: none; color: var(--ink); }
+  .tool b { color: var(--lime-ink); }
+  .legend { display: flex; gap: 8px; margin: 16px 0 10px; font-size: .82rem; }
+  .legend span { padding: 2px 12px; border-radius: 999px; font-weight: 600; }
+  .legend .good { background: var(--lime-soft); color: var(--lime-ink); } .legend .mid { background: #fff3d6; color: #8a5a00; } .legend .bad { background: #fde4df; color: #a5301f; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .sc { scroll-margin-top: 140px; background: var(--card); border: 1px solid var(--line); border-left-width: 5px; border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; align-content: start; }
+  .sc:target { outline: 3px solid var(--lime); }
+  .sc b { font-size: 1.5rem; }
+  .sc span { font-size: .86rem; }
+  .sc a { font-size: .78rem; font-weight: 600; color: var(--lime-ink); }
+  .sc.good { border-left-color: #6aae2c; } .sc.good b { color: var(--lime-ink); }
+  .sc.mid { border-left-color: #e3a72a; } .sc.mid b { color: #b07400; }
+  .sc.bad { border-left-color: #d0543a; } .sc.bad b { color: #c0392b; }
+</style>
