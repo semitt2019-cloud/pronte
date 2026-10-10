@@ -1,0 +1,140 @@
+---
+// หน้าศูนย์รวม: โปรเน็ตสำหรับนักเรียน นักศึกษา
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import NewSimCta from '../components/NewSimCta.astro';
+import { studentPkgs, USAGE_PER_HOUR } from '../data/students';
+import { speedLabel } from '../data/ais';
+import { POSTS, thaiDate } from '../lib/blog';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/students/';
+const picks = studentPkgs();
+const posts = POSTS.filter((p) => p.meta.category === 'students');
+const title = 'โปรเน็ตนักเรียน นักศึกษา AIS เติมเงิน คุ้มสุด เริ่มวันละไม่ถึง 14 บาท';
+const description = 'รวมโปรเน็ต AIS สำหรับนักเรียน นักศึกษา เรียนออนไลน์ ดู TikTok YouTube เล่นเกม เลือกตามการใช้งานและงบ พร้อมตารางเน็ตที่ใช้ต่อชั่วโมง และบทความประหยัดเน็ต';
+
+const faq: [string, string][] = [
+  ['นักเรียนควรใช้โปรเน็ตแบบไหน?', 'ส่วนใหญ่คุ้มที่สุดคือโปรเติมเงิน 30 วัน เพราะถูกกว่ากดรายวันทุกวันมาก ถ้าใช้หนักแค่บางช่วง ค่อยเลือกโปร 7 วันหรือรายวัน'],
+  ['เรียนออนไลน์ต้องใช้เน็ตความเร็วเท่าไร?', 'ตามข้อกำหนดของ Zoom วิดีโอคอลกลุ่มคุณภาพปกติใช้ราว 1 Mbps และ 720p ใช้ราว 1.5 Mbps โปร 4 Mbps จึงเรียนผ่านวิดีโอได้สบาย ถ้าเปิดแค่เสียง 2 Mbps ก็พอ'],
+  ['โปร 2 Mbps ดู TikTok ได้ไหม?', 'ได้ TikTok ใช้เน็ตราว 0.3 GB ต่อชั่วโมง ความเร็ว 2 Mbps เพียงพอสำหรับดูต่อเนื่อง'],
+  ['เปิดซิมใหม่ให้นักเรียน มีโปรพิเศษไหม?', 'ซิมใหม่ AIS สมัครแพ็กเสริมเน็ต 30 วัน 200–350 บาท ได้ภายใน 7 วันแรก เน็ตรวม 30–100GB เหมาะสำหรับเดือนแรก'],
+  ['เน็ตหมดกลางดึกตอนต้องส่งงาน ทำยังไง?', 'กดสมัครโปรรายวันได้ทันทีด้วยรหัสโทรออก ไม่ต้องใช้เน็ต หรือติดตั้งแอปของเว็บนี้ไว้ เปิดดูรหัสได้แม้เน็ตหมด'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตนักเรียน นักศึกษา', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต AIS แนะนำสำหรับนักเรียน นักศึกษา',
+    itemListElement: picks.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/students.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>โปรเน็ตนักเรียน นักศึกษา</span></nav>
+
+  <section class="hero">
+    <span class="badge">🎓 นักเรียน · นักศึกษา · เด็กหอ</span>
+    <h1>โปรเน็ตนักเรียน นักศึกษา <em>เรียนก็ได้ ดูคลิปก็ไหว</em></h1>
+    <p>เลือกโปรเน็ต AIS เติมเงินให้พอดีกับการใช้งานจริง ไม่จ่ายเกิน เริ่มต้นวันละไม่ถึง 14 บาท</p>
+  </section>
+
+  <section class="answer"><b>สรุปสั้น:</b> ใช้ทั้งเดือนเลือก <b>400 บาท/30 วัน (2 Mbps)</b> ถ้าเรียน Zoom/Meet แบบเปิดกล้องบ่อย เลือก <b>490 บาท/30 วัน (4 Mbps)</b> ใช้หนักแค่บางช่วงเลือก <b>130 บาท/7 วัน</b> และวันส่งงานด่วนกด <b>40 บาท/1 วัน</b> ถ้าเพิ่งเปิดซิมใหม่ ใช้แพ็กซิมใหม่ 200–350 บาทคุ้มกว่า</section>
+
+  <h2>4 โปรที่เหมาะกับนักเรียน นักศึกษา</h2>
+  <div class="picks">
+    {picks.map((p) => (
+      <div class="pk">
+        <span class="lb">{p.label}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net}</div>
+        <p>{p.why}</p>
+        <code>{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+
+  <h2>รายวันทุกวัน vs รายเดือน ต่างกันแค่ไหน</h2>
+  <p>หลายคนกดโปรรายวันทีละวันเพราะสะดวก แต่ถ้าใช้ทุกวันทั้งเดือน ค่าใช้จ่ายจะสูงกว่ามาก</p>
+  <div class="cmp">
+    <div><span>กดรายวัน 24฿ ทุกวัน (512 Kbps)</span><b>720฿</b><small>ต่อ 30 วัน</small></div>
+    <div><span>กดรายวัน 40฿ ทุกวัน (4 Mbps)</span><b>1,200฿</b><small>ต่อ 30 วัน</small></div>
+    <div class="best"><span>โปร 30 วัน (4 Mbps)</span><b>490฿</b><small>ประหยัดกว่า 700 บาท</small></div>
+  </div>
+
+  <h2>เรียน ดูคลิป เล่นเกม ใช้เน็ตชั่วโมงละเท่าไร</h2>
+  <p>ตัวเลขโดยประมาณ ใช้วางแผนว่าควรเลือกโปรแบบไหน (การใช้งานจริงขึ้นกับความละเอียดวิดีโอและแอป)</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>การใช้งาน</th><th>ต่อ 1 ชั่วโมง</th><th>ที่มา</th></tr></thead>
+      <tbody>{USAGE_PER_HOUR.map(([a, b, c]) => <tr><td>{a}</td><td><b>{b}</b></td><td class="src">{c}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="small">ปริมาณของ Zoom และ Google Meet คำนวณจากความเร็วที่ผู้ให้บริการระบุ (ขาขึ้น + ขาลง) ส่วนโปรแบบ "ไม่อั้น" ไม่ต้องกังวลเรื่องปริมาณ แต่ควรเลือกความเร็วให้พอกับงาน</p>
+
+  <NewSimCta heading="เพิ่งได้ซิมใหม่? เดือนแรกใช้แพ็กนี้คุ้มกว่า" text="ซิมใหม่ AIS สมัครแพ็กเสริมเน็ต 30 วันได้ภายใน 7 วันแรก เน็ตรวม 30–100GB พร้อมสิทธิ์โทร" />
+
+  <h2>บทความสำหรับนักเรียน นักศึกษา</h2>
+  {posts.length ? (
+    <div class="posts">
+      {posts.map((p) => (
+        <a href={`/blog/${p.slug}/`}><b>{p.meta.h1}</b><small>{thaiDate(p.meta.updated ?? p.meta.date)}</small></a>
+      ))}
+    </div>
+  ) : <p>กำลังเพิ่มบทความใหม่</p>}
+
+  <Faq items={faq} />
+
+  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; }
+  .hero h1 em { font-style: normal; color: #fff6c2; display: block; }
+  .hero p { margin: 0; }
+  @media (min-width: 720px) { .hero { padding: 40px; } .hero h1 { font-size: 2.4rem; } }
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; }
+  .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .pk code { text-align: center; padding: 8px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; font-size: .85rem; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .cmp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  @media (max-width: 560px) { .cmp { grid-template-columns: 1fr; } }
+  .cmp div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; text-align: center; display: grid; gap: 2px; }
+  .cmp span { font-size: .85rem; color: var(--muted); }
+  .cmp b { font-size: 1.5rem; }
+  .cmp small { font-size: .8rem; color: var(--muted); }
+  .cmp .best { background: var(--lime-soft); border-color: var(--lime); }
+  .cmp .best b { color: var(--lime-ink); }
+
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  td.src { font-size: .78rem; color: var(--muted); }
+
+  .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .posts a { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .posts a:hover { border-color: var(--lime); }
+  .posts small { color: var(--muted); font-size: .78rem; }
+</style>

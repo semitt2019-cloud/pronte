@@ -12,6 +12,7 @@ export type PostMeta = {
   date: string;         // วันที่เผยแพร่ YYYY-MM-DD
   updated?: string;     // วันที่แก้ล่าสุด YYYY-MM-DD
   order: number;        // ลำดับในหน้ารวมบทความ
+  category?: 'newsim' | 'students'; // หมวด (ไม่ใส่ = เปิดซิมใหม่)
   summary: string;      // กล่อง "สรุปสั้น" ด้านบน (ตอบคำถามทันที)
   image?: string;       // รูปแชร์ 1200x630
   faq?: [string, string][];
@@ -26,6 +27,12 @@ const files = import.meta.glob<MarkdownInstance<PostMeta>>('../content/blog/*.md
 export const POSTS: Post[] = Object.entries(files)
   .map(([path, mod]) => ({ slug: path.split('/').pop()!.replace(/\.md$/, ''), meta: mod.frontmatter, mod }))
   .sort((a, b) => a.meta.order - b.meta.order);
+
+export const CATEGORIES: Record<string, { label: string; hub: string; hubLabel: string }> = {
+  newsim: { label: 'เปิดซิมใหม่ AIS', hub: '/ais-new-sim/', hubLabel: 'เปิดซิมใหม่ AIS' },
+  students: { label: 'นักเรียน นักศึกษา', hub: '/students/', hubLabel: 'โปรเน็ตนักเรียน นักศึกษา' },
+};
+export const catOf = (p: Post) => p.meta.category ?? 'newsim';
 
 /** ประมาณเวลาอ่าน (ภาษาไทย ~ 500 ตัวอักษร/นาที) */
 export function readMinutes(html: string): number {

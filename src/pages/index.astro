@@ -37,6 +37,12 @@ const faq: [string, string][] = [
     <span class="ns-go">ดูแพ็ก 200–350 บาท →</span>
   </a>
 
+  <a class="newsim stu" href="/students/">
+    <span class="ns-tag">🎓 นักเรียน นักศึกษา</span>
+    <b>ใช้เน็ตเยอะ เรียนออนไลน์ ดูคลิป เล่นเกม? ดูโปรที่เหมาะกับนักเรียน เริ่มวันละไม่ถึง 14 บาท</b>
+    <span class="ns-go">ดูโปรเน็ตนักเรียน →</span>
+  </a>
+
   <h2>โปรยอดนิยม</h2>
   <PkgList items={popular} />
 
@@ -93,5 +99,7 @@ const faq: [string, string][] = [
   .ns-tag { font-size: .75rem; font-weight: 600; color: #8a5a00; }
   .newsim b { font-weight: 600; }
   .ns-go { color: var(--lime-ink); font-weight: 500; font-size: .92rem; }
+  .newsim.stu { margin-top: 10px; background: linear-gradient(120deg, #eef7e1, #e2f2c9); border-color: #c8e39b; }
+  .newsim.stu .ns-tag { color: var(--lime-ink); }
   @media (min-width: 720px) { .hero { padding: 48px 44px 40px; } .hero h1 { font-size: 2.6rem; } }
 </style>

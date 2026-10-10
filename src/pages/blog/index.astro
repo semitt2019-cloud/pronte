@@ -2,12 +2,13 @@
 // หน้ารวมบทความ
 import Base from '../../layouts/Base.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
-import { POSTS, thaiDate } from '../../lib/blog';
+import { POSTS, thaiDate, CATEGORIES, catOf } from '../../lib/blog';
 import { breadcrumb } from '../../lib/seo';
 import { SITE } from '../../config';
 
-const title = 'บทความเปิดซิมใหม่ AIS ซื้อซิม ลงทะเบียน เอกสาร แก้ปัญหา';
-const description = 'รวมบทความเรื่องเปิดซิมใหม่ AIS ซื้อซิมที่ไหน ใช้เอกสารอะไร เติมเงินหรือรายเดือนดี ใส่ซิมแล้วต้องทำอะไร และวิธีแก้ซิมไม่มีสัญญาณ อ่านง่าย ทำตามได้ทันที';
+const title = 'บทความโปรเน็ต AIS เปิดซิมใหม่ และเน็ตสำหรับนักเรียน นักศึกษา';
+const groups = (['students', 'newsim'] as const).map((k) => ({ key: k, ...CATEGORIES[k], posts: POSTS.filter((p) => catOf(p) === k) })).filter((g) => g.posts.length);
+const description = 'รวมบทความโปรเน็ต AIS เรื่องเปิดซิมใหม่ ลงทะเบียน แก้ปัญหาซิม และบทความสำหรับนักเรียน นักศึกษา เรียนออนไลน์ใช้เน็ตเท่าไร ประหยัดเน็ตยังไง อ่านง่าย ทำตามได้ทันที';
 const schema = [
   breadcrumb([['หน้าแรก', '/'], ['บทความ', '/blog/']]),
   {
@@ -19,22 +20,38 @@ const schema = [
 <Base title={title} description={description} schema={schema}>
   <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>บทความ</span></nav>
   <section class="hero">
-    <h1>บทความเปิดซิมใหม่ AIS</h1>
-    <p>ทุกเรื่องที่ต้องรู้ก่อนและหลังเปิดซิมใหม่ ตั้งแต่ซื้อซิม ลงทะเบียน จนถึงสมัครแพ็กเน็ตให้คุ้มที่สุด</p>
+    <h1>บทความโปรเน็ต AIS</h1>
+    <p>ทุกเรื่องที่ต้องรู้ ตั้งแต่เปิดซิมใหม่ จนถึงใช้เน็ตให้คุ้มสำหรับนักเรียน นักศึกษา</p>
   </section>
 
-  <div class="list">
-    {POSTS.map((p, i) => (
-      <a class="post" href={`/blog/${p.slug}/`}>
-        <span class="n">{String(i + 1).padStart(2, '0')}</span>
-        <div>
-          <b>{p.meta.h1}</b>
-          <p>{p.meta.description}</p>
-          <small>{thaiDate(p.meta.updated ?? p.meta.date)}</small>
-        </div>
-      </a>
-    ))}
-  </div>
+  <nav class="chips" aria-label="หมวดบทความ">
+    {groups.map((g) => <a href={`#${g.key}`}>{g.key === 'students' ? '🎓 ' : ''}{g.label} <small>{g.posts.length}</small></a>)}
+  </nav>
+
+  <a class="stu" href="/students/">
+    <span>🎓 สำหรับนักเรียน นักศึกษา</span>
+    <b>โปรเน็ตนักเรียน เรียนออนไลน์ ดูคลิป เล่นเกม เริ่มวันละไม่ถึง 14 บาท</b>
+    <em>ดูโปรที่เหมาะ →</em>
+  </a>
+
+  {groups.map((g) => (
+    <section id={g.key} class="grp">
+      <h2>{g.label}</h2>
+      <div class="list">
+        {g.posts.map((p, i) => (
+          <a class="post" href={`/blog/${p.slug}/`}>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <b>{p.meta.h1}</b>
+              <p>{p.meta.description}</p>
+              <small>{thaiDate(p.meta.updated ?? p.meta.date)}</small>
+            </div>
+          </a>
+        ))}
+      </div>
+      <a class="hub" href={g.hub}>ไปหน้า {g.hubLabel} →</a>
+    </section>
+  ))}
 
   <NewSimCta />
 </Base>
@@ -46,7 +63,15 @@ const schema = [
     background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%); }
   .hero h1 { margin: 0 0 8px; font-size: 1.8rem; }
   .hero p { margin: 0; }
-  .list { display: grid; gap: 10px; margin-top: 18px; }
+  .list { display: grid; gap: 10px; margin-top: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chips a { background: var(--card); border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; text-decoration: none; color: var(--ink); font-weight: 500; }
+  .chips small { color: var(--muted); }
+  .stu { display: grid; gap: 4px; margin-top: 14px; padding: 14px 18px; border-radius: 18px; text-decoration: none; color: var(--ink); background: linear-gradient(120deg, #eef7e1, #e2f2c9); border: 1px solid #c8e39b; }
+  .stu span { font-size: .78rem; font-weight: 600; color: var(--lime-ink); }
+  .stu em { font-style: normal; color: var(--lime-ink); font-weight: 600; font-size: .92rem; }
+  .grp { scroll-margin-top: 130px; }
+  .hub { display: inline-block; margin-top: 10px; font-weight: 600; }
   .post { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); }
   .post:hover { border-color: var(--lime); }
   .n { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }

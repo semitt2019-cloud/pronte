@@ -3,7 +3,8 @@
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
-import { POSTS, readMinutes, thaiDate, type Post } from '../../lib/blog';
+import StudentCta from '../../components/StudentCta.astro';
+import { POSTS, readMinutes, thaiDate, CATEGORIES, catOf, type Post } from '../../lib/blog';
 import { faqSchema, breadcrumb } from '../../lib/seo';
 import { SITE } from '../../config';
 import { NEW_SIM } from '../../data/newsim';
@@ -15,6 +16,8 @@ export function getStaticPaths() {
 const { post } = Astro.props as { post: Post };
 const { meta, mod, slug } = post;
 const path = `/blog/${slug}/`;
+const cat = catOf(post);
+const C = CATEGORIES[cat];
 const html: string = await mod.compiledContent();
 const minutes = readMinutes(html);
 const toc = mod.getHeadings().filter((h) => h.depth === 2);
@@ -26,12 +29,13 @@ const firstHalf = parts.slice(0, cut).join('');
 const secondHalf = parts.slice(cut).join('');
 
 const image = meta.image ?? `/og/blog/${slug}.jpg`;
-const idx = POSTS.findIndex((p) => p.slug === slug);
-const others = [1, 2, 3, 4].map((k) => POSTS[(idx + k) % POSTS.length]).filter((p) => p.slug !== slug);
+const same = POSTS.filter((p) => catOf(p) === cat);
+const idx = same.findIndex((p) => p.slug === slug);
+const others = [1, 2, 3, 4].map((k) => same[(idx + k) % same.length]).filter((p, i, a) => p.slug !== slug && a.indexOf(p) === i);
 const pick = NEW_SIM[1];
 
 const schema = [
-  breadcrumb([['หน้าแรก', '/'], ['บทความ', '/blog/'], [meta.h1, path]]),
+  breadcrumb([['หน้าแรก', '/'], [C.hubLabel, C.hub], [meta.h1, path]]),
   {
     '@context': 'https://schema.org', '@type': 'Article',
     headline: meta.h1, description: meta.description,
@@ -47,12 +51,12 @@ const schema = [
 ---
 <Base title={meta.title} description={meta.description} schema={schema} image={image} ogType="article">
   <nav class="crumb" aria-label="breadcrumb">
-    <a href="/">หน้าแรก</a> › <a href="/blog/">บทความ</a> › <span>{meta.keyword}</span>
+    <a href="/">หน้าแรก</a> › <a href={C.hub}>{C.hubLabel}</a> › <span>{meta.keyword}</span>
   </nav>
 
   <article>
     <header class="ah">
-      <span class="kw">เปิดซิมใหม่ AIS</span>
+      <span class="kw">{cat === 'students' ? '🎓 ' : ''}{C.label}</span>
       <h1>{meta.h1}</h1>
       <p class="by">
         <time datetime={meta.updated ?? meta.date}>อัปเดต {thaiDate(meta.updated ?? meta.date)}</time>{' · '}อ่าน {minutes} นาที
@@ -70,7 +74,7 @@ const schema = [
 
     <div class="prose">
       <Fragment set:html={firstHalf} />
-      <NewSimCta />
+      {cat === 'students' ? <StudentCta /> : <NewSimCta />}
       <Fragment set:html={secondHalf} />
     </div>
   </article>
@@ -88,7 +92,7 @@ const schema = [
     </>
   )}
 
-  <h2>บทความอื่นเกี่ยวกับซิมใหม่</h2>
+  <h2>{cat === 'students' ? 'บทความอื่นสำหรับนักเรียน นักศึกษา' : 'บทความอื่นเกี่ยวกับซิมใหม่'}</h2>
   <div class="cards">
     {others.map((p) => (
       <a class="pc" href={`/blog/${p.slug}/`}><b>{p.meta.h1}</b><span>{p.meta.description.slice(0, 70)}…</span></a>

@@ -1,0 +1,43 @@
+---
+// กล่องโปรเน็ตสำหรับนักเรียน นักศึกษา (กดสมัครได้ทันที) — ใช้ในบทความหมวดนักเรียน
+import { studentPkgs } from '../data/students';
+import { speedLabel } from '../data/ais';
+import { ussd, telHref } from '../config';
+
+interface Props { heading?: string }
+const { heading = 'โปรเน็ตที่นักเรียน นักศึกษาเลือกบ่อย' } = Astro.props;
+const list = studentPkgs();
+---
+<aside class="stc" aria-label="โปรเน็ตสำหรับนักเรียน">
+  <span class="tag">🎓 สำหรับนักเรียน นักศึกษา</span>
+  <p class="h">{heading}</p>
+  <div class="grid">
+    {list.map((p) => (
+      <div class="c">
+        <i>{p.label}</i>
+        <b>{p.price}฿<small>/{p.days} วัน</small></b>
+        <span>ไม่อั้น {speedLabel(p.mbps)} · {p.net}</span>
+        <code>{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+  <a class="more" href="/students/">ดูโปรเน็ตนักเรียนทั้งหมด + วิธีเลือก →</a>
+</aside>
+
+<style>
+  .stc { margin: 26px 0; padding: 18px; border-radius: 20px; background: linear-gradient(120deg, #eef7e1, #e2f2c9); border: 1px solid #c8e39b; }
+  .tag { font-size: .78rem; font-weight: 600; color: var(--lime-ink); }
+  .h { margin: 4px 0 12px; font-size: 1.15rem; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .c { background: #fff; border-radius: 14px; padding: 10px 8px; text-align: center; display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .c i { font-style: normal; font-size: .72rem; font-weight: 600; color: #8a5a00; }
+  .c b { font-size: 1.3rem; color: var(--lime-ink); }
+  .c b small { font-size: .75rem; color: var(--muted); font-weight: 500; }
+  .c span { font-size: .8rem; }
+  .c code { font-size: .7rem; color: var(--muted); overflow-wrap: anywhere; }
+  .go { margin-top: 6px; padding: 7px 0; border-radius: 10px; font-weight: 600; font-size: .9rem; color: #fff; text-decoration: none;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); }
+  .more { display: inline-block; margin-top: 12px; font-weight: 600; }
+</style>
