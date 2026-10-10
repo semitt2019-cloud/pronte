@@ -1,0 +1,184 @@
+---
+// หน้ารายละเอียดเบอร์มงคลแต่ละเบอร์
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import NewSimCta from '../../components/NewSimCta.astro';
+import AllPkgTable from '../../components/AllPkgTable.astro';
+import BuyBox from '../../components/BuyBox.astro';
+import { LUCKY, luckySorted, fmtNum, digitSum, LUCKY_PACK, type LuckyNumber } from '../../data/lucky';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+import { SITE, CONTACT } from '../../config';
+
+export function getStaticPaths() {
+  return LUCKY.map((n) => ({ params: { num: n.num }, props: { n } }));
+}
+const { n } = Astro.props as { n: LuckyNumber };
+const f = fmtNum(n.num);
+const sum = digitSum(n.num);
+const path = `/ber-mongkol/${n.num}/`;
+const last4 = n.num.slice(6);
+const title = `เบอร์มงคล ${f} ผลรวม ${sum} ${n.focus[0]} ${n.focus[1]} ราคา ${n.price} บาท`;
+const description = `เบอร์ AIS ${f} ผลรวม ${sum} ${n.headline} ซิมใหม่ยังไม่ลงทะเบียน ราคา ${n.price} บาท พร้อมวิธีเปิดซิมและโปรเน็ตซิมใหม่`;
+const others = luckySorted().filter((x) => x.num !== n.num);
+
+const faq: [string, string][] = [
+  ...n.faq,
+  [`ซื้อเบอร์ ${f} แล้วเปิดซิมยังไง?`, 'ลงทะเบียนในชื่อตัวเองผ่านแอป myAIS เมนูเปิดใช้ซิม หรือไปที่ AIS Shop พร้อมบัตรประชาชนตัวจริง และสแกนใบหน้ายืนยันตัวตน'],
+  ['เปิดซิมแล้วสมัครโปรเน็ตอะไรได้บ้าง?', 'สมัครแพ็กเสริมเน็ตสำหรับซิมใหม่ 200–350 บาท/30 วันได้ภายใน 7 วันแรก หรือเลือกโปรเน็ตไม่อั้นรายวัน 7 วัน 30 วันได้ตามต้องการ'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เบอร์มงคล AIS', '/ber-mongkol/'], [f, path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'Product',
+    name: `เบอร์มงคล AIS ${f}`,
+    description,
+    image: [new URL(`/lucky/${n.num}.jpg`, SITE.url).href],
+    brand: { '@type': 'Brand', name: 'AIS' },
+    sku: n.num,
+    offers: {
+      '@type': 'Offer', price: n.price, priceCurrency: 'THB', url: new URL(path, SITE.url).href,
+      availability: n.sold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: CONTACT.shipping, currency: 'THB' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TH' },
+      },
+    },
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image={`/og/lucky/${n.num}.jpg`}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/ber-mongkol/">เบอร์มงคล AIS</a> › <span>{f}</span></nav>
+
+  <section class="lead-box">
+    <div class="pic"><img src={`/lucky/${n.num}.jpg`} alt={`ซิม AIS เบอร์ ${f} ของจริง`} width="720" height="960" decoding="async" /></div>
+    <div class="info">
+      {n.badge && !n.sold && <span class="flag">{n.badge}</span>}
+      <h1>เบอร์มงคล <span class="num">{f}</span></h1>
+      <p class="hl">{n.headline}</p>
+      <div class="facts">
+        <div><small>ผลรวม</small><b>{sum}</b></div>
+        <div><small>4 ตัวท้าย</small><b>{last4}</b></div>
+        <div><small>ราคา</small><b class="price">{n.price}฿</b></div>
+      </div>
+      <div class="tags">{n.focus.map((t) => <span>{t}</span>)}</div>
+      <div id="buy" class="buyw"><BuyBox num={n.num} price={n.price} sold={n.sold} /></div>
+      <ul class="spec">
+        <li>{LUCKY_PACK}</li>
+        <li>ซิมใหม่ ยังไม่ลงทะเบียน ลงทะเบียนในชื่อคุณเอง</li>
+        <li>ส่ง {CONTACT.shipBy} ทั่วประเทศ ค่าส่ง {CONTACT.shipping} บาทต่อเบอร์</li>
+        <li>ลงทะเบียนก่อนวันหมดอายุบนสติกเกอร์ และเปิดใช้ภายใน 60 วันหลังยืนยันตัวตน</li>
+      </ul>
+    </div>
+  </section>
+
+  <h2>เบอร์ {f} มงคลยังไง</h2>
+  <p>{n.intro}</p>
+
+  <h3>ผลรวม {sum}</h3>
+  <p>{n.sumNote}</p>
+
+  <h3>คู่เลขที่ควรรู้ในเบอร์นี้</h3>
+  <div class="pairs">
+    {n.pairs.map((p) => (
+      <div class={`pair ${p.tone === 'ดี' ? 'good' : 'mid'}`}><b>{p.pair}</b><span>{p.meaning}</span><em>{p.tone === 'ดี' ? 'คู่ดี' : 'คู่กลาง'}</em></div>
+    ))}
+  </div>
+
+  <h3>วิเคราะห์ภาพรวม</h3>
+  {n.reading.map((t) => <p>{t}</p>)}
+
+  <h3>เบอร์นี้เหมาะกับใคร</h3>
+  <ul class="fit">{n.goodFor.map((g) => <li>{g}</li>)}</ul>
+
+  <h2>ได้ซิมแล้ว เปิดใช้งานยังไง</h2>
+  <ol class="steps">
+    <li><b>ใส่ซิมในมือถือ</b><span>ซิมเป็นแบบ 3-in-1 หักขนาดให้พอดีกับถาดซิม (มือถือรุ่นใหม่ใช้ขนาดเล็กสุด)</span></li>
+    <li><b>ลงทะเบียนในชื่อตัวเอง</b><span>เปิดแอป myAIS → เปิดใช้ซิม → สแกนเลขซิม → ถ่ายบัตรประชาชน → สแกนใบหน้า (<a href="/ais-sim-register/">ดูวิธีละเอียด</a>)</span></li>
+    <li><b>เช็คเบอร์และเงินในซิม</b><span>กด <code>*545#</code> ดูเบอร์ และ <code>*121#</code> ดูยอดเงินและวันใช้งาน</span></li>
+    <li><b>สมัครโปรเน็ตซิมใหม่ภายใน 7 วัน</b><span>เติมเงินให้พอกับราคาแพ็ก แล้วกดสมัครจากกล่องด้านล่าง</span></li>
+  </ol>
+  <p class="note">ไม่สะดวกทำในแอป? นำซิมและบัตรประชาชนไปที่ AIS Shop หรือร้านตัวแทน พนักงานลงทะเบียนให้ได้ อ่านเพิ่ม: <a href="/blog/new-sim-checklist/">ใส่ซิมใหม่แล้วต้องทำอะไรบ้าง</a></p>
+
+  <NewSimCta heading={`โปรเน็ตสำหรับซิมใหม่ ใช้กับเบอร์ ${f} ได้เลย`} text="แพ็กเสริมเน็ต 30 วันราคาพิเศษ สมัครได้ภายใน 7 วันแรกหลังเปิดซิม กดปุ่มแล้วโทรออกเพื่อสมัคร" />
+
+  <h2>โปรเน็ต AIS ทั้งหมด (หลังหมดแพ็กซิมใหม่)</h2>
+  <p>หลังใช้แพ็กซิมใหม่ครบ 30 วัน เลือกต่อโปรเน็ตไม่อั้นตามการใช้งาน กดสมัครได้ทุกโปร</p>
+  <AllPkgTable />
+
+  <Faq items={faq} />
+
+  <h2>เบอร์มงคลอื่นในชุดนี้</h2>
+  <div class="others">
+    {others.map((o) => (
+      <a href={`/ber-mongkol/${o.num}/`} class={o.sold ? 'is-sold' : ''}>
+        <b>{fmtNum(o.num)}</b><span>ผลรวม {digitSum(o.num)} · {o.focus.slice(0, 2).join(' · ')}</span><em>{o.sold ? 'ขายแล้ว' : `${o.price}฿`}</em>
+      </a>
+    ))}
+  </div>
+
+  <p class="small">ความหมายเบอร์มงคลเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม แต่ละตำราตีความต่างกัน ไม่ใช่การรับประกันผล · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+
+  {!n.sold && (
+    <div class="sticky">
+      <div><b>{f}</b> · {n.price}฿</div>
+      <a href="#buy">สั่งซื้อเบอร์นี้</a>
+    </div>
+  )}
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .lead-box { display: grid; gap: 18px; margin-top: 8px; }
+  @media (min-width: 760px) { .lead-box { grid-template-columns: 340px 1fr; align-items: start; } }
+  .pic { border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); background: #eee; max-width: 240px; margin: 0 auto; }
+  @media (min-width: 760px) { .pic { max-width: 340px; margin: 0; } }
+  .pic img { width: 100%; height: auto; display: block; }
+  .info { display: grid; gap: 12px; }
+  .flag { justify-self: start; font-size: .78rem; font-weight: 600; color: #fff; background: #f08c00; padding: 3px 12px; border-radius: 999px; }
+  .info h1 { margin: 0; font-size: 1.5rem; }
+  .info h1 .num { display: block; font-size: 2.3rem; color: var(--lime-ink); letter-spacing: .5px; }
+  .hl { margin: 0; color: var(--muted); }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .facts div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; }
+  .facts small { display: block; color: var(--muted); font-size: .78rem; }
+  .facts b { font-size: 1.4rem; }
+  .facts .price { color: var(--lime-ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: .8rem; background: var(--lime-soft); color: var(--lime-ink); padding: 3px 10px; border-radius: 999px; }
+  .buyw { scroll-margin-top: 140px; }
+  .spec { margin: 0; padding-left: 20px; font-size: .88rem; color: var(--muted); }
+
+  .pairs { display: grid; gap: 8px; }
+  .pair { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; }
+  .pair b { font-size: 1.5rem; text-align: center; }
+  .pair em { font-style: normal; font-size: .75rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .good b { color: var(--lime-ink); } .good em { background: var(--lime-soft); color: var(--lime-ink); }
+  .mid b { color: #b07400; } .mid em { background: #fff3d6; color: #8a5a00; }
+  .fit { padding-left: 20px; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; display: grid; gap: 2px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+  .steps span { font-size: .9rem; color: var(--muted); }
+
+  .others { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .others a { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .others a:hover { border-color: var(--lime); }
+  .others b { font-size: 1.15rem; }
+  .others span { font-size: .8rem; color: var(--muted); }
+  .others em { font-style: normal; font-weight: 600; color: var(--lime-ink); }
+  .is-sold { opacity: .55; }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 20px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

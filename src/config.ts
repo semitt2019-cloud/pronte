@@ -25,6 +25,18 @@ export const GA_ID = 'G-QFRYSGEGEJ';
 // ------------------------------------------------------------
 export const AGENT_CODE = '';
 
+// ------------------------------------------------------------
+//  ช่องทางสั่งซื้อเบอร์มงคล (หน้า /ber-mongkol/)
+//  lineUrl = ลิงก์ LINE OA (lin.ee/...)  หรือ line = LINE ID   phone = เบอร์โทร (ถ้ามี)
+//  shipping = ค่าส่งต่อเบอร์ (บาท)  shipBy = วิธีส่ง
+// ------------------------------------------------------------
+export const CONTACT = { lineUrl: 'https://lin.ee/NUUnkjx', line: '', phone: '', shipping: 30, shipBy: 'EMS' };
+export function lineHref(): string {
+  if (CONTACT.lineUrl) return CONTACT.lineUrl;
+  const id = CONTACT.line.trim();
+  return id ? 'https://line.me/R/ti/p/' + (id.startsWith('@') ? id : '~' + id) : '';
+}
+
 /** รหัส USSD ที่แสดงบนหน้าเว็บ เช่น *777*7721*123456# */
 export function ussd(pkgCode: string): string {
   return AGENT_CODE ? `*777*${pkgCode}*${AGENT_CODE}#` : `*777*${pkgCode}#`;

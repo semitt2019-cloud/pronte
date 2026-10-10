@@ -1,0 +1,46 @@
+---
+// ปุ่มสั่งซื้อเบอร์มงคล (LINE / โทร) — ตั้งค่าใน src/config.ts → CONTACT
+import { CONTACT, lineHref } from '../config';
+import { fmtNum } from '../data/lucky';
+
+interface Props { num: string; price: number; sold?: boolean }
+const { num, price, sold } = Astro.props;
+const line = lineHref();
+const phone = CONTACT.phone.replace(/\D/g, '');
+---
+<div class="buy">
+  {sold ? (
+    <p class="sold">เบอร์นี้ขายแล้ว <a href="/ber-mongkol/">ดูเบอร์ที่ยังว่าง →</a></p>
+  ) : (
+    <>
+      <div class="total">
+        <div><span>ราคาเบอร์</span><b>{price}฿</b></div>
+        <div><span>ค่าส่ง {CONTACT.shipBy}</span><b>{CONTACT.shipping}฿</b></div>
+        <div class="sum"><span>รวม</span><b>{price + CONTACT.shipping}฿</b></div>
+      </div>
+      <p class="msg">กดปุ่มด้านล่าง แล้วแจ้งเบอร์ <b>{fmtNum(num)}</b> ใน LINE OA แอดมินจะแจ้งวิธีชำระเงินและจัดส่งให้</p>
+      <div class="btns">
+        {line && <a class="ln" href={line} target="_blank" rel="noopener" data-buy={num}>สั่งซื้อทาง LINE OA</a>}
+        {phone && <a class="ph" href={`tel:${phone}`} data-buy={num}>โทรสั่ง {CONTACT.phone}</a>}
+        {!line && !phone && <span class="soon">ช่องทางสั่งซื้อจะเปิดเร็ว ๆ นี้</span>}
+      </div>
+    </>
+  )}
+</div>
+
+<style>
+  .buy { display: grid; gap: 8px; }
+  .total { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .total div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px; text-align: center; display: grid; }
+  .total span { font-size: .75rem; color: var(--muted); }
+  .total b { font-size: 1.1rem; }
+  .total .sum { background: var(--lime-soft); border-color: var(--lime); }
+  .total .sum b { color: var(--lime-ink); }
+  .msg { margin: 0; font-size: .9rem; color: var(--muted); }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btns a { flex: 1 1 160px; text-align: center; text-decoration: none; font-weight: 600; padding: 12px 16px; border-radius: 14px; }
+  .ln { background: #06c755; color: #fff; box-shadow: 0 8px 18px -10px rgba(6,199,85,.9); }
+  .ph { background: #fff; color: var(--lime-ink); border: 1.5px solid var(--lime); }
+  .soon { padding: 10px 14px; border-radius: 12px; background: var(--lime-soft); color: var(--lime-ink); font-weight: 500; }
+  .sold { margin: 0; padding: 12px 14px; border-radius: 12px; background: #fdecea; color: #a12b1f; font-weight: 600; }
+</style>

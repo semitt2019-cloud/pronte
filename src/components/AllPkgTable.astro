@@ -1,0 +1,50 @@
+---
+// ตารางโปรเน็ตทั้งหมดแบบย่อ แยกตามจำนวนวัน (กดสมัครได้ทุกแถว)
+import { byDays, speedLabel } from '../data/ais';
+import { ussd, telHref } from '../config';
+
+const groups: [number, string, string][] = [
+  [1, 'รายวัน (1 วัน)', '/ais-1-day/'],
+  [2, '2 วัน', '/ais-2-day/'],
+  [3, '3 วัน', '/ais-3-day/'],
+  [7, '7 วัน', '/ais-7-day/'],
+  [30, '30 วัน', '/ais-30-day/'],
+];
+---
+<div class="apt">
+  {groups.map(([d, label, href], i) => (
+    <details open={i === 4}>
+      <summary><b>โปรเน็ต {label}</b><span>{byDays(d).length} โปร</span></summary>
+      <div class="rows">
+        {byDays(d).map((p) => (
+          <div class="r">
+            <div class="pr"><b>{p.price}฿</b><small>{p.days} วัน</small></div>
+            <div class="sp"><b>เน็ตไม่อั้น {speedLabel(p.mbps)}</b><small>{p.net}{p.bonus?.length ? ' · มีของแถม' : ''}</small></div>
+            <code>{ussd(p.code)}</code>
+            <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+          </div>
+        ))}
+      </div>
+      <a class="more" href={href}>ดูรายละเอียดโปร {label} →</a>
+    </details>
+  ))}
+</div>
+
+<style>
+  .apt { display: grid; gap: 10px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow); }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  summary::-webkit-details-marker { display: none; }
+  summary span { font-size: .82rem; color: var(--muted); }
+  summary::after { content: '+'; color: var(--lime-ink); font-weight: 600; margin-left: 10px; }
+  details[open] summary::after { content: '−'; }
+  .rows { display: grid; gap: 6px; margin-top: 10px; }
+  .r { display: grid; grid-template-columns: 70px 1fr auto auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+  .pr b { color: var(--lime-ink); font-size: 1.1rem; display: block; line-height: 1.1; }
+  .pr small, .sp small { color: var(--muted); font-size: .75rem; }
+  .sp b { font-size: .9rem; display: block; font-weight: 500; }
+  code { font-size: .78rem; color: var(--muted); }
+  .go { background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 7px 14px; border-radius: 10px; font-size: .88rem; white-space: nowrap; }
+  .more { display: inline-block; margin-top: 8px; font-size: .88rem; font-weight: 600; }
+  @media (max-width: 520px) { .r { grid-template-columns: 62px 1fr auto; } code { display: none; } }
+</style>

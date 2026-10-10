@@ -1,0 +1,140 @@
+---
+// หน้ารวมเบอร์มงคล AIS
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import NewSimCta from '../../components/NewSimCta.astro';
+import { luckySorted, fmtNum, digitSum, LUCKY_PACK } from '../../data/lucky';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+import { SITE, CONTACT, lineHref } from '../../config';
+
+const list = luckySorted();
+const avail = list.filter((n) => !n.sold);
+const minPrice = Math.min(...avail.map((n) => n.price));
+const title = `เบอร์มงคล AIS ราคา ${minPrice} บาท ซิมใหม่ เลือกเบอร์ได้ พร้อมความหมาย`;
+const description = `ขายเบอร์มงคล AIS ซิมใหม่ยังไม่ลงทะเบียน ราคาเบอร์ละ ${minPrice} บาท ดูผลรวมและความหมายคู่เลขทุกเบอร์ เปิดซิมในชื่อตัวเองได้ทันที แล้วสมัครโปรเน็ตซิมใหม่ 200–350 บาทต่อได้เลย`;
+
+const faq: [string, string][] = [
+  ['ซิมที่ขายลงทะเบียนแล้วหรือยัง?', 'ยังไม่ลงทะเบียน ผู้ซื้อลงทะเบียนในชื่อตัวเองได้ทันทีผ่านแอป myAIS หรือที่ AIS Shop ด้วยบัตรประชาชนและสแกนใบหน้า เบอร์จึงเป็นของคุณอย่างถูกต้อง ใช้กับแอปธนาคารได้'],
+  [`ราคา ${minPrice} บาท รวมอะไรบ้าง?`, `รวมซิม ${LUCKY_PACK} 1 ใบ เบอร์ตามที่เลือก ค่าส่ง ${CONTACT.shipBy} ${CONTACT.shipping} บาทต่อเบอร์ รวม ${minPrice + CONTACT.shipping} บาท`],
+  ['สั่งซื้อเบอร์ยังไง?', `กดปุ่มสั่งซื้อทาง LINE OA แล้วแจ้งเบอร์ที่ต้องการ แอดมินจะแจ้งวิธีชำระเงิน และจัดส่งซิมทาง ${CONTACT.shipBy}`],
+  ['ซิมมีวันหมดอายุไหม?', 'ซิมใหม่ต้องลงทะเบียนก่อนวันหมดอายุที่ระบุบนสติกเกอร์ และหลังยืนยันตัวตนแล้วต้องเปิดใช้งานภายใน 60 วัน ตามที่พิมพ์ไว้บนการ์ดซิม'],
+  ['ได้ซิมแล้วสมัครโปรเน็ตอะไรดี?', 'ซิมใหม่สมัครแพ็กเสริมเน็ตสำหรับซิมใหม่ได้ภายใน 7 วันแรก ราคา 200–350 บาท เน็ตรวม 30–100GB กดสมัครได้จากหน้ารายละเอียดของแต่ละเบอร์'],
+  ['ความหมายเบอร์มงคลเชื่อถือได้แค่ไหน?', 'เป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม แต่ละตำราตีความต่างกัน เราสรุปแนวทางที่พบบ่อยเพื่อประกอบการตัดสินใจเท่านั้น'],
+  ['ซื้อหลายเบอร์ได้ไหม?', 'ได้ แต่ควรลงทะเบียนแต่ละเบอร์ในชื่อคนที่ใช้งานจริง และถ้าถือเกิน 5 เบอร์ต่อค่ายต้องยืนยันตัวตนเพิ่มตามเกณฑ์ของ กสทช.'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['เบอร์มงคล AIS', '/ber-mongkol/']]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'เบอร์มงคล AIS ซิมใหม่',
+    itemListElement: list.map((n, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/ber-mongkol/${n.num}/`, SITE.url).href, name: `เบอร์มงคล ${fmtNum(n.num)}` })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema} image="/og/lucky/index.jpg">
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>เบอร์มงคล AIS</span></nav>
+
+  <section class="hero">
+    <span class="badge">ซิมใหม่ AIS · ยังไม่ลงทะเบียน</span>
+    <h1>เบอร์มงคล AIS <em>ราคาเบอร์ละ {minPrice} บาท</em></h1>
+    <p>เลือกเบอร์ที่ชอบ ดูผลรวมและความหมายคู่เลข แล้วเปิดซิมในชื่อตัวเองได้ทันที ต่อด้วยโปรเน็ตซิมใหม่สุดคุ้ม</p>
+    <div class="stats"><span><b>{avail.length}</b> เบอร์ว่าง</span><span><b>{minPrice}฿</b> ต่อเบอร์</span><span><b>{CONTACT.shipBy}</b> ค่าส่ง {CONTACT.shipping}฿</span><span><b>5G</b> ซิม 3 ขนาด</span></div>
+    <a class="lineb" href={lineHref()} target="_blank" rel="noopener" data-buy="all">สั่งซื้อทาง LINE OA</a>
+  </section>
+
+  <h2>เบอร์มงคลที่ว่างตอนนี้</h2>
+  <div class="grid">
+    {list.map((n) => (
+      <a class={`card ${n.sold ? 'is-sold' : ''}`} href={`/ber-mongkol/${n.num}/`}>
+        <div class="img"><img src={`/lucky/${n.num}.jpg`} alt={`ซิม AIS เบอร์มงคล ${fmtNum(n.num)}`} width="360" height="480" loading="lazy" decoding="async" />{n.badge && !n.sold && <i class="flag">{n.badge}</i>}{n.sold && <i class="flag sold">ขายแล้ว</i>}</div>
+        <div class="body">
+          <b class="num">{fmtNum(n.num)}</b>
+          <span class="sum">ผลรวม {digitSum(n.num)}</span>
+          <p>{n.headline}</p>
+          <div class="tags">{n.focus.map((f) => <span>{f}</span>)}</div>
+          <div class="cfoot"><b class="price">{n.price}฿</b><em>ดูรายละเอียด →</em></div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <h2>ซื้อเบอร์แล้วทำยังไงต่อ</h2>
+  <ol class="steps">
+    <li><b>เลือกเบอร์และสั่งซื้อ</b><span>กดดูรายละเอียดเบอร์ที่ชอบ แล้วกดสั่งซื้อทาง LINE OA แจ้งเบอร์ที่ต้องการ ส่ง {CONTACT.shipBy} ค่าส่ง {CONTACT.shipping} บาทต่อเบอร์</span></li>
+    <li><b>รับซิม แล้วลงทะเบียนในชื่อตัวเอง</b><span>ใช้แอป myAIS หรือไปที่ AIS Shop พร้อมบัตรประชาชน (<a href="/ais-sim-register/">ดูวิธีลงทะเบียน</a>)</span></li>
+    <li><b>สมัครโปรเน็ตซิมใหม่ภายใน 7 วัน</b><span>แพ็ก 30 วัน 200–350 บาท เน็ตรวมสูงสุด 100GB (<a href="/ais-new-sim/">ดูแพ็กทั้งหมด</a>)</span></li>
+  </ol>
+
+  <NewSimCta heading="ได้ซิมแล้ว สมัครโปรเน็ตซิมใหม่ได้เลย" />
+
+  <h2>เลือกเบอร์มงคลดูจากอะไร</h2>
+  <p>คนเลือกเบอร์มงคลส่วนใหญ่ดู 2 อย่าง คือ <b>ผลรวม</b> (บวกเลขทั้ง 10 หลัก) และ <b>คู่เลข</b> โดยเฉพาะ 4 ตัวท้ายซึ่งเป็นส่วนที่คนจำและพูดถึงบ่อยที่สุด ทุกเบอร์ในหน้านี้ขึ้นต้นด้วย 082-871 เหมือนกัน จึงเปรียบเทียบกันที่ตัวท้ายได้ง่าย อ่านหลักการเพิ่มเติมได้ที่ <a href="/blog/lucky-number-ais/">วิธีเลือกเบอร์มงคล AIS</a></p>
+
+  <div class="cmp">
+    <table>
+      <thead><tr><th>เบอร์</th><th>ผลรวม</th><th>คู่เด่น</th><th>เหมาะกับ</th></tr></thead>
+      <tbody>
+        {list.map((n) => (
+          <tr><td><a href={`/ber-mongkol/${n.num}/`}>{fmtNum(n.num)}</a></td><td>{digitSum(n.num)}</td><td>{n.pairs.filter((p) => p.tone === 'ดี').map((p) => p.pair).join(', ') || '–'}</td><td>{n.focus.join(' · ')}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <Faq items={faq} />
+
+  <p class="small">ความหมายเบอร์มงคลเป็นความเชื่อตามตำราเลขศาสตร์ที่นิยม ไม่ใช่การรับประกันผล · ซิมเป็นซิม AIS ของแท้ ยังไม่ลงทะเบียน ผู้ซื้อลงทะเบียนในชื่อตัวเอง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff; margin-top: 6px;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; }
+  .hero h1 em { font-style: normal; color: #fff6c2; display: block; }
+  .hero p { margin: 0 0 14px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lineb { display: inline-block; margin-top: 14px; background: #06c755; color: #fff; font-weight: 600; text-decoration: none; padding: 11px 22px; border-radius: 14px; box-shadow: 0 8px 18px -10px rgba(0,80,30,.8); }
+  .stats span { background: #fff; color: var(--lime-ink); padding: 6px 14px; border-radius: 12px; font-size: .88rem; }
+  @media (min-width: 720px) { .hero { padding: 40px; } .hero h1 { font-size: 2.4rem; } }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform .15s; }
+  .card:hover { transform: translateY(-2px); border-color: var(--lime); }
+  .img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #eee; }
+  .img img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .flag { position: absolute; top: 10px; left: 10px; font-style: normal; font-size: .75rem; font-weight: 600; color: #fff; background: #f08c00; padding: 3px 10px; border-radius: 999px; }
+  .flag.sold { background: #c0392b; }
+  .is-sold { opacity: .6; }
+  .body { padding: 14px; display: grid; gap: 4px; flex: 1; }
+  .num { font-size: 1.45rem; letter-spacing: .5px; }
+  .sum { font-size: .82rem; color: var(--lime-ink); font-weight: 600; }
+  .body p { margin: 4px 0; font-size: .88rem; color: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tags span { font-size: .72rem; background: var(--lime-soft); color: var(--lime-ink); padding: 2px 8px; border-radius: 999px; }
+  .cfoot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .price { font-size: 1.35rem; color: var(--lime-ink); }
+  .cfoot em { font-style: normal; font-weight: 600; font-size: .88rem; color: var(--lime-ink); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; display: grid; gap: 2px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+  .steps span { font-size: .9rem; color: var(--muted); }
+
+  .cmp { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  @media (max-width: 520px) {
+    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .body { padding: 10px; }
+    .num { font-size: 1.05rem; letter-spacing: 0; white-space: nowrap; }
+    .body p, .tags { display: none; }
+    .price { font-size: 1.15rem; }
+    .cfoot em { font-size: .78rem; }
+  }
+</style>
