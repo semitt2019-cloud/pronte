@@ -1,12 +1,10 @@
 ---
 import { ussd, telHref } from '../config';
 import { type Pkg, perDay, speedLabel } from '../data/ais';
-import { salesByCode } from '../data/sales';
 
 interface Props { p: Pkg }
 const { p } = Astro.props;
 const code = ussd(p.code);
-const sp = salesByCode(p.code);
 ---
 <article class:list={['pkg', { hot: p.popular }]}>
   {p.popular && <span class="ribbon">ยอดนิยม</span>}
@@ -29,7 +27,7 @@ const sp = salesByCode(p.code);
     <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
   </div>
   <div class="foot-row">
-    {sp ? <a class="more" href={`/pro/${sp.slug}/`}>ดูรายละเอียดโปรนี้ →</a> : <span></span>}
+    <a class="more" href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a>
     <span class="tax">ราคารวมภาษีแล้ว</span>
   </div>
 </article>

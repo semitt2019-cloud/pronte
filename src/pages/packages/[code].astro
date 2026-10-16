@@ -1,0 +1,179 @@
+---
+// หน้า SEO 1 หน้าต่อ 1 รหัสแพ็กเกจ (URL: /packages/<code>/) สร้างจาก ais.ts + newsim.ts
+import Base from '../../layouts/Base.astro';
+import PkgCard from '../../components/PkgCard.astro';
+import Faq from '../../components/Faq.astro';
+import { AIS, perDay, speedLabel, type Pkg } from '../../data/ais';
+import { NEW_SIM, type NewSimPkg } from '../../data/newsim';
+import { salesByCode } from '../../data/sales';
+import { ussd, telHref, SITE } from '../../config';
+import { faqSchema, breadcrumb } from '../../lib/seo';
+
+type Item =
+  | { kind: 'ais'; code: string; price: number; days: number; p: Pkg }
+  | { kind: 'newsim'; code: string; price: number; days: number; n: NewSimPkg };
+
+export function getStaticPaths() {
+  const items: Item[] = [
+    ...AIS.map((p) => ({ kind: 'ais' as const, code: p.code, price: p.price, days: p.days, p })),
+    ...NEW_SIM.map((n) => ({ kind: 'newsim' as const, code: n.code, price: n.price, days: 30, n })),
+  ];
+  const seen = new Set<string>();
+  return items.filter((i) => !seen.has(i.code) && seen.add(i.code)).map((it) => ({ params: { code: it.code }, props: { it } }));
+}
+
+const { it } = Astro.props as { it: Item };
+const code = ussd(it.code);
+const href = telHref(it.code);
+const path = `/packages/${it.code}/`;
+const isAis = it.kind === 'ais';
+const pk = isAis ? it.p : null;
+const ns = !isAis ? it.n : null;
+const sp = salesByCode(it.code);
+
+const spec = pk
+  ? `${pk.net} ${speedLabel(pk.mbps)} ไม่อั้น`
+  : `เน็ตรวม ${ns!.totalGB}GB`;
+const title = pk
+  ? `โปรเน็ต AIS ${it.code} ราคา ${it.price} บาท ${it.days} วัน ${spec}`
+  : `โปรเน็ต AIS ${it.code} ซิมใหม่ ${it.price} บาท 30 วัน ${spec}`;
+const extras = pk ? (pk.bonus ?? []) : [...ns!.net, ns!.call, ...ns!.gifts];
+const description = pk
+  ? `สมัครโปร ${it.code} AIS เติมเงิน ${it.price} บาท ใช้ได้ ${it.days} วัน เน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด${pk.bonus?.length ? ' แถม' + pk.bonus[0] : ''} กดรหัส ${code}`
+  : `สมัครโปร ${it.code} AIS สำหรับซิมใหม่/ย้ายค่าย ${it.price} บาท 30 วัน เน็ตรวม ${ns!.totalGB}GB ${ns!.call} กดรหัส ${code}`;
+const keywords = [
+  `โปรเน็ต AIS ${it.code}`, `สมัครโปร ${it.code}`, `โปร ${it.code}`, `*777*${it.code}`,
+  `โปรเน็ต AIS ${it.price} บาท`, `เน็ต AIS ${it.days} วัน`, `โปรเน็ต ${it.price} บาท ${it.days} วัน`,
+  ...(pk ? [`เน็ตไม่อั้น ${speedLabel(pk.mbps)}`, `เน็ต ${pk.net} AIS`] : ['โปรซิมใหม่ AIS', `เน็ต ${ns!.totalGB}GB`]),
+].join(', ');
+
+// โปรใกล้เคียง
+const pool: Item[] = [
+  ...AIS.map((p) => ({ kind: 'ais' as const, code: p.code, price: p.price, days: p.days, p })),
+  ...NEW_SIM.map((n) => ({ kind: 'newsim' as const, code: n.code, price: n.price, days: 30, n })),
+].filter((x) => x.code !== it.code);
+const related = pool
+  .filter((x) => x.kind === it.kind)
+  .sort((a, b) => (Math.abs(a.days - it.days) - Math.abs(b.days - it.days)) || (Math.abs(a.price - it.price) - Math.abs(b.price - it.price)))
+  .slice(0, 6);
+const relatedCards = related.filter((x) => x.kind === 'ais').slice(0, 3).map((x) => (x as any).p as Pkg);
+const label = (x: Item) => x.kind === 'ais' ? `โปร ${x.code} · ${x.price} บาท ${x.days} วัน ${speedLabel(x.p.mbps)}` : `โปร ${x.code} · ซิมใหม่ ${x.price} บาท ${x.n.totalGB}GB`;
+const listHref = pk ? `/ais-${it.days}-day/` : '/ais-new-sim/';
+const listName = pk ? `โปร ${it.days} วัน` : 'เปิดซิมใหม่';
+
+const faq: [string, string][] = [
+  [`สมัครโปร ${it.code} กดอะไร?`, `กด ${code} แล้วโทรออก หรือแตะปุ่ม "กดสมัคร" บนหน้านี้ ระบบจะหักเงิน ${it.price} บาทจากยอดเงินในซิม`],
+  [`โปร ${it.code} ใช้ได้กี่วัน?`, `ใช้ได้ ${it.days} วัน${it.days === 1 ? ' (24 ชั่วโมง)' : ''} นับจากเวลาที่สมัครสำเร็จ`],
+  ...(pk ? [[`โปร ${it.code} ลดสปีดไหม?`, `เป็นเน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีดตลอด ${it.days} วัน`] as [string, string]]
+         : [[`ใช้เน็ตครบ ${ns!.totalGB}GB แล้วเป็นอย่างไร?`, ns!.after] as [string, string]]),
+];
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], [listName, listHref], [`โปร ${it.code}`, path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'Product', name: title, description,
+    brand: { '@type': 'Brand', name: 'AIS' }, sku: it.code, category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
+    offers: { '@type': 'Offer', price: it.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href },
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} keywords={keywords} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <a href={listHref}>{listName}</a> › <span>โปร {it.code}</span>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <span class="badge">{pk ? `${pk.net} · ไม่อั้น ไม่ลดสปีด` : 'ซิมใหม่ / ย้ายค่าย'}</span>
+      <h1>โปรเน็ต AIS {it.code} — {it.price} บาท {it.days} วัน</h1>
+      <p class="tag">{pk ? `เน็ต ${pk.net} ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ เฉลี่ย ${perDay(pk)} บาท/วัน` : `เน็ตรวม ${ns!.totalGB}GB นาน 30 วัน · ${ns!.call}`}</p>
+    </div>
+    <div class="offer">
+      <div class="o-price"><small>฿</small>{it.price.toLocaleString('th-TH')}</div>
+      <div class="o-meta">{it.days} วัน · {spec}</div>
+      <code class="o-code">{code}</code>
+      <a class="o-btn" href={href} data-pkg={it.code}>กดสมัครโปร {it.code}</a>
+      <div class="o-tax">ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม</div>
+    </div>
+  </section>
+
+  <h2>รายละเอียดโปร {it.code} AIS</h2>
+  <div class="tbl">
+    <table>
+      <tbody>
+        <tr><th scope="row">รหัสแพ็กเกจ</th><td>{it.code}</td></tr>
+        <tr><th scope="row">ราคา</th><td>{it.price.toLocaleString('th-TH')} บาท (รวมภาษี)</td></tr>
+        <tr><th scope="row">ระยะเวลา</th><td>{it.days} วัน{it.days <= 2 ? ` (${it.days * 24} ชั่วโมง)` : ''}</td></tr>
+        {pk && <tr><th scope="row">ความเร็ว</th><td>{pk.net} {speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด</td></tr>}
+        {pk && <tr><th scope="row">เฉลี่ยต่อวัน</th><td>{perDay(pk)} บาท</td></tr>}
+        {ns && <tr><th scope="row">เน็ต</th><td>{ns.net.join(', ')} (รวม {ns.totalGB}GB)</td></tr>}
+        {ns && <tr><th scope="row">หลังใช้ครบ</th><td>{ns.after}</td></tr>}
+        {ns && <tr><th scope="row">การโทร</th><td>{ns.call}</td></tr>}
+        <tr><th scope="row">ของแถม</th><td>{(pk ? pk.bonus : ns!.gifts)?.join(', ') || '–'}</td></tr>
+        <tr><th scope="row">รหัสสมัคร</th><td><code>{code}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>วิธีสมัครโปร {it.code}</h2>
+  <ol class="steps">
+    <li>เช็กเงินในซิมให้มีอย่างน้อย {it.price} บาท (กด <code>*121#</code>)</li>
+    <li>กด <code>{code}</code> แล้วโทรออก หรือแตะปุ่ม <a href={href} data-pkg={it.code}>กดสมัครโปร {it.code}</a></li>
+    <li>รอ SMS ยืนยัน ตรวจราคา {it.price} บาท / {it.days} วัน ให้ตรง แล้วใช้งานได้ทันที</li>
+  </ol>
+  {ns && <p class="small">แพ็กนี้สำหรับซิมใหม่หรือย้ายค่ายเบอร์เดิมมา AIS อ่านเงื่อนไขเพิ่มที่ <a href="/ais-new-sim/">หน้าเปิดซิมใหม่</a></p>}
+  {sp && <p>อ่านรีวิวเต็ม ว่าเหมาะกับใคร คุ้มไหม: <a href={`/pro/${sp.slug}/`}>{sp.keyword}</a></p>}
+
+  <Faq items={faq} />
+
+  {relatedCards.length > 0 && (
+    <>
+      <h2>โปรเน็ต AIS ใกล้เคียง</h2>
+      <div class="grid">{relatedCards.map((p) => <PkgCard p={p} />)}</div>
+    </>
+  )}
+  <h2>รหัสโปรอื่นที่น่าสนใจ</h2>
+  <ul class="links">
+    {related.map((x) => <li><a href={`/packages/${x.code}/`}>{label(x)}</a></li>)}
+  </ul>
+
+  <div class="sticky">
+    <div><b>โปร {it.code}</b> · {it.price} บาท / {it.days} วัน</div>
+    <a href={href} data-pkg={it.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero {
+    display: grid; gap: 18px; border-radius: 24px; padding: 24px; color: #fff;
+    background: linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.6rem; margin: 12px 0 8px; }
+  .tag { margin: 0; }
+  .offer { background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; }
+  .o-price { font-size: 2.6rem; font-weight: 700; line-height: 1; }
+  .o-price small { font-size: 1.2rem; color: var(--muted); vertical-align: 12px; }
+  .o-meta { color: var(--muted); font-size: .9rem; margin: 8px 0 10px; }
+  .o-code { display: block; text-align: center; padding: 10px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; }
+  .o-btn, .sticky a {
+    display: block; text-align: center; padding: 14px; border-radius: 14px; font-weight: 600;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;
+  }
+  .o-tax { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 8px; }
+  @media (min-width: 760px) { .hero { grid-template-columns: 1.3fr 1fr; align-items: center; padding: 36px; } }
+  .tbl th { width: 34%; }
+  .steps li { margin: 6px 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid var(--line); font-size: .92rem;
+  }
+  .sticky a { flex: none; padding: 10px 22px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

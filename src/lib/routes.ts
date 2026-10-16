@@ -4,6 +4,8 @@ import { SALES } from '../data/sales';
 import { HOWTO } from '../data/howto';
 import { POSTS } from './blog';
 import { LUCKY } from '../data/lucky';
+import { AIS } from '../data/ais';
+import { NEW_SIM } from '../data/newsim';
 
 export const ALL_ROUTES: string[] = [
   '/',
@@ -25,5 +27,7 @@ export const ALL_ROUTES: string[] = [
   ...SALES.map((s) => `/pro/${s.slug}/`),
   ...HOWTO.map((h) => `/ais/${h.slug}/`),
   ...POSTS.map((p) => `/blog/${p.slug}/`),
+  ...AIS.map((p) => `/packages/${p.code}/`),
+  ...NEW_SIM.map((p) => `/packages/${p.code}/`),
   ...LUCKY.map((n) => `/ber-mongkol/${n.num}/`),
 ];

@@ -95,7 +95,7 @@ const schema = [
           <code class="ussd">{ussd(p.code)}</code>
           <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
         </div>
-        <div class="tax">ราคารวม VAT แล้ว</div>
+        <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a> · ราคารวม VAT แล้ว</div>
       </article>
     ))}
   </div>

@@ -8,8 +8,9 @@ interface Props {
   schema?: object[];
   image?: string; // รูปตอนแชร์ลิงก์ (1200x630)
   ogType?: string; // website | article
+  keywords?: string;
 }
-const { title, description, schema = [], image = '/og/default.jpg', ogType = 'website' } = Astro.props;
+const { title, description, schema = [], image = '/og/default.jpg', ogType = 'website', keywords } = Astro.props;
 const ogImage = new URL(image, Astro.site ?? SITE.url).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
@@ -34,6 +35,7 @@ const path = Astro.url.pathname;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
+  {keywords && <meta name="keywords" content={keywords} />}
   <link rel="canonical" href={canonical} />
   <meta property="og:type" content={ogType} />
   <meta property="og:locale" content="th_TH" />
