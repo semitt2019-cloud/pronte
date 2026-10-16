@@ -93,7 +93,7 @@ const schema = [
         </ul>
         <div class="gifts">{p.gifts.map((g) => <span>🎁 {g}</span>)}</div>
         <div class="act">
-          <code class="ussd">{ussd(p.code)}</code>
+          <span class="dialbox"><code class="ussd">{ussd(p.code)}</code></span>
           <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
         </div>
         <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a> · ราคารวม VAT แล้ว</div>
@@ -205,7 +205,7 @@ const schema = [
   .card li.muted::before { content: '↳'; color: var(--muted); }
   .gifts { display: flex; flex-direction: column; gap: 4px; background: #fdf6e3; border-radius: 12px; padding: 8px 10px; margin-bottom: 12px; font-size: .84rem; color: #6b4600; }
   .act { display: flex; gap: 8px; }
-  .ussd { flex: 1; text-align: center; padding: 11px 6px; background: #f5f7f3; border: 1px dashed #cfd8c8; font-size: .92rem; overflow-wrap: anywhere; }
+  .ussd { text-align: center; padding: 11px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; }
   .btn { flex: none; display: grid; place-items: center; padding: 0 18px; border-radius: 12px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35); }
   .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
 

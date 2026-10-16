@@ -220,7 +220,42 @@ const path = Astro.url.pathname;
   th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { background: var(--lime-soft); color: var(--lime-ink); font-weight: 600; }
   tr:last-child td { border-bottom: 0; }
-  code { background: var(--lime-soft); padding: 2px 8px; border-radius: 8px; font-size: .95em; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  code { background: var(--lime-soft); padding: 2px 8px; border-radius: 8px; font-size: .95em; font-family: ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
+
+  /* รหัสกดสมัคร *777*XXXX*1048517# อยู่บรรทัดเดียว และย่อตามกล่อง .dialbox */
+  .act:has(> .dialbox) { flex-wrap: wrap; min-width: 0; }
+  .dialbox {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    container-type: inline-size;
+    container-name: dial;
+  }
+  .act > .dialbox {
+    flex: 1 1 11rem;
+    width: auto;
+    min-width: min(100%, 11rem);
+  }
+  .dialbox > code,
+  .dialbox > .dial,
+  .dialbox > small.dial {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: keep-all !important;
+    letter-spacing: 0 !important;
+    text-align: center;
+    line-height: 1.35;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: min(0.95rem, 7.15cqi) !important;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
 
   .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; padding: 0; list-style: none; }
   .links a {

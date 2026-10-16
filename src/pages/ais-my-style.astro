@@ -72,7 +72,7 @@ const schema = [
         </ul>
         <p class="cond">{p.condition}</p>
         <div class="act">
-          <code class="ussd">{ussd(p.code)}</code>
+          <span class="dialbox"><code class="ussd">{ussd(p.code)}</code></span>
           <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
         </div>
         <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a>{p.price == null ? ' · ตรวจราคาใน SMS' : ' · ราคารวม VAT แล้ว'}</div>
@@ -96,7 +96,7 @@ const schema = [
   <p class="small">ข้อมูลจากใบโปรแพ็กเสริม MY STYLE ของ AIS One-2-Call รอบ 1 ต.ค. 69 – 31 ต.ค. 69 · ตรวจข้อมูล {SITE.updated} · รหัส 2902–2908 ไม่ได้พิมพ์ราคาแยกบนการ์ด หัวแคมเปญระบุ 29 บาท/เดือน ตรวจราคาใน SMS ยืนยันก่อนสมัคร · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
 
   <div class="sticky">
-    <div><b>MY STYLE</b> · {ussd(lead.code)}</div>
+    <div class="sk"><b>MY STYLE</b><span class="dialbox"><span class="dial">{ussd(lead.code)}</span></span></div>
     <a href={telHref(lead.code)} data-pkg={lead.code}>กดสมัคร</a>
   </div>
 </Base>
@@ -137,7 +137,10 @@ const schema = [
   .card li::before { content: '✓'; position: absolute; left: 0; color: #5fae2e; font-weight: 700; }
   .cond { margin: 0 0 12px; font-size: .82rem; color: #6b4600; background: #fdf6e3; border-radius: 12px; padding: 8px 10px; }
   .act { display: flex; gap: 8px; }
-  .ussd { flex: 1; text-align: center; padding: 11px 6px; background: #f5f7f3; border: 1px dashed #cfd8c8; font-size: .92rem; overflow-wrap: anywhere; }
+  .ussd { text-align: center; padding: 11px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; }
+  .sk { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .sk b { font-size: .85rem; line-height: 1.2; }
+  .sk .dialbox { flex: none; min-width: 0; }
   .btn { flex: none; display: grid; place-items: center; padding: 0 18px; border-radius: 12px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35); }
   .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
 

@@ -169,9 +169,12 @@
     box-shadow: 0 -10px 40px -10px rgba(0,0,0,.35);
   }
   .s-card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+  .s-card { container-type: inline-size; }
   .s-code {
-    display: block; text-align: center; font-size: 1.5rem; font-weight: 700; padding: 12px; margin-bottom: 10px;
+    display: block; text-align: center; font-weight: 700; padding: 12px 4px; margin-bottom: 10px;
     background: var(--lime-soft); border: 1px dashed #b9dc8c; border-radius: 12px; color: var(--lime-ink);
+    white-space: nowrap; letter-spacing: 0;
+    font-size: min(1.35rem, 6.4cqi);
   }
   .s-why { font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
   .s-steps { margin: 0 0 14px; padding-left: 20px; }

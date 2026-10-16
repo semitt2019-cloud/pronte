@@ -64,7 +64,7 @@ const description = 'ไม่รู้จะเลือกโปรเน็�
           ${i === 0 ? '<span class="tag">คุ้มที่สุด</span>' : ''}
           <div class="row"><b>${p.price} บาท / ${p.days} วัน</b><span>${p.net} ${sp(p.mbps)}</span></div>
           ${(p.bonus || []).map((b) => `<div class="bn">+ ${esc(b)}</div>`).join('')}
-          <div class="row act"><code>${esc(p.ussd)}</code><a class="btn" href="${p.href}">กดสมัคร</a></div>
+          <div class="row act"><span class="dialbox"><code class="dial">${esc(p.ussd)}</code></span><a class="btn" href="${p.href}">กดสมัคร</a></div>
         </div>`).join('');
     }
     form.addEventListener('change', pick);
@@ -90,9 +90,9 @@ const description = 'ไม่รู้จะเลือกโปรเน็�
   :global(.res .tag) { position: absolute; top: -11px; left: 16px; background: linear-gradient(140deg, #ffd36b, #f5a623); color: #5a3700; font-size: .72rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; }
   :global(.res .row) { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   :global(.res .row b) { font-size: 1.35rem; }
-  :global(.res .row span) { background: var(--lime-soft); color: var(--lime-ink); font-size: .85rem; padding: 4px 10px; border-radius: 10px; }
+  :global(.res .row span:not(.dialbox)) { background: var(--lime-soft); color: var(--lime-ink); font-size: .85rem; padding: 4px 10px; border-radius: 10px; }
   :global(.res .bn) { font-size: .9rem; color: var(--muted); }
   :global(.res .act) { margin-top: 12px; }
-  :global(.res .act code) { flex: 1; text-align: center; padding: 11px; background: #f5f7f3; border: 1px dashed #cfd8c8; }
+  :global(.res .act code) { text-align: center; padding: 11px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; }
   :global(.res .btn) { background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none; font-weight: 600; padding: 11px 20px; border-radius: 12px; }
 </style>

@@ -23,7 +23,7 @@ const code = ussd(p.code);
     {p.bonus?.map((b) => <li class="bonus">{b}</li>)}
   </ul>
   <div class="act">
-    <code class="ussd">{code}</code>
+    <span class="dialbox"><code class="ussd">{code}</code></span>
     <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
   </div>
   <div class="foot-row">
@@ -69,8 +69,8 @@ const code = ussd(p.code);
   .bonus::before { background-color: #fdf3dc; }
   .act { display: flex; gap: 8px; align-items: stretch; }
   .ussd {
-    flex: 1; font-size: .92rem; padding: 11px 8px; text-align: center; letter-spacing: .5px;
-    overflow-wrap: anywhere; background: #f5f7f3; border: 1px dashed #cfd8c8; color: var(--ink);
+    padding: 11px 4px; text-align: center;
+    background: #f5f7f3; border: 1px dashed #cfd8c8; color: var(--ink);
   }
   .btn {
     flex: none; display: grid; place-items: center;

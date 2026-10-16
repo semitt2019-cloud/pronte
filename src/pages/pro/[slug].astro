@@ -72,7 +72,7 @@ const lvl = ['ไม่แนะนำ', 'พอได้', 'สบาย'];
       <div class="o-price"><small>฿</small>{pkg.price.toLocaleString('th-TH')}</div>
       <div class="o-meta">{pkg.days} วัน · {speedLabel(pkg.mbps)} · เฉลี่ย {pd} บาท/วัน</div>
       {pkg.bonus && <ul class="o-bonus">{pkg.bonus.map((b) => <li>{b}</li>)}</ul>}
-      <code class="o-code">{code}</code>
+      <span class="dialbox"><code class="o-code">{code}</code></span>
       <a class="o-btn" href={href} data-pkg={pkg.code}>กดสมัครเลย</a>
       <div class="o-tax">ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม</div>
     </div>
@@ -175,7 +175,7 @@ const lvl = ['ไม่แนะนำ', 'พอได้', 'สบาย'];
   .o-price small { font-size: 1.2rem; color: var(--muted); font-weight: 500; vertical-align: 12px; margin-right: 2px; }
   .o-meta { color: var(--muted); font-size: .9rem; margin: 8px 0 10px; }
   .o-bonus { margin: 0 0 12px; padding-left: 18px; font-size: .9rem; color: #8a5a00; }
-  .o-code { display: block; text-align: center; padding: 10px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; font-size: 1rem; }
+  .o-code { text-align: center; padding: 10px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; }
   .o-btn {
     display: block; text-align: center; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 1.1rem;
     background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;

@@ -118,7 +118,7 @@ const schema = [
         ? <div class="o-price o-dur">{ms.duration}</div>
         : <div class="o-price"><small>฿</small>{(charge ?? it.price).toLocaleString('th-TH')}</div>}
       <div class="o-meta">{ms ? ms.priceText : `${it.days} วัน · ${spec}`}</div>
-      <code class="o-code">{code}</code>
+      <span class="dialbox"><code class="o-code">{code}</code></span>
       <a class="o-btn" href={href} data-pkg={it.code}>กดสมัครโปร {it.code}</a>
       <div class="o-tax">{ms && ms.price == null ? 'ตรวจราคาใน SMS ยืนยันก่อนสมัคร' : 'ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม'}</div>
     </div>
@@ -191,7 +191,7 @@ const schema = [
   .o-price small { font-size: 1.2rem; color: var(--muted); vertical-align: 12px; }
   .o-dur { font-size: 1.7rem; }
   .o-meta { color: var(--muted); font-size: .9rem; margin: 8px 0 10px; }
-  .o-code { display: block; text-align: center; padding: 10px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; }
+  .o-code { text-align: center; padding: 10px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; }
   .o-btn, .sticky a {
     display: block; text-align: center; padding: 14px; border-radius: 14px; font-weight: 600;
     background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;
