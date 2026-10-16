@@ -50,12 +50,12 @@ const schema = [
   <h2>4 โปรที่เหมาะกับนักเรียน นักศึกษา</h2>
   <div class="picks">
     {picks.map((p) => (
-      <div class="pk">
+      <div class="pk dialbox">
         <span class="lb">{p.label}</span>
         <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
         <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net}</div>
         <p>{p.why}</p>
-        <code>{ussd(p.code)}</code>
+        <code class="dial">{ussd(p.code)}</code>
         <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
       </div>
     ))}
@@ -116,7 +116,7 @@ const schema = [
   .pr small { color: var(--muted); }
   .sp { font-weight: 600; }
   .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
-  .pk code { text-align: center; padding: 8px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; font-size: .85rem; }
+  .pk code { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
   .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
 
   .cmp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }

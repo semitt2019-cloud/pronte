@@ -88,8 +88,8 @@ const schema = [
     box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
   }
   .a-text { font-size: 1.08rem; margin: 0 0 14px; font-weight: 500; text-shadow: 0 1px 6px rgba(40,90,10,.25); }
-  .a-code { display: flex; gap: 10px; align-items: stretch; background: #fff; padding: 8px; border-radius: 16px; }
-  .a-code code { flex: 1; display: grid; place-items: center; font-size: 1.6rem; font-weight: 700; color: var(--ink); background: transparent; letter-spacing: 1px; }
+  .a-code { display: flex; gap: 10px; align-items: stretch; background: #fff; padding: 8px; border-radius: 16px; container-type: inline-size; min-width: 0; }
+  .a-code code { flex: 1; min-width: 0; display: grid; place-items: center; font-weight: 700; color: var(--ink); background: transparent; letter-spacing: 0; white-space: nowrap; font-size: min(1.6rem, 8cqi); }
   .a-btn {
     flex: none; display: grid; place-items: center; padding: 12px 20px; border-radius: 12px; font-weight: 600;
     background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; text-decoration: none;
