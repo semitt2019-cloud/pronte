@@ -26,6 +26,7 @@ export const AIS: Pkg[] = [
   { code: '7723', price: 65, days: 1, net: '5G', mbps: 10, bonus: ['เน็ต 5G ความเร็วสูงสุด 1GB'] },
   // 2 วัน
   { code: '7380', price: 38, days: 2, net: '4G', mbps: 1 },
+  { code: '7783', price: 55, days: 2, net: '5G', mbps: 1, bonus: ['เน็ต 5G ความเร็วสูงสุด 3GB (โปร 1–31 ต.ค. 69)'] },
   { code: '7384', price: 59, days: 2, net: '4G', mbps: 4 },
   { code: '7724', price: 70, days: 2, net: '5G', mbps: 4, popular: true, bonus: ['เน็ต 5G ความเร็วสูงสุด 1GB/วัน'] },
   { code: '7385', price: 81, days: 2, net: '4G', mbps: 6 },
@@ -37,6 +38,7 @@ export const AIS: Pkg[] = [
   // 7 วัน
   { code: '7629', price: 130, days: 7, net: '5G', mbps: 2, popular: true },
   { code: '7630', price: 155, days: 7, net: '4G', mbps: 2, bonus: ['โทรฟรีทุกเครือข่าย 15 นาที'] },
+  { code: '7788', price: 179, days: 7, net: '5G', mbps: 2, bonus: ['เน็ต 5G ความเร็วสูงสุด 1GB (โปร 1–31 ต.ค. 69)', 'โทรฟรีทุกเครือข่าย 15 นาที'] },
   { code: '7154', price: 236, days: 7, net: '5G', mbps: 4 },
   { code: '7210', price: 289, days: 7, net: '5G', mbps: 6 },
   { code: '7388', price: 354, days: 7, net: '5G', mbps: 10 },

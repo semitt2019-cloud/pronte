@@ -1,0 +1,156 @@
+---
+// แพ็กเสริม MY STYLE — ใบโปร AIS 1–31 ต.ค. 69
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { MY_STYLE, MY_STYLE_GAMES } from '../data/mystyle';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/ais-my-style/';
+const title = 'แพ็ก MY STYLE AIS 29 บาท เลือกรายเดือน เมื่อมีแพ็กเน็ต 250–350 บาท';
+const description = 'แพ็กเสริม MY STYLE ของ AIS จ่ายเพิ่ม 29 บาท/เดือน ต้องมีแพ็กเน็ต 250–350 บาท (รหัส 2901 ใช้ได้ตั้งแต่ 200 บาท) เลือกได้ 1 อย่าง เช่น ReelShort, เน็ตโซเชียล, TikTok, 14 เกม, Karaoke, Viu, WeTV หรือประกัน KPI';
+const lead = MY_STYLE[0];
+
+const faq: [string, string][] = [
+  ['แพ็ก MY STYLE สมัครได้เมื่อไร?', 'ต้องสมัครในวันเดียวกับวันที่สมัครแพ็กเน็ตสำเร็จ และรับได้เพียง 1 รหัส รหัส 2902–2908 ใช้กับแพ็กเน็ต 250–350 บาท รหัส 2901 (ReelShort + วอลเปเปอร์) ใช้ได้เมื่อมีแพ็กเน็ต 200 บาทขึ้นไป'],
+  ['ราคาเท่าไหร่?', 'ใบโปรระบุหัวแคมเปญว่าจ่ายเพิ่ม 29 บาท/เดือน และพิมพ์ราคา 29 บาทไว้ที่รหัส 2901 รหัส 2902–2908 ไม่ได้พิมพ์ราคาแยก ตรวจยอดใน SMS ยืนยันก่อนกดสมัคร'],
+  ['เลือกได้กี่อย่าง?', 'ได้เพียง 1 แพ็กเกจ ต่ออายุสิทธิ์ได้สูงสุด 6 เดือนกดรับตาม SMS ทุกเดือน ถ้าหักค่าแพ็กเน็ตไม่เต็มจำนวนจะรับสิทธิ์เดือนถัดไปไม่ได้'],
+  ['ได้ไอศกรีม Dairy Queen ไหม?', 'ใบโปรระบุโคน 1 บอล เมื่อสมัครแพ็กเน็ต 350 บาทพร้อมแพ็ก MY STYLE'],
+  ['เน็ตโซเชียลกับ TikTok ใช้แอปอะไรได้?', 'รหัส 2902 ได้ 5GB นาน 7 วัน สำหรับ Facebook, Messenger, Instagram และ LINE รหัส 2903 ได้ 3GB นาน 7 วัน สำหรับ TikTok ทั้งคู่เร็วสูงสุด 7.2 Mbps'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['แพ็ก MY STYLE', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'แพ็กเสริม MY STYLE AIS',
+    itemListElement: MY_STYLE.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'Product',
+        name: `แพ็ก MY STYLE AIS ${p.code} ${p.title}`,
+        description: [...p.perks, p.condition].join(' · '),
+        brand: { '@type': 'Brand', name: 'AIS' },
+        ...(p.price != null ? { offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href } } : {}),
+      },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>แพ็ก MY STYLE</span></nav>
+
+  <section class="hero">
+    <span class="badge">ใบโปร 1 ต.ค. 69 – 31 ต.ค. 69</span>
+    <h1>แพ็ก MY STYLE<br /><em>จ่ายเพิ่ม 29 บาท/เดือน</em></h1>
+    <p class="lead-w">ต้องมีแพ็กเน็ต 250–350 บาท แล้วเลือกความพิเศษได้ 1 อย่าง ในวันเดียวกัน</p>
+    <div class="hero-cta">
+      <a class="cta" href="#packages">ดู 8 รหัส ↓</a>
+      <a class="cta-2" href={telHref(lead.code)}>สมัคร ReelShort 29 บาท</a>
+    </div>
+  </section>
+
+  <section class="answer">
+    <b>เงื่อนไขสำคัญ:</b> สมัครแพ็ก MY STYLE ในวันเดียวกับแพ็กเน็ต และรับได้เพียง 1 รหัส
+    รหัส <b>2902–2908</b> ใช้เมื่อมีแพ็กเน็ต <b>250–350 บาท</b>
+    รหัส <b>2901</b> ใช้ได้ตั้งแต่แพ็กเน็ต <b>200 บาทขึ้นไป</b> ราคาที่พิมพ์บนใบโปรคือ 29 บาท/เดือน
+  </section>
+
+  <h2 id="packages">รหัสแพ็ก MY STYLE</h2>
+  <div class="grid">
+    {MY_STYLE.map((p) => (
+      <article class:list={['card', { hot: p.price != null }]} id={`pkg-${p.code}`}>
+        {p.tag && <span class="ribbon">{p.tag}</span>}
+        <div class="head">
+          {p.price != null
+            ? <h3 class="price"><small>฿</small>{p.price}<span>/เดือน</span></h3>
+            : <h3 class="price dur">{p.duration}</h3>}
+        </div>
+        <h3 class="name">{p.title}</h3>
+        <ul>
+          {p.perks.filter((n) => n.length < 140).map((n) => <li>{n}</li>)}
+        </ul>
+        <p class="cond">{p.condition}</p>
+        <div class="act">
+          <code class="ussd">{ussd(p.code)}</code>
+          <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+        </div>
+        <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a>{p.price == null ? ' · ตรวจราคาใน SMS' : ' · ราคารวม VAT แล้ว'}</div>
+      </article>
+    ))}
+  </div>
+
+  <h2>14 เกมของรหัส 2904</h2>
+  <p>เล่นไม่จำกัด 30 วัน ที่ความเร็วสูงสุด 7.2 Mbps</p>
+  <ul class="games">
+    {MY_STYLE_GAMES.map((g) => <li>{g}</li>)}
+  </ul>
+
+  <h2>ของแถม Dairy Queen</h2>
+  <p class="note">ไอศกรีม Dairy Queen โคน 1 บอล เมื่อสมัครแพ็กเน็ต 350 บาท พร้อมแพ็ก MY STYLE</p>
+
+  <p class="note">ยังไม่มีแพ็กเน็ต? ดู <a href="/ais-new-sim/">แพ็กซิมใหม่ 200–350 บาท</a> แล้วกลับมากดรหัส MY STYLE ในวันเดียวกัน</p>
+
+  <Faq items={faq} />
+
+  <p class="small">ข้อมูลจากใบโปรแพ็กเสริม MY STYLE ของ AIS One-2-Call รอบ 1 ต.ค. 69 – 31 ต.ค. 69 · ตรวจข้อมูล {SITE.updated} · รหัส 2902–2908 ไม่ได้พิมพ์ราคาแยกบนการ์ด หัวแคมเปญระบุ 29 บาท/เดือน ตรวจราคาใน SMS ยืนยันก่อนสมัคร · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
+
+  <div class="sticky">
+    <div><b>MY STYLE</b> · {ussd(lead.code)}</div>
+    <a href={telHref(lead.code)} data-pkg={lead.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero {
+    border-radius: 24px; padding: 26px 22px; color: #fff; margin-top: 6px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.85rem; margin: 12px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .lead-w { margin: 0 0 18px; color: rgba(255,255,255,.95); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta { background: #fff; color: var(--lime-ink); font-weight: 600; text-decoration: none; padding: 11px 18px; border-radius: 12px; box-shadow: 0 10px 24px -10px rgba(30,70,10,.6); }
+  .cta-2 { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.55); color: #fff; font-weight: 600; text-decoration: none; padding: 11px 18px; border-radius: 12px; }
+  @media (min-width: 720px) { .hero { padding: 42px; } .hero h1 { font-size: 2.5rem; } }
+
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; scroll-margin-top: 130px; }
+  .card.hot { border: 1.5px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(140deg, var(--lime-2), var(--lime) 50%, #f5c04a) border-box; }
+  .ribbon { position: absolute; top: -11px; right: 16px; background: linear-gradient(140deg, #ffd36b, #f5a623); color: #5a3700; font-size: .72rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .price { font-size: 2.1rem; font-weight: 700; line-height: 1; margin: 8px 0 0; }
+  .price small { font-size: 1.1rem; color: var(--muted); font-weight: 500; vertical-align: 8px; margin-right: 2px; }
+  .price span { font-size: .85rem; color: var(--muted); font-weight: 500; margin-left: 3px; }
+  .price.dur { font-size: 1.45rem; color: var(--lime-ink); }
+  .name { font-size: 1.05rem; margin: 8px 0 0; }
+  .card ul { list-style: none; padding: 0; margin: 10px 0; font-size: .92rem; flex: 1; }
+  .card li { position: relative; padding-left: 20px; margin: 4px 0; }
+  .card li::before { content: '✓'; position: absolute; left: 0; color: #5fae2e; font-weight: 700; }
+  .cond { margin: 0 0 12px; font-size: .82rem; color: #6b4600; background: #fdf6e3; border-radius: 12px; padding: 8px 10px; }
+  .act { display: flex; gap: 8px; }
+  .ussd { flex: 1; text-align: center; padding: 11px 6px; background: #f5f7f3; border: 1px dashed #cfd8c8; font-size: .92rem; overflow-wrap: anywhere; }
+  .btn { flex: none; display: grid; place-items: center; padding: 0 18px; border-radius: 12px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); text-shadow: 0 1px 1px rgba(40,80,10,.35); }
+  .tax { font-size: .72rem; color: var(--muted); text-align: right; margin-top: 8px; }
+
+  .games { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+  .games li { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: .88rem; }
+
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem;
+  }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

@@ -21,7 +21,7 @@ const {
       </a>
     ))}
   </div>
-  <a class="more" href="/ais-new-sim/">เทียบแพ็กซิมใหม่ทั้ง 4 แบบ →</a>
+  <a class="more" href="/ais-new-sim/">เทียบแพ็กซิมใหม่ทั้ง {NEW_SIM.length} แบบ →</a>
 </aside>
 
 <style>
@@ -29,8 +29,8 @@ const {
   .tag { font-size: .78rem; font-weight: 600; color: #8a5a00; }
   .h { margin: 4px 0 2px; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
   .t { margin: 0 0 12px; color: #6b4600; font-size: .92rem; }
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (min-width: 720px) { .grid { grid-template-columns: repeat(5, 1fr); } }
   .m { position: relative; background: #fff; border-radius: 14px; padding: 12px 8px 10px; text-align: center; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
   .m b { font-size: 1.35rem; color: var(--lime-ink); }
   .m span { font-weight: 600; font-size: .9rem; }
