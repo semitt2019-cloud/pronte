@@ -6,6 +6,7 @@ import { POSTS } from './blog';
 import { LUCKY } from '../data/lucky';
 import { AIS } from '../data/ais';
 import { NEW_SIM } from '../data/newsim';
+import { MY_STYLE } from '../data/mystyle';
 
 export const ALL_ROUTES: string[] = [
   '/',
@@ -15,6 +16,7 @@ export const ALL_ROUTES: string[] = [
   '/about/',
   '/app/',
   '/ais-new-sim/',
+  '/ais-my-style/',
   '/ais-sim-register/',
   '/blog/',
   '/ber-mongkol/',
@@ -29,5 +31,6 @@ export const ALL_ROUTES: string[] = [
   ...POSTS.map((p) => `/blog/${p.slug}/`),
   ...AIS.map((p) => `/packages/${p.code}/`),
   ...NEW_SIM.map((p) => `/packages/${p.code}/`),
+  ...MY_STYLE.map((p) => `/packages/${p.code}/`),
   ...LUCKY.map((n) => `/ber-mongkol/${n.num}/`),
 ];

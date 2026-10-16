@@ -5,18 +5,21 @@ import PkgCard from '../../components/PkgCard.astro';
 import Faq from '../../components/Faq.astro';
 import { AIS, perDay, speedLabel, type Pkg } from '../../data/ais';
 import { NEW_SIM, type NewSimPkg } from '../../data/newsim';
+import { MY_STYLE, type MyStylePkg } from '../../data/mystyle';
 import { salesByCode } from '../../data/sales';
 import { ussd, telHref, SITE } from '../../config';
 import { faqSchema, breadcrumb } from '../../lib/seo';
 
 type Item =
   | { kind: 'ais'; code: string; price: number; days: number; p: Pkg }
-  | { kind: 'newsim'; code: string; price: number; days: number; n: NewSimPkg };
+  | { kind: 'newsim'; code: string; price: number; days: number; n: NewSimPkg }
+  | { kind: 'mystyle'; code: string; price: number; days: number; m: MyStylePkg };
 
 export function getStaticPaths() {
   const items: Item[] = [
     ...AIS.map((p) => ({ kind: 'ais' as const, code: p.code, price: p.price, days: p.days, p })),
     ...NEW_SIM.map((n) => ({ kind: 'newsim' as const, code: n.code, price: n.price, days: 30, n })),
+    ...MY_STYLE.map((m) => ({ kind: 'mystyle' as const, code: m.code, price: m.price ?? 0, days: m.days, m })),
   ];
   const seen = new Set<string>();
   return items.filter((i) => !seen.has(i.code) && seen.add(i.code)).map((it) => ({ params: { code: it.code }, props: { it } }));
@@ -27,53 +30,75 @@ const code = ussd(it.code);
 const href = telHref(it.code);
 const path = `/packages/${it.code}/`;
 const isAis = it.kind === 'ais';
+const isNew = it.kind === 'newsim';
 const pk = isAis ? it.p : null;
-const ns = !isAis ? it.n : null;
+const ns = isNew ? it.n : null;
+const ms = it.kind === 'mystyle' ? it.m : null;
 const sp = salesByCode(it.code);
+const charge = ms ? ms.price : it.price;
 
 const spec = pk
   ? `${pk.net} ${speedLabel(pk.mbps)} ไม่อั้น`
-  : `เน็ตรวม ${ns!.totalGB}GB`;
-const title = pk
-  ? `โปรเน็ต AIS ${it.code} ราคา ${it.price} บาท ${it.days} วัน ${spec}`
-  : `โปรเน็ต AIS ${it.code} ซิมใหม่ ${it.price} บาท 30 วัน ${spec}`;
-const extras = pk ? (pk.bonus ?? []) : [...ns!.net, ns!.call, ...ns!.gifts];
-const description = pk
-  ? `สมัครโปร ${it.code} AIS เติมเงิน ${it.price} บาท ใช้ได้ ${it.days} วัน เน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด${pk.bonus?.length ? ' แถม' + pk.bonus[0] : ''} กดรหัส ${code}`
-  : `สมัครโปร ${it.code} AIS สำหรับซิมใหม่/ย้ายค่าย ${it.price} บาท 30 วัน เน็ตรวม ${ns!.totalGB}GB ${ns!.call} กดรหัส ${code}`;
+  : ns
+    ? `เน็ตรวม ${ns.totalGB}GB`
+    : ms!.duration;
+const title = ms
+  ? `แพ็ก MY STYLE AIS ${it.code} ${ms.title} ${ms.priceText}`
+  : pk
+    ? `โปรเน็ต AIS ${it.code} ราคา ${it.price} บาท ${it.days} วัน ${spec}`
+    : `โปรเน็ต AIS ${it.code} ซิมใหม่ ${it.price} บาท 30 วัน ${spec}`;
+const description = ms
+  ? `แพ็ก MY STYLE ${it.code} ${ms.title} ${ms.priceText} ${ms.duration} ${ms.condition} กดรหัส ${code}`
+  : pk
+    ? `สมัครโปร ${it.code} AIS เติมเงิน ${it.price} บาท ใช้ได้ ${it.days} วัน เน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด${pk.bonus?.length ? ' แถม' + pk.bonus[0] : ''} กดรหัส ${code}`
+    : `สมัครโปร ${it.code} AIS สำหรับซิมใหม่/ย้ายค่าย ${it.price} บาท 30 วัน เน็ตรวม ${ns!.totalGB}GB ${ns!.call} กดรหัส ${code}`;
 const keywords = [
-  `โปรเน็ต AIS ${it.code}`, `สมัครโปร ${it.code}`, `โปร ${it.code}`, `*777*${it.code}`,
-  `โปรเน็ต AIS ${it.price} บาท`, `เน็ต AIS ${it.days} วัน`, `โปรเน็ต ${it.price} บาท ${it.days} วัน`,
-  ...(pk ? [`เน็ตไม่อั้น ${speedLabel(pk.mbps)}`, `เน็ต ${pk.net} AIS`] : ['โปรซิมใหม่ AIS', `เน็ต ${ns!.totalGB}GB`]),
+  `โปรเน็ต AIS ${it.code}`, `สมัครโปร ${it.code}`, `โปร ${it.code}`, code,
+  ...(ms ? ['แพ็ก MY STYLE AIS', ms.title] : pk ? [`โปรเน็ต AIS ${it.price} บาท`, `เน็ต AIS ${it.days} วัน`, `เน็ตไม่อั้น ${speedLabel(pk.mbps)}`] : [`โปรเน็ต AIS ${it.price} บาท`, 'โปรซิมใหม่ AIS', `เน็ต ${ns!.totalGB}GB`]),
 ].join(', ');
 
 // โปรใกล้เคียง
 const pool: Item[] = [
   ...AIS.map((p) => ({ kind: 'ais' as const, code: p.code, price: p.price, days: p.days, p })),
   ...NEW_SIM.map((n) => ({ kind: 'newsim' as const, code: n.code, price: n.price, days: 30, n })),
+  ...MY_STYLE.map((m) => ({ kind: 'mystyle' as const, code: m.code, price: m.price ?? 0, days: m.days, m })),
 ].filter((x) => x.code !== it.code);
 const related = pool
   .filter((x) => x.kind === it.kind)
   .sort((a, b) => (Math.abs(a.days - it.days) - Math.abs(b.days - it.days)) || (Math.abs(a.price - it.price) - Math.abs(b.price - it.price)))
   .slice(0, 6);
 const relatedCards = related.filter((x) => x.kind === 'ais').slice(0, 3).map((x) => (x as any).p as Pkg);
-const label = (x: Item) => x.kind === 'ais' ? `โปร ${x.code} · ${x.price} บาท ${x.days} วัน ${speedLabel(x.p.mbps)}` : `โปร ${x.code} · ซิมใหม่ ${x.price} บาท ${x.n.totalGB}GB`;
-const listHref = pk ? `/ais-${it.days}-day/` : '/ais-new-sim/';
-const listName = pk ? `โปร ${it.days} วัน` : 'เปิดซิมใหม่';
+const label = (x: Item) =>
+  x.kind === 'ais' ? `โปร ${x.code} · ${x.price} บาท ${x.days} วัน ${speedLabel(x.p.mbps)}`
+  : x.kind === 'newsim' ? `โปร ${x.code} · ซิมใหม่ ${x.price} บาท ${x.n.totalGB}GB`
+  : `MY STYLE ${x.code} · ${x.m.title}`;
+const listHref = pk ? `/ais-${it.days}-day/` : ms ? '/ais-my-style/' : '/ais-new-sim/';
+const listName = pk ? `โปร ${it.days} วัน` : ms ? 'แพ็ก MY STYLE' : 'เปิดซิมใหม่';
 
-const faq: [string, string][] = [
-  [`สมัครโปร ${it.code} กดอะไร?`, `กด ${code} แล้วโทรออก หรือแตะปุ่ม "กดสมัคร" บนหน้านี้ ระบบจะหักเงิน ${it.price} บาทจากยอดเงินในซิม`],
-  [`โปร ${it.code} ใช้ได้กี่วัน?`, `ใช้ได้ ${it.days} วัน${it.days === 1 ? ' (24 ชั่วโมง)' : ''} นับจากเวลาที่สมัครสำเร็จ`],
-  ...(pk ? [[`โปร ${it.code} ลดสปีดไหม?`, `เป็นเน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีดตลอด ${it.days} วัน`] as [string, string]]
-         : [[`ใช้เน็ตครบ ${ns!.totalGB}GB แล้วเป็นอย่างไร?`, ns!.after] as [string, string]]),
-];
+const faq: [string, string][] = ms
+  ? [
+      [`สมัครแพ็ก ${it.code} กดอะไร?`, charge != null
+        ? `กด ${code} แล้วโทรออก หรือแตะปุ่ม "กดสมัคร" บนหน้านี้ ระบบจะหักเงิน ${charge} บาทจากยอดเงินในซิม ตรวจยอดใน SMS ยืนยันก่อนสมัคร`
+        : `กด ${code} แล้วโทรออก ใบโปรไม่ได้พิมพ์ราคาของรหัสนี้แยกจากหัวแคมเปญ MY STYLE 29 บาท/เดือน ตรวจยอดใน SMS ยืนยันก่อนสมัคร`],
+      [`แพ็ก ${it.code} สมัครได้เมื่อไร?`, `${ms.condition} รับแพ็ก MY STYLE ได้เพียง 1 รหัส`],
+      [`ใช้ได้นานแค่ไหน?`, `ตามใบโปรคือ ${ms.duration} สิทธิ์ใช้ได้สูงสุด 6 เดือน โดยกดรับตาม SMS ทุกเดือน`],
+    ]
+  : [
+      [`สมัครโปร ${it.code} กดอะไร?`, `กด ${code} แล้วโทรออก หรือแตะปุ่ม "กดสมัคร" บนหน้านี้ ระบบจะหักเงิน ${it.price} บาทจากยอดเงินในซิม`],
+      [`โปร ${it.code} ใช้ได้กี่วัน?`, `ใช้ได้ ${it.days} วัน${it.days === 1 ? ' (24 ชั่วโมง)' : ''} นับจากเวลาที่สมัครสำเร็จ`],
+      ...(pk ? [[`โปร ${it.code} ลดสปีดไหม?`, `เป็นเน็ต ${pk.net} ความเร็ว ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีดตลอด ${it.days} วัน`] as [string, string]]
+             : [[`ใช้เน็ตครบ ${ns!.totalGB}GB แล้วเป็นอย่างไร?`, ns!.after] as [string, string]]),
+    ];
+const product: Record<string, unknown> = {
+  '@context': 'https://schema.org', '@type': 'Product', name: title, description,
+  brand: { '@type': 'Brand', name: 'AIS' }, sku: it.code, category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
+};
+if (charge != null) {
+  product.offers = { '@type': 'Offer', price: charge, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href };
+}
 const schema = [
   breadcrumb([['หน้าแรก', '/'], [listName, listHref], [`โปร ${it.code}`, path]]),
-  {
-    '@context': 'https://schema.org', '@type': 'Product', name: title, description,
-    brand: { '@type': 'Brand', name: 'AIS' }, sku: it.code, category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
-    offers: { '@type': 'Offer', price: it.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href },
-  },
+  product,
   faqSchema(faq),
 ];
 ---
@@ -84,16 +109,18 @@ const schema = [
 
   <section class="hero">
     <div>
-      <span class="badge">{pk ? `${pk.net} · ไม่อั้น ไม่ลดสปีด` : 'ซิมใหม่ / ย้ายค่าย'}</span>
-      <h1>โปรเน็ต AIS {it.code} — {it.price} บาท {it.days} วัน</h1>
-      <p class="tag">{pk ? `เน็ต ${pk.net} ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ เฉลี่ย ${perDay(pk)} บาท/วัน` : `เน็ตรวม ${ns!.totalGB}GB นาน 30 วัน · ${ns!.call}`}</p>
+      <span class="badge">{pk ? `${pk.net} · ไม่อั้น ไม่ลดสปีด` : ms ? 'แพ็ก MY STYLE' : 'ซิมใหม่ / ย้ายค่าย'}</span>
+      <h1>{ms ? `แพ็ก MY STYLE ${it.code} — ${ms.title}` : `โปรเน็ต AIS ${it.code} — ${it.price} บาท ${it.days} วัน`}</h1>
+      <p class="tag">{pk ? `เน็ต ${pk.net} ${speedLabel(pk.mbps)} ไม่จำกัดปริมาณ เฉลี่ย ${perDay(pk)} บาท/วัน` : ms ? `${ms.priceText} · ${ms.duration} · ${ms.condition}` : `เน็ตรวม ${ns!.totalGB}GB นาน 30 วัน · ${ns!.call}`}</p>
     </div>
     <div class="offer">
-      <div class="o-price"><small>฿</small>{it.price.toLocaleString('th-TH')}</div>
-      <div class="o-meta">{it.days} วัน · {spec}</div>
+      {ms && ms.price == null
+        ? <div class="o-price o-dur">{ms.duration}</div>
+        : <div class="o-price"><small>฿</small>{(charge ?? it.price).toLocaleString('th-TH')}</div>}
+      <div class="o-meta">{ms ? ms.priceText : `${it.days} วัน · ${spec}`}</div>
       <code class="o-code">{code}</code>
       <a class="o-btn" href={href} data-pkg={it.code}>กดสมัครโปร {it.code}</a>
-      <div class="o-tax">ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม</div>
+      <div class="o-tax">{ms && ms.price == null ? 'ตรวจราคาใน SMS ยืนยันก่อนสมัคร' : 'ราคารวมภาษีแล้ว · หักจากยอดเงินในซิม'}</div>
     </div>
   </section>
 
@@ -102,14 +129,17 @@ const schema = [
     <table>
       <tbody>
         <tr><th scope="row">รหัสแพ็กเกจ</th><td>{it.code}</td></tr>
-        <tr><th scope="row">ราคา</th><td>{it.price.toLocaleString('th-TH')} บาท (รวมภาษี)</td></tr>
-        <tr><th scope="row">ระยะเวลา</th><td>{it.days} วัน{it.days <= 2 ? ` (${it.days * 24} ชั่วโมง)` : ''}</td></tr>
+        <tr><th scope="row">ราคา</th><td>{ms ? (ms.price != null ? `${ms.price.toLocaleString('th-TH')} บาท/เดือน (รวมภาษี)` : `${ms.priceText} — ใบโปรไม่ได้พิมพ์ราคาแยก ตรวจใน SMS`) : `${it.price.toLocaleString('th-TH')} บาท (รวมภาษี)`}</td></tr>
+        {!ms && <tr><th scope="row">ระยะเวลา</th><td>{it.days} วัน{it.days <= 2 ? ` (${it.days * 24} ชั่วโมง)` : ''}</td></tr>}
         {pk && <tr><th scope="row">ความเร็ว</th><td>{pk.net} {speedLabel(pk.mbps)} ไม่จำกัดปริมาณ ไม่ลดสปีด</td></tr>}
         {pk && <tr><th scope="row">เฉลี่ยต่อวัน</th><td>{perDay(pk)} บาท</td></tr>}
         {ns && <tr><th scope="row">เน็ต</th><td>{ns.net.join(', ')} (รวม {ns.totalGB}GB)</td></tr>}
         {ns && <tr><th scope="row">หลังใช้ครบ</th><td>{ns.after}</td></tr>}
         {ns && <tr><th scope="row">การโทร</th><td>{ns.call}</td></tr>}
-        <tr><th scope="row">ของแถม</th><td>{(pk ? pk.bonus : ns!.gifts)?.join(', ') || '–'}</td></tr>
+        {ms && <tr><th scope="row">ระยะสิทธิ์</th><td>{ms.duration}</td></tr>}
+        {ms && <tr><th scope="row">เงื่อนไข</th><td>{ms.condition} รับได้เพียง 1 รหัส MY STYLE</td></tr>}
+        {ms && <tr><th scope="row">ได้อะไร</th><td>{ms.perks.join(' · ')}</td></tr>}
+        {!ms && <tr><th scope="row">ของแถม</th><td>{(pk ? pk.bonus : ns!.gifts)?.join(', ') || '–'}</td></tr>}
         <tr><th scope="row">รหัสสมัคร</th><td><code>{code}</code></td></tr>
       </tbody>
     </table>
@@ -117,11 +147,13 @@ const schema = [
 
   <h2>วิธีสมัครโปร {it.code}</h2>
   <ol class="steps">
-    <li>เช็กเงินในซิมให้มีอย่างน้อย {it.price} บาท (กด <code>*121#</code>)</li>
+    <li>เช็กเงินในซิมให้พอ (กด <code>*121#</code>){charge != null ? ` อย่างน้อย ${charge} บาท` : ''}</li>
+    {ms && <li>สมัครแพ็กเน็ตที่เข้าเงื่อนไขให้สำเร็จในวันเดียวกัน แล้วค่อยกดรหัสนี้ รับ MY STYLE ได้เพียง 1 รหัส</li>}
     <li>กด <code>{code}</code> แล้วโทรออก หรือแตะปุ่ม <a href={href} data-pkg={it.code}>กดสมัครโปร {it.code}</a></li>
-    <li>รอ SMS ยืนยัน ตรวจราคา {it.price} บาท / {it.days} วัน ให้ตรง แล้วใช้งานได้ทันที</li>
+    <li>รอ SMS ยืนยัน{charge != null ? ` ตรวจราคา ${charge} บาท` : ' ตรวจราคาให้ตรงกับที่ต้องการ'} แล้วใช้งานได้ทันที</li>
   </ol>
   {ns && <p class="small">แพ็กนี้สำหรับซิมใหม่หรือย้ายค่ายเบอร์เดิมมา AIS อ่านเงื่อนไขเพิ่มที่ <a href="/ais-new-sim/">หน้าเปิดซิมใหม่</a></p>}
+  {ms && <p class="small">เงื่อนไขแพ็ก MY STYLE ทั้งชุดอยู่ที่ <a href="/ais-my-style/">หน้าแพ็ก MY STYLE</a> แพ็กเน็ต 250–350 บาทเลือกได้ 1 อย่าง รหัส 2901 ใช้ได้ตั้งแต่แพ็ก 200 บาท</p>}
   {sp && <p>อ่านรีวิวเต็ม ว่าเหมาะกับใคร คุ้มไหม: <a href={`/pro/${sp.slug}/`}>{sp.keyword}</a></p>}
 
   <Faq items={faq} />
@@ -138,7 +170,7 @@ const schema = [
   </ul>
 
   <div class="sticky">
-    <div><b>โปร {it.code}</b> · {it.price} บาท / {it.days} วัน</div>
+    <div><b>โปร {it.code}</b> · {ms ? ms.priceText : `${it.price} บาท / ${it.days} วัน`}</div>
     <a href={href} data-pkg={it.code}>กดสมัคร</a>
   </div>
 </Base>
@@ -157,6 +189,7 @@ const schema = [
   .offer { background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; }
   .o-price { font-size: 2.6rem; font-weight: 700; line-height: 1; }
   .o-price small { font-size: 1.2rem; color: var(--muted); vertical-align: 12px; }
+  .o-dur { font-size: 1.7rem; }
   .o-meta { color: var(--muted); font-size: .9rem; margin: 8px 0 10px; }
   .o-code { display: block; text-align: center; padding: 10px; background: #f5f7f3; border: 1px dashed #cfd8c8; margin-bottom: 10px; }
   .o-btn, .sticky a {
