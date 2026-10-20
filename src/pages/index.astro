@@ -49,6 +49,18 @@ const faq: [string, string][] = [
     <span class="ns-go">ดูโปรเน็ตนักเรียน →</span>
   </a>
 
+  <a class="newsim game" href="/games/">
+    <span class="ns-tag">🎮 สายเกม</span>
+    <b>เล่น ROV, Free Fire, PUBG ทุกวัน? ดูโปรเน็ตไม่อั้นและแพ็กเน็ตเล่นเกมไม่จำกัด</b>
+    <span class="ns-go">ดูโปรเน็ตเล่นเกม →</span>
+  </a>
+
+  <a class="newsim trip" href="/travel/">
+    <span class="ns-tag">🧳 ไปเที่ยว</span>
+    <b>เที่ยววันหยุดยาว 3 วัน เน็ต 5G ไม่อั้น 105 บาท ไม่ต้องกลัวเน็ตหมดกลางทริป</b>
+    <span class="ns-go">ดูโปรเน็ตไปเที่ยว →</span>
+  </a>
+
   <h2>โปรยอดนิยม</h2>
   <PkgList items={popular} />
 
@@ -109,5 +121,9 @@ const faq: [string, string][] = [
   .newsim.style .ns-tag { color: #0b6e75; }
   .newsim.stu { margin-top: 10px; background: linear-gradient(120deg, #eef7e1, #e2f2c9); border-color: #c8e39b; }
   .newsim.stu .ns-tag { color: var(--lime-ink); }
+  .newsim.game { margin-top: 10px; background: linear-gradient(120deg, #eef1f6, #e2e8f2); border-color: #c5cfdf; }
+  .newsim.game .ns-tag { color: #33415c; }
+  .newsim.trip { margin-top: 10px; background: linear-gradient(120deg, #e3f5f8, #d3ecf3); border-color: #a9d8e4; }
+  .newsim.trip .ns-tag { color: #0b5c73; }
   @media (min-width: 720px) { .hero { padding: 48px 44px 40px; } .hero h1 { font-size: 2.6rem; } }
 </style>

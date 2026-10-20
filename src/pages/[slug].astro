@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import PkgList from '../components/PkgList.astro';
 import Faq from '../components/Faq.astro';
+import TripAd from '../components/TripAd.astro';
 import { LIST_PAGES, type ListPage } from '../data/pages';
+import { TRIP_PAGES } from '../data/affiliates';
 import { faqSchema, offersSchema, breadcrumb } from '../lib/seo';
 import { SITE } from '../config';
 
@@ -34,6 +36,8 @@ const schema = [
     <li>กดปุ่ม "กดสมัคร" หรือกดรหัสบนแป้นโทรศัพท์แล้วโทรออก</li>
     <li>รอ SMS ยืนยัน ตรวจราคาให้ตรง แล้วเริ่มใช้งานได้ทันที</li>
   </ol>
+
+  {TRIP_PAGES.includes(page.slug) && <TripAd />}
 
   <Faq items={page.faq} />
 

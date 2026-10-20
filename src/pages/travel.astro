@@ -1,0 +1,213 @@
+---
+// Sale page: โปรเน็ตไปเที่ยว (เน็ต AIS + กล่อง Trip.com)
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import TripAd from '../components/TripAd.astro';
+import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/travel/';
+const get = (code: string): Pkg => {
+  const p = AIS.find((x) => x.code === code);
+  if (!p) throw new Error(`ไม่พบรหัสโปร ${code} ใน ais.ts`);
+  return p;
+};
+
+// โปรหลักของหน้า (ทริปวันหยุดยาว 3 วัน)
+const main = get('7719');
+const daily = get('7721');
+
+// เลือกตามความยาวทริป — แก้รหัสได้ที่นี่ ต้องมีใน ais.ts
+const TRIPS: { code: string; trip: string; why: string; hot?: boolean }[] = [
+  { code: '7721', trip: 'ไปเช้า เย็นกลับ', why: 'เที่ยววันเดียว ใช้แผนที่ ลงรูป เรียกรถได้ทั้งวัน แถมโทรฟรี 10 นาที' },
+  { code: '7724', trip: 'เสาร์–อาทิตย์', why: '48 ชั่วโมงเต็ม ถูกกว่ากดรายวัน 2 ครั้ง ไม่ต้องจำว่าต้องสมัครใหม่' },
+  { code: '7719', trip: 'วันหยุดยาว 3 วัน', why: '3 วันเต็ม ตกวันละ 35 บาท พร้อมเน็ต 5G ความเร็วสูงสุดวันละ 1GB', hot: true },
+  { code: '7720', trip: '3 วัน ไลฟ์ / แชร์ให้เพื่อน', why: 'ความเร็ว 6 Mbps พอไลฟ์สดระหว่างทริป และแชร์ฮอตสปอตให้เพื่อนในรถ' },
+  { code: '7629', trip: 'ทริปยาว 1 สัปดาห์', why: '7 วันเพียง 130 บาท ใช้แผนที่ แชต โซเชียลได้ตลอดทริป' },
+  { code: '7154', trip: 'สัปดาห์ ดูคลิปด้วย', why: '7 วัน 4 Mbps ดู YouTube / ซีรีส์ที่ที่พักได้ลื่นกว่า' },
+];
+const trips = TRIPS.map((t) => ({ ...get(t.code), ...t }));
+
+const save = daily.price * main.days - main.price;
+const title = 'โปรเน็ตไปเที่ยว AIS ไม่อั้น 2 วัน 3 วัน 7 วัน เน็ตไม่หมดกลางทริป';
+const description = `โปรเน็ต AIS เติมเงินสำหรับไปเที่ยวต่างจังหวัด วันหยุดยาว 3 วัน ${main.price} บาท 5G ไม่อั้น เลือกตามจำนวนวันเที่ยว พร้อมเช็กลิสต์ก่อนเดินทางและรหัสกดสมัครทันที`;
+
+const faq: [string, string][] = [
+  ['ไปเที่ยว 3 วัน ควรสมัครโปรเน็ตอะไร?', `โปร ${main.price} บาท 3 วัน 5G ${speedLabel(main.mbps)} ไม่อั้น คุ้มที่สุด ถูกกว่ากดรายวัน ${daily.price} บาท 3 ครั้ง ${save} บาท ถ้าต้องไลฟ์สดหรือแชร์เน็ตให้เพื่อน เลือก 130 บาท (6 Mbps)`],
+  ['ควรสมัครโปรก่อนออกเดินทางไหม?', 'ควรสมัครก่อนออกจากบ้าน เพราะระหว่างทางบางช่วงสัญญาณอ่อน อาจรอ SMS ยืนยันนาน โปรจะเริ่มนับเวลาตั้งแต่ได้รับ SMS'],
+  ['ขึ้นดอย เข้าป่า เน็ตใช้ได้ไหม?', 'ขึ้นกับสัญญาณในพื้นที่ ไม่ใช่โปร ก่อนไปที่ห่างไกล ควรโหลดแผนที่ออฟไลน์ไว้ และแจ้งเส้นทางให้คนที่บ้านรู้'],
+  ['แชร์ฮอตสปอตให้เพื่อนในรถได้ไหม?', 'ได้ แต่เน็ตจะถูกแบ่งกันใช้ ถ้าแชร์ 2–3 เครื่อง แนะนำความเร็ว 6 Mbps ขึ้นไป'],
+  ['ไปเที่ยวต่างประเทศใช้โปรนี้ได้ไหม?', 'ไม่ได้ โปรในหน้านี้ใช้ในประเทศไทยเท่านั้น ต่างประเทศต้องใช้แพ็กโรมมิ่งหรือซิม/eSIM ท้องถิ่น'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตไปเที่ยว', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต AIS สำหรับไปเที่ยว',
+    itemListElement: trips.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>โปรเน็ตไปเที่ยว</span></nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <span class="badge">🧳 เที่ยวต่างจังหวัด · วันหยุดยาว</span>
+      <h1>เที่ยวให้สุด <em>เน็ตไม่หมดกลางทริป</em></h1>
+      <p class="tag">เปิดแผนที่ เรียกรถ ลงรูป ไลฟ์ได้ตลอดทาง สมัครโปรเน็ตไม่อั้นครั้งเดียว ใช้ได้จนกลับถึงบ้าน</p>
+      <ul class="chips"><li>ไม่จำกัดปริมาณ</li><li>ไม่ลดสปีด</li><li>5G</li><li>ไม่ต้องโหลดแอป</li></ul>
+    </div>
+    <div class="offer dialbox">
+      <span class="o-lb">ขายดีช่วงวันหยุดยาว</span>
+      <div class="o-price"><small>฿</small>{main.price}</div>
+      <div class="o-meta">{main.days} วัน · 5G {speedLabel(main.mbps)} ไม่อั้น · เฉลี่ย {perDay(main)} บาท/วัน</div>
+      {main.bonus && <ul class="o-bonus">{main.bonus.map((b) => <li>{b}</li>)}</ul>}
+      <code class="o-code dial">{ussd(main.code)}</code>
+      <a class="o-btn" href={telHref(main.code)} data-pkg={main.code}>กดสมัครเลย</a>
+      <div class="o-tax">ถูกกว่ากดรายวัน {daily.price} บาท 3 ครั้ง {save} บาท · ราคารวมภาษี</div>
+    </div>
+  </section>
+
+  <h2>เที่ยวทีไร เน็ตชอบหมดตอนสำคัญ</h2>
+  <div class="pains">
+    <div><span>🗺️</span><b>หลงทาง</b><small>แผนที่โหลดไม่ขึ้นตอนขับรถในเส้นทางที่ไม่คุ้น</small></div>
+    <div><span>📸</span><b>ลงรูปไม่ได้</b><small>ถ่ายรูปสวยแต่อัปโหลดไม่ไป ต้องรอกลับที่พัก</small></div>
+    <div><span>🚕</span><b>เรียกรถไม่ได้</b><small>เน็ตหมดหน้าสถานี เรียก Grab / Bolt ไม่ได้</small></div>
+    <div><span>👫</span><b>เพื่อนขอแชร์เน็ต</b><small>แชร์ฮอตสปอตทีไร เน็ตช้าทั้งรถ</small></div>
+  </div>
+  <p class="fix">โปรเน็ตไม่อั้นแก้ได้ทุกข้อ <b>ไม่ต้องนับ GB</b> ไม่ต้องกลัวหมดก่อนกลับ เลือกตามจำนวนวันที่ไปเที่ยวได้เลย</p>
+
+  <h2>เลือกโปรตามจำนวนวันเที่ยว</h2>
+  <div class="trips">
+    {trips.map((p) => (
+      <div class:list={['tp dialbox', { hot: p.hot }]}>
+        <span class="lb">{p.hot ? '⭐ ' : ''}{p.trip}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net}</div>
+        <p>{p.why}</p>
+        <code class="dial">{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+
+  <TripAd heading="ได้เน็ตแล้ว จองที่พักหรือยัง?" text="เทียบราคาโรงแรม รีสอร์ท และตั๋วเครื่องบินบน Trip.com มีดีลลดราคาบ่อย จองก่อนเดินทางได้ราคาดีกว่า" />
+
+  <h2>คุ้มกว่ากดรายวันแค่ไหน</h2>
+  <div class="cmp">
+    <div><span>กดรายวัน {daily.price}฿ × 3 วัน</span><b>{daily.price * 3}฿</b><small>ต้องสมัครใหม่ทุกวัน</small></div>
+    <div class="best"><span>โปร 3 วัน</span><b>{main.price}฿</b><small>ประหยัด {save} บาท สมัครครั้งเดียว</small></div>
+  </div>
+
+  <h2>เช็กลิสต์ก่อนออกเดินทาง</h2>
+  <ul class="check">
+    <li><b>เติมเงินให้พอ</b> เช็กยอดด้วย <code>*121#</code> ก่อนออกจากบ้าน</li>
+    <li><b>สมัครโปรก่อนออกเดินทาง</b> บางช่วงทางสัญญาณอ่อน อาจรอ SMS ยืนยันนาน</li>
+    <li><b>โหลดแผนที่ออฟไลน์</b> ใน Google Maps สำหรับดอย ป่า หรือเกาะที่สัญญาณไม่แน่นอน</li>
+    <li><b>พกพาวเวอร์แบงก์</b> เปิดแผนที่และฮอตสปอตทั้งวัน แบตหมดไวกว่าปกติ</li>
+    <li><b>ติดตั้งแอปของเว็บนี้</b> เปิดดูรหัสสมัครได้แม้เน็ตหมดกลางทาง <a href="/app/">ติดตั้งแอป</a></li>
+  </ul>
+
+  <h2>วิธีสมัคร</h2>
+  <ol class="steps">
+    <li><b>เช็กเงินในซิม</b> ต้องมีอย่างน้อยเท่าราคาโปร กด <code>*121#</code> แล้วโทรออก</li>
+    <li><b>กดปุ่ม "กดสมัคร"</b> มือถือจะโทรออกด้วยรหัสให้ทันที หรือกดรหัสเองบนแป้นโทรศัพท์</li>
+    <li><b>รอ SMS ยืนยัน</b> ตรวจราคาและจำนวนวันให้ตรง แล้วออกเดินทางได้เลย</li>
+  </ol>
+
+  <Faq items={faq} />
+
+  <h2>อ่านต่อก่อนเที่ยว</h2>
+  <ul class="links">
+    <li><a href="/pro/ais-105-baht-3-day/">รีวิวโปร 105 บาท 3 วัน</a></li>
+    <li><a href="/pro/ais-70-baht-2-day/">รีวิวโปร 70 บาท 2 วัน</a></li>
+    <li><a href="/blog/share-hotspot-roommates/">แชร์ฮอตสปอตให้เพื่อนยังไงไม่ให้เน็ตช้า</a></li>
+    <li><a href="/blog/pocket-wifi-sim/">ซิมใส่ Pocket WiFi</a></li>
+    <li><a href="/ais-3-day/">โปรเน็ต 3 วันทั้งหมด</a></li>
+    <li><a href="/ais-7-day/">โปรเน็ต 7 วันทั้งหมด</a></li>
+  </ul>
+
+  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการจอง โดยราคาของคุณไม่เปลี่ยน</p>
+
+  <div class="sticky">
+    <div><b>{main.price} บาท</b> / {main.days} วัน · 5G ไม่อั้น</div>
+    <a href={telHref(main.code)} data-pkg={main.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+
+  .hero { display: grid; gap: 18px; border-radius: 24px; padding: 24px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #3fb8c9 0%, #2a8fb0 50%, #1d5f8a 100%);
+    box-shadow: 0 22px 40px -22px rgba(29,95,138,.8); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 8px; line-height: 1.3; }
+  .hero h1 em { font-style: normal; color: #fff3b0; display: block; }
+  .tag { margin: 0; font-size: 1.02rem; color: rgba(255,255,255,.95); }
+  .chips { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { font-size: .8rem; background: rgba(255,255,255,.18); padding: 3px 10px; border-radius: 999px; }
+  .offer { background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; box-shadow: 0 16px 30px -18px rgba(10,40,70,.6); display: grid; gap: 4px; }
+  .o-lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #fff; background: var(--hot); padding: 2px 10px; border-radius: 999px; }
+  .o-price { font-size: 2.6rem; font-weight: 700; line-height: 1.1; letter-spacing: -1px; }
+  .o-price small { font-size: 1.2rem; color: var(--muted); font-weight: 500; vertical-align: 12px; margin-right: 2px; }
+  .o-meta { color: var(--muted); font-size: .9rem; }
+  .o-bonus { margin: 4px 0 8px; padding-left: 18px; font-size: .88rem; color: #8a5a00; }
+  .o-code { text-align: center; padding: 10px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; margin-bottom: 6px; }
+  .o-btn { display: block; text-align: center; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 1.1rem; color: #fff; text-decoration: none;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); box-shadow: 0 8px 18px -8px rgba(110,170,40,.9); }
+  .o-tax { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 6px; }
+  @media (min-width: 760px) { .hero { grid-template-columns: 1.3fr 1fr; align-items: center; padding: 36px; } .hero h1 { font-size: 2.3rem; } }
+
+  .pains { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .pains div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 4px; box-shadow: var(--shadow); }
+  .pains span { font-size: 1.6rem; }
+  .pains small { color: var(--muted); }
+  .fix { margin-top: 14px; background: var(--lime-soft); border-left: 4px solid var(--lime); border-radius: 0 14px 14px 0; padding: 12px 16px; }
+
+  .trips { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .tp { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .tp.hot { border: 2px solid var(--lime); background: linear-gradient(180deg, var(--lime-soft), var(--card) 40%); }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #0b5c73; background: #dff3f7; padding: 2px 10px; border-radius: 999px; }
+  .hot .lb { color: #8a5a00; background: #fff3d6; }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; }
+  .tp p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 520px) { .cmp { grid-template-columns: 1fr; } }
+  .cmp div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; text-align: center; display: grid; gap: 2px; }
+  .cmp span { font-size: .85rem; color: var(--muted); }
+  .cmp b { font-size: 1.6rem; }
+  .cmp small { font-size: .8rem; color: var(--muted); }
+  .cmp .best { background: var(--lime-soft); border-color: var(--lime); }
+  .cmp .best b { color: var(--lime-ink); }
+
+  .check { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .check li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 10px 40px; position: relative; }
+  .check li::before { content: '✓'; position: absolute; left: 14px; top: 10px; color: var(--lime-ink); font-weight: 700; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--lime-2), var(--lime)); }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

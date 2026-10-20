@@ -1,0 +1,190 @@
+---
+// หน้าศูนย์รวม: โปรเน็ตสำหรับคนเล่นเกมมือถือ
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { gamePkgs, gameNewSim, gameMyStyle, GAME_USAGE } from '../data/games';
+import { MY_STYLE_GAMES } from '../data/mystyle';
+import { speedLabel } from '../data/ais';
+import { POSTS, thaiDate } from '../lib/blog';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/games/';
+const picks = gamePkgs();
+const ns = gameNewSim();
+const ms = gameMyStyle();
+const GAME_POSTS = ['mobile-game-data-usage', 'high-ping-mobile-game'];
+const posts = POSTS.filter((p) => GAME_POSTS.includes(p.slug));
+const title = 'โปรเน็ตเล่นเกม AIS ไม่อั้น ROV Free Fire PUBG เล่นลื่น ปิงนิ่ง';
+const description = 'รวมโปรเน็ต AIS เติมเงินสำหรับคนเล่นเกมมือถือ ROV, Free Fire, PUBG, MLBB เลือกตามงบและเวลาเล่น พร้อมแพ็กเน็ตเล่นเกมไม่จำกัด ตารางเน็ตที่เกมใช้ต่อชั่วโมง และรหัสกดสมัคร';
+
+const faq: [string, string][] = [
+  ['เล่นเกมมือถือควรใช้โปรเน็ตความเร็วเท่าไร?', 'ตัวเกมใช้แบนด์วิดท์ไม่มาก 2 Mbps ก็เล่นได้ แต่ถ้าเล่นเกมควบคู่กับดูคลิป คุยเสียงในทีม หรือต้องโหลดอัปเดต แนะนำ 4 Mbps ขึ้นไป'],
+  ['ROV, Free Fire, PUBG ใช้เน็ตชั่วโมงละกี่ MB?', 'Free Fire ประมาณ 31 MB, PUBG Mobile ประมาณ 28 MB ต่อชั่วโมง ROV อยู่ในหลักสิบ MB เช่นกัน น้อยกว่าดู TikTok ราว 10 เท่า ที่กินเน็ตจริงคืออัปเดตเกม'],
+  ['เน็ตแรงแต่ยังแล็ก ปิงสูง เกิดจากอะไร?', 'ความแล็กมาจาก ping (ความหน่วง) มากกว่าความเร็ว มักเกิดจากสัญญาณอ่อนหรือคนใช้เครือข่ายเยอะ ลองย้ายจุดเล่นใกล้หน้าต่าง ปิดแอปที่โหลดเบื้องหลัง และใช้ 5G ถ้ามือถือรองรับ'],
+  ['มีแพ็กเน็ตเล่นเกมไม่จำกัดโดยเฉพาะไหม?', `มี 2 แบบ คือแพ็กซิมใหม่ ${ns.price} บาท (สมัครได้ภายใน 7 วันแรกของซิมใหม่) และแพ็ก MY STYLE เกม ${MY_STYLE_GAMES.length} เกม ที่เลือกเพิ่มได้เมื่อสมัครแพ็กเน็ต 250–350 บาทในวันเดียวกัน`],
+  ['สมัครแล้วเงินถูกหักจากไหน?', 'หักจากยอดเงินในซิม AIS เติมเงินโดยตรง ไม่ต้องโอนเงินหรือให้ข้อมูลส่วนตัว ตรวจราคาใน SMS ยืนยันก่อนกดตกลงทุกครั้ง'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตเล่นเกม', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต AIS แนะนำสำหรับเล่นเกมมือถือ',
+    itemListElement: picks.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>โปรเน็ตเล่นเกม</span></nav>
+
+  <section class="hero">
+    <span class="badge">🎮 ROV · Free Fire · PUBG · MLBB</span>
+    <h1>โปรเน็ตเล่นเกม AIS <em>ไม่อั้น เล่นลื่น ปิงนิ่ง</em></h1>
+    <p>เลือกโปรเน็ตเติมเงินให้พอดีกับเวลาเล่น ไม่ต้องจ่ายเกิน เริ่มต้นวันละประมาณ 13 บาท</p>
+  </section>
+
+  <section class="answer"><b>สรุปสั้น:</b> เล่นทุกวันเลือก <b>490 บาท/30 วัน (4 Mbps)</b> งบน้อยและเล่นเกมอย่างเดียวเลือก <b>400 บาท/30 วัน (2 Mbps)</b> เล่นหนักบางสัปดาห์เลือก <b>236 บาท/7 วัน</b> เล่นเฉพาะวันหยุดกด <b>40 บาท/1 วัน</b> ถ้าเพิ่งเปิดซิมใหม่ แพ็กสายเกม <b>{ns.price} บาท</b> ได้เน็ตเล่นเกมไม่จำกัดด้วย</section>
+
+  <h2>4 โปรเน็ตไม่อั้นที่เหมาะกับคนเล่นเกม</h2>
+  <div class="picks">
+    {picks.map((p) => (
+      <div class="pk dialbox">
+        <span class="lb">{p.label}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net}</div>
+        <p>{p.why}</p>
+        <code class="dial">{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+
+  <h2>แพ็กเน็ตเล่นเกมไม่จำกัด</h2>
+  <p>นอกจากโปรไม่อั้นทั่วไป AIS มีแพ็กที่แถมเน็ตสำหรับเกมโดยเฉพาะ แต่มีเงื่อนไขการสมัคร อ่านก่อนกด</p>
+  <div class="special">
+    <div class="sx dialbox">
+      <span class="lb hot">ซิมใหม่ / ย้ายค่าย</span>
+      <div class="pr"><b>{ns.price}฿</b><small>/ 30 วัน</small></div>
+      <ul>
+        {ns.gifts.slice(0, 1).map((g) => <li><b>{g}</b></li>)}
+        {ns.net.map((n) => <li>{n}</li>)}
+        <li>{ns.after}</li>
+        <li>{ns.call}</li>
+      </ul>
+      <p class="cond">สมัครได้ภายใน 7 วันแรกหลังเปิดซิมใหม่หรือย้ายค่าย · <a href="/ais-new-sim/">ดูแพ็กซิมใหม่ทั้งหมด</a></p>
+      <code class="dial">{ussd(ns.code)}</code>
+      <a class="go" href={telHref(ns.code)} data-pkg={ns.code}>กดสมัคร</a>
+    </div>
+    <div class="sx dialbox">
+      <span class="lb hot">MY STYLE</span>
+      <div class="pr"><b>{ms.title}</b></div>
+      <ul>
+        <li>เล่น {MY_STYLE_GAMES.length} เกมไม่จำกัด นาน {ms.days} วัน</li>
+        <li>ความเร็วสูงสุด 7.2 Mbps</li>
+        <li class="games">{MY_STYLE_GAMES.join(' · ')}</li>
+      </ul>
+      <p class="cond">{ms.condition} · <a href="/ais-my-style/">ดูแพ็ก MY STYLE ทั้งหมด</a></p>
+      <code class="dial">{ussd(ms.code)}</code>
+      <a class="go" href={telHref(ms.code)} data-pkg={ms.code}>กดสมัคร</a>
+    </div>
+  </div>
+
+  <h2>เล่นเกมใช้เน็ตชั่วโมงละเท่าไร</h2>
+  <p>ตัวเกมระหว่างเล่นใช้เน็ตน้อยกว่าที่คิด ส่วนที่กินเน็ตจริงคืออัปเดตเกม คุยเสียง และไลฟ์</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>การใช้งาน</th><th>ต่อ 1 ชั่วโมง</th><th>ที่มา</th></tr></thead>
+      <tbody>{GAME_USAGE.map(([a, b, c]) => <tr><td>{a}</td><td><b>{b}</b></td><td class="src">{c}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="small">ตัวเลขโดยประมาณ ไม่รวมไฟล์หลักของเกม อ่านรายละเอียดได้ที่ <a href="/blog/mobile-game-data-usage/">เล่นเกมมือถือใช้เน็ตกี่ MB</a></p>
+
+  <h2>เลือกโปรตามสไตล์การเล่น</h2>
+  <div class="cmp">
+    <div><span>เล่นเกมอย่างเดียว อัปเดตผ่าน Wi-Fi</span><b>2 Mbps</b><small>400฿ / 30 วัน</small></div>
+    <div class="best"><span>เล่นเกม + ดูคลิป + โซเชียล</span><b>4 Mbps</b><small>490฿ / 30 วัน</small></div>
+    <div><span>ไลฟ์เกม / โหลดอัปเดตผ่านเน็ตมือถือ</span><b>6–10 Mbps</b><small><a href="/ais-30-day/">ดูโปร 30 วันทั้งหมด</a></small></div>
+  </div>
+
+  <h2>เล่นแล้วแล็ก ปิงสูง แก้ยังไง</h2>
+  <ul class="tips">
+    <li><b>ความนิ่งสำคัญกว่าความเร็ว</b> เน็ต 4 Mbps ที่สัญญาณดี เล่นลื่นกว่า 10 Mbps ที่สัญญาณอ่อน</li>
+    <li><b>ย้ายจุดเล่น</b> ใกล้หน้าต่างหรือที่โล่ง หลีกเลี่ยงห้องปิดทึบและชั้นใต้ดิน</li>
+    <li><b>ปิดแอปเบื้องหลัง</b> เช่น สำรองรูปอัตโนมัติ อัปเดตแอป ที่แย่งเน็ตระหว่างเล่น</li>
+    <li><b>ใช้ 5G ถ้ามือถือรองรับ</b> มักได้ ping ต่ำกว่า 4G ในพื้นที่ที่มีสัญญาณ</li>
+  </ul>
+  <p><a href="/blog/high-ping-mobile-game/">อ่านวิธีแก้ปิงสูงแบบละเอียด →</a></p>
+
+  {posts.length > 0 && (
+    <>
+      <h2>บทความสำหรับสายเกม</h2>
+      <div class="posts">
+        {posts.map((p) => (
+          <a href={`/blog/${p.slug}/`}><b>{p.meta.h1}</b><small>{thaiDate(p.meta.updated ?? p.meta.date)}</small></a>
+        ))}
+      </div>
+    </>
+  )}
+
+  <Faq items={faq} />
+
+  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ชื่อเกมเป็นเครื่องหมายการค้าของเจ้าของ</p>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(180,224,90,.35) 0%, rgba(180,224,90,0) 60%), linear-gradient(135deg, #1d3a24 0%, #13221a 55%, #0a120c 100%);
+    box-shadow: 0 22px 40px -22px rgba(10,18,12,.8); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; }
+  .hero h1 em { font-style: normal; color: var(--lime-2); display: block; }
+  .hero p { margin: 0; color: #dfe8da; }
+  @media (min-width: 720px) { .hero { padding: 40px; } .hero h1 { font-size: 2.4rem; } }
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pk, .sx { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .lb.hot { color: #fff; background: var(--hot); }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; }
+  .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .special { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .sx { border: 2px solid var(--lime); }
+  .sx .pr b { font-size: 1.35rem; }
+  .sx ul { margin: 0; padding-left: 18px; font-size: .9rem; display: grid; gap: 3px; }
+  .sx .games { font-size: .8rem; color: var(--muted); }
+  .cond { margin: 0; font-size: .8rem; color: var(--muted); }
+
+  .cmp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  @media (max-width: 560px) { .cmp { grid-template-columns: 1fr; } }
+  .cmp div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; text-align: center; display: grid; gap: 2px; }
+  .cmp span { font-size: .85rem; color: var(--muted); }
+  .cmp b { font-size: 1.5rem; }
+  .cmp small { font-size: .8rem; color: var(--muted); }
+  .cmp .best { background: var(--lime-soft); border-color: var(--lime); }
+  .cmp .best b { color: var(--lime-ink); }
+
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  td.src { font-size: .78rem; color: var(--muted); }
+
+  .tips { padding-left: 20px; display: grid; gap: 6px; }
+  .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .posts a { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
+  .posts a:hover { border-color: var(--lime); }
+  .posts small { color: var(--muted); font-size: .78rem; }
+</style>
