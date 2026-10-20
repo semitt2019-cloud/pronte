@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import PkgCard from '../../components/PkgCard.astro';
+import TripAd from '../../components/TripAd.astro';
+import { TRIP_PAGES } from '../../data/affiliates';
 import { AIS, perDay, speedLabel, type Pkg } from '../../data/ais';
 import { SALES, USES, useLevel, salesByCode, type SalesPage } from '../../data/sales';
 import { ussd, telHref, SITE } from '../../config';
@@ -132,6 +134,8 @@ const lvl = ['ไม่แนะนำ', 'พอได้', 'สบาย'];
     <li><b>กดรหัส</b> <code>{code}</code> แล้วโทรออก หรือกดปุ่ม "กดสมัครเลย" บนหน้านี้</li>
     <li><b>รอ SMS ยืนยัน</b> ตรวจราคาและระยะเวลาให้ตรง แล้วเริ่มใช้งานได้ทันที</li>
   </ol>
+
+  {TRIP_PAGES.includes(s.slug) && <TripAd />}
 
   <Faq items={s.faq} />
 
