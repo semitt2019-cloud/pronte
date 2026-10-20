@@ -1,0 +1,32 @@
+---
+// กล่องโฆษณา Trip.com (ACCESSTRADE) — ลิงก์อยู่ที่ src/data/affiliates.ts
+import { TRIP } from '../data/affiliates';
+
+interface Props { heading?: string; text?: string }
+const {
+  heading = 'ไปเที่ยวแล้ว จองที่พักหรือยัง?',
+  text = 'เทียบราคาโรงแรม ที่พัก และตั๋วเครื่องบินบน Trip.com มีดีลลดราคาบ่อย จองก่อนเดินทางได้ราคาดีกว่า',
+} = Astro.props;
+---
+<aside class="trip" aria-label="โฆษณา">
+  <span class="ad">โฆษณา</span>
+  <a class="bn" href={TRIP.bannerHref} target="_blank" rel="sponsored noopener">
+    <img src={TRIP.bannerImg} width={TRIP.bannerW} height={TRIP.bannerH} alt={TRIP.bannerAlt} loading="lazy" decoding="async" />
+  </a>
+  <div class="tx">
+    <b>{heading}</b>
+    <p>{text}</p>
+    <a class="go" href={TRIP.link} target="_blank" rel="sponsored noopener">ดูดีลที่พักบน {TRIP.name} →</a>
+  </div>
+</aside>
+
+<style>
+  .trip { position: relative; margin: 22px 0; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+  @media (min-width: 720px) { .trip { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; } }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #f1f3ef; padding: 1px 8px; border-radius: 999px; z-index: 1; }
+  .bn img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .tx { display: grid; gap: 6px; }
+  .tx b { font-size: 1.1rem; }
+  .tx p { margin: 0; font-size: .9rem; color: var(--muted); }
+  .go { justify-self: start; background: #f57c00; color: #fff; font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 12px; }
+</style>
