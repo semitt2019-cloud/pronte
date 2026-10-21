@@ -28,6 +28,7 @@ export const ALL_ROUTES: string[] = [
   '/travel/',
   '/esim-travel/',
   '/phone-5g/',
+  '/iqiyi/',
   '/data-calculator/',
   ...LIST_PAGES.map((p) => `/${p.slug}/`),
   ...SALES.map((s) => `/pro/${s.slug}/`),
