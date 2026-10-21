@@ -123,7 +123,7 @@ const lvl = ['ไม่แนะนำ', 'พอได้', 'สบาย'];
       <li>ถ้าซื้อโปรรายวัน {daily.net} {speedLabel(daily.mbps)} ({daily.price} บาท) ครบ {pkg.days} วัน จะจ่าย {dailyTotal.toLocaleString('th-TH')} บาท
         {dailyTotal > pkg.price ? <> · <strong>โปรนี้ประหยัดกว่า {(dailyTotal - pkg.price).toLocaleString('th-TH')} บาท</strong></> : null}</li>
     )}
-    {faster && <li>เพิ่มอีก {faster.price - pkg.price} บาท ได้ความเร็ว {faster.net} {speedLabel(faster.mbps)} ({faster.price} บาท / {faster.days} วัน)</li>}
+    {faster && <li>เพิ่มอีก {Math.round((faster.price - pkg.price) * 100) / 100} บาท ได้ความเร็ว {faster.net} {speedLabel(faster.mbps)} ({faster.price} บาท / {faster.days} วัน)</li>}
     {cheaper && <li>ถ้าอยากประหยัดกว่านี้ มีโปร {cheaper.price} บาท {cheaper.net} {speedLabel(cheaper.mbps)} ในระยะเวลาเท่ากัน</li>}
     {longer && <li>ถ้าใช้ต่อเนื่อง โปร {longer.price} บาท {longer.days} วัน ความเร็วเท่ากัน เฉลี่ยเหลือวันละ {perDay(longer)} บาท</li>}
   </ul>
