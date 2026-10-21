@@ -3,7 +3,7 @@
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import { AIS, speedLabel, type Pkg } from '../data/ais';
-import { AIRALO } from '../data/affiliates';
+import { AIRALO, TRAVESIM } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
 import { faqSchema, breadcrumb } from '../lib/seo';
 
@@ -29,6 +29,7 @@ const faq: [string, string][] = [
   ['มือถือรุ่นไหนใช้ eSIM ได้?', 'iPhone ตั้งแต่ XR/XS ขึ้นไป, Samsung Galaxy รุ่นเรือธงตั้งแต่ S20 และ Google Pixel ตั้งแต่ Pixel 3 เป็นต้นไป ควรตรวจในเมนูตั้งค่าว่ามี "เพิ่ม eSIM" และเครื่องต้องไม่ติดล็อกค่าย'],
   ['ควรติดตั้ง eSIM ตอนไหน?', 'ติดตั้งตอนอยู่ไทยที่มี Wi-Fi ก่อนวันเดินทาง 1–2 วัน แล้วค่อยเปิดใช้เน็ตของ eSIM เมื่อถึงปลายทาง ตรวจเงื่อนไขของแต่ละแพ็กว่าเริ่มนับวันเมื่อไร'],
   ['ใช้ eSIM แล้วยังรับ SMS / OTP เบอร์ AIS ได้ไหม?', 'มือถือที่รองรับ 2 ซิมเปิดเบอร์ AIS ไว้คู่กันได้ ตั้งให้เน็ตใช้จาก eSIM และปิดโรมมิ่งข้อมูลของซิม AIS ส่วนการรับ SMS ในต่างประเทศเป็นไปตามเงื่อนไขโรมมิ่งของ AIS'],
+  ['ไปญี่ปุ่นใช้ซิมเน็ตอะไรดี?', `ถ้ามือถือรองรับ eSIM ซื้อ eSIM ญี่ปุ่นได้เลย ถ้าไม่รองรับหรืออยากได้เน็ตไม่อั้น มีซิมการ์ดอย่าง ${TRAVESIM.nihon.name} ที่ใช้เครือข่ายในญี่ปุ่น เริ่ม ${TRAVESIM.nihon.plans[0].price} บาท ${TRAVESIM.nihon.plans[0].days} วัน (ราคาตามหน้าเว็บผู้ให้บริการ)`],
   ['eSIM ท่องเที่ยวโทรออกได้ไหม?', 'แพ็กส่วนใหญ่เป็นเน็ตอย่างเดียว ไม่มีเบอร์โทร ใช้โทรผ่าน LINE, WhatsApp หรือแอปอื่นแทนได้ ตรวจรายละเอียดของแพ็กก่อนซื้อ'],
   ['ไปต่างประเทศนาน ๆ เบอร์ AIS เติมเงินจะหมดอายุไหม?', 'วันใช้งานของซิมเติมเงินยังนับต่อแม้อยู่ต่างประเทศ ควรเติมเงินให้วันใช้งานพอก่อนเดินทาง อ่านเพิ่มที่บทความวันหมดอายุซิมเติมเงิน'],
 ];
@@ -103,6 +104,27 @@ const schema = [
     <li><b>ถึงปลายทาง</b> เปิดสาย eSIM ตั้งให้ "ข้อมูลมือถือ" ใช้จาก eSIM และเปิดโรมมิ่งข้อมูลเฉพาะสาย eSIM ถ้าแพ็กกำหนด</li>
   </ol>
 
+  <h2>ไปญี่ปุ่น? ซิมเน็ตไม่อั้น {TRAVESIM.nihon.name}</h2>
+  <section class="jp">
+    <span class="ad">โฆษณา</span>
+    <p>คนไทยไปญี่ปุ่นเยอะที่สุด ถ้ามือถือไม่รองรับ eSIM หรืออยากได้ <b>เน็ตไม่อั้น</b> มีซิมการ์ด {TRAVESIM.nihon.name} (บริการของ {TRAVESIM.name}) ใช้เครือข่ายในญี่ปุ่น แชร์ฮอตสปอตได้ตามเพดานของแต่ละแพ็ก</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>จำนวนวัน</th><th>ราคา</th><th>เน็ตมือถือ</th><th>แชร์ฮอตสปอต</th></tr></thead>
+        <tbody>
+          {TRAVESIM.nihon.plans.map((p) => (
+            <tr><td>{p.days} วัน</td><td><b>{p.price.toLocaleString('th-TH')} บาท</b></td><td>ไม่อั้น</td><td>สูงสุด {p.hotspot}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="small">ราคาตามหน้าเว็บผู้ให้บริการ ณ {SITE.updated} อาจเปลี่ยนแปลง ตรวจสอบก่อนสั่งซื้อ</p>
+    <div class="jp-btns">
+      <a class="o-btn aff" href={TRAVESIM.nihon.link} target="_blank" rel="sponsored noopener">ดูแพ็ก {TRAVESIM.nihon.name} ญี่ปุ่น →</a>
+      <a class="o-btn alt" href={TRAVESIM.link} target="_blank" rel="sponsored noopener">eSIM ประเทศอื่นที่ {TRAVESIM.name} →</a>
+    </div>
+  </section>
+
   <h2>ตั้งค่าให้ซิม AIS ไม่โดนค่าโรมมิ่ง</h2>
   <ul class="check">
     <li><b>ปิดโรมมิ่งข้อมูลของซิม AIS</b> ก่อนเครื่องลง เพื่อไม่ให้เน็ตวิ่งผ่านซิมไทย</li>
@@ -144,7 +166,7 @@ const schema = [
     <li><a href="/blog/foreigner-ais-sim/">ซิม AIS สำหรับชาวต่างชาติ</a></li>
   </ul>
 
-  <p class="small">ราคาโปร AIS ตรวจสอบ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS หรือ {AIRALO.name} · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการซื้อ โดยราคาของคุณไม่เปลี่ยน</p>
+  <p class="small">ราคาโปร AIS ตรวจสอบ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS, {AIRALO.name} หรือ {TRAVESIM.name} · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการซื้อ โดยราคาของคุณไม่เปลี่ยน</p>
 
   <div class="sticky">
     <div><b>eSIM เที่ยวต่างประเทศ</b> · ติดตั้งก่อนบิน</div>
@@ -201,6 +223,11 @@ const schema = [
   .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
   .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
 
+  .jp { position: relative; background: linear-gradient(120deg, #fff1f1, #ffe4e4); border: 1px solid #f5c2c2; border-radius: 18px; padding: 18px; display: grid; gap: 10px; }
+  .jp > p { margin: 0; padding-right: 54px; }
+  .jp-btns { display: grid; gap: 8px; }
+  @media (min-width: 720px) { .jp-btns { grid-template-columns: 1fr 1fr; } }
+  .alt { background: #fff; color: #3e4bc4; border: 1px solid #3e4bc4; }
   .cta2 { position: relative; margin: 26px 0; background: linear-gradient(120deg, #eef0ff, #e1e5ff); border: 1px solid #c7cdfa; border-radius: 18px; padding: 18px; display: grid; gap: 8px; }
   .cta2 b { font-size: 1.15rem; padding-right: 54px; }
   .cta2 p { margin: 0; color: var(--muted); }

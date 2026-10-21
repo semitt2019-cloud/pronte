@@ -1,0 +1,169 @@
+---
+// Sale page: มือถือ 5G ซื้อที่ไหนดี (PowerBuy / TG Fone / COMPASIA) + โปรเน็ต 5G AIS
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
+import { PHONE_SHOPS } from '../data/affiliates';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/phone-5g/';
+const get = (code: string): Pkg => {
+  const p = AIS.find((x) => x.code === code);
+  if (!p) throw new Error(`ไม่พบรหัสโปร ${code} ใน ais.ts`);
+  return p;
+};
+
+// โปรเน็ต 5G สำหรับมือถือเครื่องใหม่ — แก้รหัสได้ที่นี่ ต้องมีใน ais.ts
+const PICKS: { code: string; label: string; why: string }[] = [
+  { code: '7721', label: 'ลอง 5G วันแรก', why: 'ได้เน็ต 5G ความเร็วสูงสุด 1GB ลองความแรงของเครื่องใหม่ แล้วใช้ต่อไม่อั้น 4 Mbps ทั้งวัน' },
+  { code: '7719', label: 'ย้ายข้อมูลเครื่องเก่า', why: '3 วัน ได้ 5G ความเร็วสูงสุดวันละ 1GB ไว้โหลดแอปและสำรองรูป ใช้ต่อไม่อั้น 4 Mbps' },
+  { code: '7790', label: 'ใช้ทั้งเดือน คุ้มสุด', why: '5G 4 Mbps ไม่อั้น 30 วัน + เน็ต 5G 1GB + โทรฟรีในเครือข่าย ตกวันละประมาณ 16 บาท' },
+  { code: '7789', label: 'งบประหยัด', why: '5G 2 Mbps ไม่อั้น 30 วัน + เน็ต 5G 1GB + โทรฟรีในเครือข่าย เหมาะกับโซเชียลและแชต' },
+];
+const picks = PICKS.map((p) => ({ ...get(p.code), ...p }));
+
+const title = 'มือถือ 5G ซื้อที่ไหนดี เครื่องใหม่ มือสอง ผ่อน 0% พร้อมโปรเน็ต 5G AIS';
+const description = 'เปรียบเทียบที่ซื้อมือถือ 5G ออนไลน์ PowerBuy, TG Fone และ COMPASIA มือสองตรวจสภาพ เช็กลิสต์ก่อนซื้อให้ใช้ 5G ของ AIS ได้เต็มที่ พร้อมโปรเน็ต 5G ไม่อั้นและรหัสกดสมัคร';
+
+const faq: [string, string][] = [
+  ['ซื้อมือถือ 5G ที่ไหนดี?', 'ถ้าต้องการเครื่องใหม่และมีสาขาให้ไปรับ เลือกร้านใหญ่อย่าง PowerBuy หรือ TG Fone ซึ่งมีโปรผ่อน 0% กับบัตรที่ร่วมรายการ ถ้าอยากได้รุ่นท็อปในงบน้อยลง ร้านมือสองที่ตรวจสภาพและมีประกันอย่าง COMPASIA เป็นอีกทางเลือก'],
+  ['มือถือ 5G ใช้กับ AIS ต้องรองรับคลื่นอะไร?', 'AIS ให้บริการ 5G หลักบนคลื่น 2600 MHz (n41) และ 700 MHz (n28) มือถือ 5G ที่ขายในไทยส่วนใหญ่รองรับ แต่เครื่องหิ้วจากต่างประเทศบางรุ่นอาจไม่รองรับ ควรเช็กสเปกก่อนซื้อ'],
+  ['มีมือถือ 5G แล้ว ต้องเปลี่ยนซิมไหม?', 'ซิม AIS รุ่นใหม่ส่วนใหญ่ใช้ 5G ได้ทันที ถ้าซิมเก่ามากแล้วไม่ขึ้น 5G ให้ติดต่อ AIS เพื่อเปลี่ยนซิม และต้องสมัครแพ็กที่รองรับ 5G'],
+  ['มือถือมือสองเสี่ยงไหม?', 'เลือกร้านที่ตรวจสภาพ ระบุสุขภาพแบตเตอรี่ และมีประกันจากร้าน ตรวจว่าไม่ติด iCloud / บัญชี Google ของเจ้าของเดิม และเครื่องไม่ติดล็อกค่าย'],
+  ['ผ่อนมือถือไม่ใช้บัตรเครดิตได้ไหม?', 'บางร้านมีบริการผ่อนผ่านบริษัทไฟแนนซ์ เงื่อนไขและดอกเบี้ยต่างจากผ่อน 0% กับบัตรเครดิต ควรอ่านรายละเอียดก่อนตกลง'],
+  ['ได้มือถือ 5G ใหม่ ควรสมัครโปรเน็ตอะไร?', 'ใช้ทั้งเดือนแนะนำ 490 บาท 30 วัน 5G 4 Mbps ไม่อั้น พร้อมเน็ต 5G 1GB และโทรฟรีในเครือข่าย ถ้าอยากลองความแรงก่อน กดรายวัน 40 บาท'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['มือถือ 5G ซื้อที่ไหนดี', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต 5G AIS สำหรับมือถือเครื่องใหม่',
+    itemListElement: picks.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>มือถือ 5G ซื้อที่ไหนดี</span></nav>
+
+  <section class="hero">
+    <span class="badge">📱 เครื่องใหม่ · มือสองตรวจสภาพ · ผ่อนได้</span>
+    <h1>มือถือ 5G ซื้อที่ไหนดี <em>ได้เครื่องแล้ว เน็ต 5G ต้องพร้อม</em></h1>
+    <p>เทียบร้านซื้อมือถือออนไลน์ 3 แบบ เช็กลิสต์ให้เครื่องใช้ 5G ของ AIS ได้เต็มที่ แล้วเลือกโปรเน็ต 5G ไม่อั้นที่คุ้มกับการใช้งาน</p>
+  </section>
+
+  <section class="answer"><b>สรุปสั้น:</b> อยากได้เครื่องใหม่และผ่อน 0% ดู <b>PowerBuy</b> หรือ <b>TG Fone</b> อยากได้รุ่นท็อปในงบน้อยลง ดูมือสองตรวจสภาพที่ <b>COMPASIA</b> ก่อนซื้อเช็กว่าเครื่อง <b>รองรับคลื่น 5G n41 / n28</b> ของ AIS และได้เครื่องแล้วสมัคร <b>โปร 5G 490 บาท 30 วัน</b> ใช้ไม่อั้นทั้งเดือน</section>
+
+  <h2>ซื้อมือถือ 5G ออนไลน์ที่ไหนดี</h2>
+  <p class="adnote">ส่วนนี้มีลิงก์พันธมิตร (โฆษณา)</p>
+  <div class="shops">
+    {PHONE_SHOPS.map((s) => (
+      <article class="shop">
+        <span class="lb">{s.tag}</span>
+        <h3>{s.name}</h3>
+        <p>{s.desc}</p>
+        <ul>{s.points.map((x) => <li>{x}</li>)}</ul>
+        <a class="aff" href={s.link} target="_blank" rel="sponsored noopener">ดูมือถือที่ {s.name} →</a>
+        {s.extra.length > 0 && (
+          <div class="extra">{s.extra.map((e) => <a href={e.link} target="_blank" rel="sponsored noopener">{e.label}</a>)}</div>
+        )}
+      </article>
+    ))}
+  </div>
+  <p class="small">ราคา โปรผ่อน และการรับประกันเป็นไปตามเงื่อนไขของแต่ละร้าน ตรวจสอบบนเว็บร้านก่อนชำระเงิน</p>
+
+  <h2>เช็กลิสต์ก่อนซื้อมือถือ 5G ให้ใช้กับ AIS ได้เต็มที่</h2>
+  <ul class="check">
+    <li><b>รองรับคลื่น 5G ของ AIS</b> หลัก ๆ คือ 2600 MHz (n41) และ 700 MHz (n28) เครื่องที่ขายในไทยส่วนใหญ่รองรับ ระวังเครื่องหิ้ว</li>
+    <li><b>รองรับ eSIM / 2 ซิม</b> สะดวกเวลาไปต่างประเทศหรือใช้ 2 เบอร์ <a href="/esim-travel/">อ่านเรื่อง eSIM เที่ยวต่างประเทศ</a></li>
+    <li><b>เครื่องไม่ติดล็อกค่าย</b> โดยเฉพาะเครื่องมือสองหรือเครื่องจากโปรค่ายอื่น</li>
+    <li><b>มือสอง: ดูสุขภาพแบตเตอรี่และประกัน</b> และต้องไม่ติด iCloud / บัญชี Google ของเจ้าของเดิม</li>
+    <li><b>เผื่องบเคส ฟิล์ม และที่ชาร์จ</b> รุ่นใหม่หลายรุ่นไม่แถมหัวชาร์จ</li>
+  </ul>
+  <p class="small">เช็กว่ามือถือเครื่องเดิมรองรับ 5G หรือยัง อ่าน <a href="/blog/5g-phone-new-sim/">มือถือรองรับ 5G ไหม เช็กยังไง</a></p>
+
+  <h2>โปรเน็ต 5G AIS สำหรับมือถือเครื่องใหม่</h2>
+  <p>เครื่องใหม่จะได้ใช้ 5G เต็มที่ต้องมีแพ็ก 5G ด้วย เลือกตามช่วงที่ใช้งาน</p>
+  <div class="picks">
+    {picks.map((p) => (
+      <div class="pk dialbox">
+        <span class="lb2">{p.label}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net} · เฉลี่ย {perDay(p)}฿/วัน</div>
+        <p>{p.why}</p>
+        <code class="dial">{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+  <p class="small">ดูโปรทั้งหมดได้ที่ <a href="/ais-30-day/">โปร 30 วัน</a> และ <a href="/ais-1-day/">โปรรายวัน</a> · ไม่แน่ใจว่าควรใช้ความเร็วเท่าไร ลอง <a href="/chooser/">ตัวช่วยเลือกโปร</a></p>
+
+  <Faq items={faq} />
+
+  <h2>อ่านต่อ</h2>
+  <ul class="links">
+    <li><a href="/blog/5g-phone-new-sim/">มือถือรองรับ 5G ไหม เช็กยังไง</a></li>
+    <li><a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับใช้ทำอะไรได้</a></li>
+    <li><a href="/ais-new-sim/">เปิดซิมใหม่ AIS แพ็กเน็ต 200–350 บาท</a></li>
+    <li><a href="/blog/ais-esim/">eSIM AIS คืออะไร</a></li>
+  </ul>
+
+  <p class="small">ราคาโปร AIS ตรวจสอบ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS หรือร้านค้าใด · ลิงก์ร้านค้าเป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการซื้อ โดยราคาของคุณไม่เปลี่ยน · ชื่อแบรนด์เป็นเครื่องหมายการค้าของเจ้าของ</p>
+
+  <div class="sticky">
+    <div><b>{picks[2].price} บาท</b> / 30 วัน · 5G ไม่อั้น</div>
+    <a href={telHref(picks[2].code)} data-pkg={picks[2].code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { border-radius: 24px; padding: 26px 22px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.3) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #2f3b4c 0%, #1c2633 55%, #0f151d 100%);
+    box-shadow: 0 22px 40px -22px rgba(15,21,29,.8); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 10px; line-height: 1.3; }
+  .hero h1 em { font-style: normal; color: var(--lime-2); display: block; }
+  .hero p { margin: 0; color: #dfe6ee; }
+  @media (min-width: 720px) { .hero { padding: 40px; } .hero h1 { font-size: 2.3rem; } }
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .adnote { margin: -4px 0 10px; font-size: .78rem; color: var(--muted); }
+  .shops { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+  .shop { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 8px; box-shadow: var(--shadow); align-content: start; }
+  .shop h3 { margin: 0; font-size: 1.3rem; }
+  .shop p { margin: 0; font-size: .9rem; color: var(--muted); }
+  .shop ul { margin: 0; padding-left: 18px; font-size: .88rem; display: grid; gap: 2px; }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #33415c; background: #e6ebf3; padding: 2px 10px; border-radius: 999px; }
+  .aff { text-align: center; background: #1c2633; color: #fff; font-weight: 600; text-decoration: none; padding: 11px; border-radius: 12px; }
+  .extra { display: flex; flex-wrap: wrap; gap: 6px; }
+  .extra a { font-size: .82rem; color: #1c2633; border: 1px solid #c5cfdf; padding: 4px 10px; border-radius: 999px; text-decoration: none; }
+
+  .check { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .check li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 10px 40px; position: relative; }
+  .check li::before { content: '✓'; position: absolute; left: 14px; top: 10px; color: var(--lime-ink); font-weight: 700; }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .lb2 { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; font-size: .92rem; }
+  .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>
