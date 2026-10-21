@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
 import StudentCta from '../../components/StudentCta.astro';
+import GearBox from '../../components/GearBox.astro';
+import { GEAR_POSTS } from '../../data/affiliates';
 import { POSTS, readMinutes, thaiDate, CATEGORIES, catOf, type Post } from '../../lib/blog';
 import { faqSchema, breadcrumb } from '../../lib/seo';
 import { SITE } from '../../config';
@@ -76,6 +78,7 @@ const schema = [
       <Fragment set:html={firstHalf} />
       {cat === 'students' ? <StudentCta /> : <NewSimCta />}
       <Fragment set:html={secondHalf} />
+      {GEAR_POSTS.includes(slug) && <GearBox />}
     </div>
   </article>
 
