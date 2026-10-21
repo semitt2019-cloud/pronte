@@ -1,0 +1,216 @@
+---
+// Sale page: eSIM เที่ยวต่างประเทศ (Airalo) + โปรเน็ต AIS วันเดินทาง
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { AIS, speedLabel, type Pkg } from '../data/ais';
+import { AIRALO } from '../data/affiliates';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/esim-travel/';
+const get = (code: string): Pkg => {
+  const p = AIS.find((x) => x.code === code);
+  if (!p) throw new Error(`ไม่พบรหัสโปร ${code} ใน ais.ts`);
+  return p;
+};
+
+// โปรเน็ต AIS ช่วงที่ยังอยู่ในไทย (วันเดินทางไปสนามบิน / วันกลับถึงไทย)
+const PICKS: { code: string; when: string; why: string }[] = [
+  { code: '7721', when: 'วันเดินทางไปสนามบิน', why: 'ใช้เรียกรถ เช็กอินออนไลน์ เปิดบอร์ดดิงพาส และโหลดไฟล์ก่อนขึ้นเครื่อง ครบ 24 ชั่วโมง' },
+  { code: '7724', when: 'วันกลับถึงไทย', why: 'ลงเครื่องแล้วใช้ต่อได้ 2 วัน ส่งรูปทริป เรียกรถกลับบ้าน ไม่ต้องหา Wi-Fi สนามบิน' },
+];
+const picks = PICKS.map((p) => ({ ...get(p.code), ...p }));
+
+const title = 'eSIM เที่ยวต่างประเทศ ใช้ยังไง ซื้อที่ไหน ไม่ต้องถอดซิม AIS เดิม';
+const description = 'eSIM เที่ยวต่างประเทศ ซื้อออนไลน์ ติดตั้งผ่าน QR ก่อนบิน ใช้เน็ตได้ทันทีเมื่อถึงปลายทาง เทียบกับโรมมิ่งและซิมท้องถิ่น มือถือรุ่นไหนรองรับ ตั้งค่ายังไงให้ซิม AIS ไม่โดนค่าโรมมิ่ง';
+
+const faq: [string, string][] = [
+  ['eSIM เที่ยวต่างประเทศคืออะไร?', 'คือแพ็กเน็ตของประเทศปลายทางในรูปแบบ eSIM ซื้อออนไลน์แล้วติดตั้งลงมือถือด้วย QR Code ไม่ต้องหาซื้อซิมการ์ดที่สนามบิน และไม่ต้องถอดซิมเบอร์ไทยออก'],
+  ['มือถือรุ่นไหนใช้ eSIM ได้?', 'iPhone ตั้งแต่ XR/XS ขึ้นไป, Samsung Galaxy รุ่นเรือธงตั้งแต่ S20 และ Google Pixel ตั้งแต่ Pixel 3 เป็นต้นไป ควรตรวจในเมนูตั้งค่าว่ามี "เพิ่ม eSIM" และเครื่องต้องไม่ติดล็อกค่าย'],
+  ['ควรติดตั้ง eSIM ตอนไหน?', 'ติดตั้งตอนอยู่ไทยที่มี Wi-Fi ก่อนวันเดินทาง 1–2 วัน แล้วค่อยเปิดใช้เน็ตของ eSIM เมื่อถึงปลายทาง ตรวจเงื่อนไขของแต่ละแพ็กว่าเริ่มนับวันเมื่อไร'],
+  ['ใช้ eSIM แล้วยังรับ SMS / OTP เบอร์ AIS ได้ไหม?', 'มือถือที่รองรับ 2 ซิมเปิดเบอร์ AIS ไว้คู่กันได้ ตั้งให้เน็ตใช้จาก eSIM และปิดโรมมิ่งข้อมูลของซิม AIS ส่วนการรับ SMS ในต่างประเทศเป็นไปตามเงื่อนไขโรมมิ่งของ AIS'],
+  ['eSIM ท่องเที่ยวโทรออกได้ไหม?', 'แพ็กส่วนใหญ่เป็นเน็ตอย่างเดียว ไม่มีเบอร์โทร ใช้โทรผ่าน LINE, WhatsApp หรือแอปอื่นแทนได้ ตรวจรายละเอียดของแพ็กก่อนซื้อ'],
+  ['ไปต่างประเทศนาน ๆ เบอร์ AIS เติมเงินจะหมดอายุไหม?', 'วันใช้งานของซิมเติมเงินยังนับต่อแม้อยู่ต่างประเทศ ควรเติมเงินให้วันใช้งานพอก่อนเดินทาง อ่านเพิ่มที่บทความวันหมดอายุซิมเติมเงิน'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตไปเที่ยว', '/travel/'], ['eSIM เที่ยวต่างประเทศ', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'HowTo', name: 'วิธีใช้ eSIM เที่ยวต่างประเทศ',
+    step: [
+      'เช็กว่ามือถือรองรับ eSIM และไม่ติดล็อกค่าย',
+      'เลือกแพ็ก eSIM ตามประเทศและจำนวนวันที่เดินทาง',
+      'ติดตั้ง eSIM ผ่าน QR Code ตอนอยู่ไทยที่มี Wi-Fi',
+      'ถึงปลายทาง เปิดเน็ตของ eSIM และปิดโรมมิ่งข้อมูลของซิม AIS',
+    ].map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <a href="/travel/">โปรเน็ตไปเที่ยว</a> › <span>eSIM เที่ยวต่างประเทศ</span></nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <span class="badge">✈️ ญี่ปุ่น · เกาหลี · จีน · ยุโรป · ทั่วโลก</span>
+      <h1>eSIM เที่ยวต่างประเทศ <em>ลงเครื่องปุ๊บ เน็ตมาปั๊บ</em></h1>
+      <p class="tag">ซื้อออนไลน์ ติดตั้งก่อนบิน ไม่ต้องต่อคิวซื้อซิมที่สนามบิน และไม่ต้องถอดซิม AIS เบอร์เดิม</p>
+      <ul class="chips"><li>ไม่ต้องถอดซิม</li><li>ติดตั้งผ่าน QR</li><li>เลือกตามประเทศ</li><li>รู้ราคาก่อนจ่าย</li></ul>
+    </div>
+    <div class="offer">
+      <span class="ad">โฆษณา</span>
+      <b class="o-h">ซื้อ eSIM ท่องเที่ยวกับ {AIRALO.name}</b>
+      <ul class="o-list">
+        <li>แพ็กเน็ตของหลายร้อยประเทศและภูมิภาค</li>
+        <li>เลือกตามจำนวนวันและปริมาณเน็ต</li>
+        <li>ได้ QR ติดตั้งทางอีเมล / แอปทันทีหลังจ่าย</li>
+      </ul>
+      <a class="o-btn aff" href={AIRALO.link} target="_blank" rel="sponsored noopener">ดูแพ็ก eSIM ตามประเทศ →</a>
+      <div class="o-tax">ราคาและเงื่อนไขดูได้บนเว็บ {AIRALO.name} ก่อนชำระเงิน</div>
+    </div>
+  </section>
+
+  <section class="answer"><b>สรุปสั้น:</b> ถ้ามือถือรองรับ eSIM และไม่ติดล็อกค่าย การซื้อ <b>eSIM ท่องเที่ยว</b> ก่อนเดินทางสะดวกที่สุด ติดตั้งตอนอยู่ไทย ถึงปลายทางแล้วเปิดเน็ตได้ทันที เก็บซิม AIS ไว้ในเครื่องเพื่อรับ SMS และ OTP ธนาคาร แค่<b>ปิดโรมมิ่งข้อมูลของซิม AIS</b> จะได้ไม่โดนค่าเน็ตโรมมิ่ง</section>
+
+  <h2>eSIM เที่ยวต่างประเทศ เทียบกับโรมมิ่งและซิมท้องถิ่น</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th></th><th>eSIM ท่องเที่ยว</th><th>โรมมิ่งซิมไทย</th><th>ซิมการ์ดท้องถิ่น</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">ซื้อเมื่อไร</th><td>ออนไลน์ ก่อนเดินทาง</td><td>สมัครก่อนบิน</td><td>ที่สนามบิน / ร้านปลายทาง</td></tr>
+        <tr><th scope="row">ต้องถอดซิม AIS ไหม</th><td><b>ไม่ต้อง</b></td><td>ไม่ต้อง</td><td>ต้อง (ถ้าเครื่องไม่รองรับ 2 ซิม)</td></tr>
+        <tr><th scope="row">ใช้เน็ตได้เมื่อไร</th><td><b>ลงเครื่องทันที</b></td><td>ลงเครื่องทันที</td><td>หลังซื้อและตั้งค่าเสร็จ</td></tr>
+        <tr><th scope="row">ความคุ้ม</th><td>มักถูกกว่าโรมมิ่ง</td><td>สะดวกสุดแต่มักแพงกว่า</td><td>มักถูก แต่ต้องเสียเวลาหาซื้อ</td></tr>
+        <tr><th scope="row">เหมาะกับ</th><td>คนที่มือถือรองรับ eSIM</td><td>ทริปสั้นที่ไม่อยากตั้งค่าอะไร</td><td>อยู่นานหรือต้องการเบอร์ท้องถิ่น</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>มือถือรุ่นไหนใช้ eSIM ได้</h2>
+  <ul class="check">
+    <li><b>iPhone</b> ตั้งแต่ XR / XS ขึ้นไป</li>
+    <li><b>Samsung Galaxy</b> รุ่นเรือธงตั้งแต่ S20 และรุ่นพับ Z Fold / Z Flip</li>
+    <li><b>Google Pixel</b> ตั้งแต่ Pixel 3 ขึ้นไป</li>
+    <li><b>เครื่องต้องไม่ติดล็อกค่าย</b> และควรตรวจในเมนูตั้งค่าว่ามี "เพิ่ม eSIM" ก่อนซื้อ</li>
+  </ul>
+  <p class="small">รุ่นที่ขายในบางประเทศอาจไม่รองรับ eSIM ตรวจในเครื่องจริงดีที่สุด อ่านเพิ่มเรื่อง <a href="/blog/ais-esim/">eSIM AIS คืออะไร</a></p>
+
+  <h2>วิธีซื้อและติดตั้ง eSIM ท่องเที่ยว</h2>
+  <ol class="steps">
+    <li><b>เลือกแพ็กตามประเทศ</b> ดูจำนวนวันและปริมาณเน็ตให้พอกับทริป ทริปเที่ยวทั่วไปใช้วันละ 1–2 GB</li>
+    <li><b>ชำระเงินและรับ QR Code</b> ทางอีเมลหรือในแอป</li>
+    <li><b>ติดตั้งตอนอยู่ไทย</b> ต่อ Wi-Fi แล้วสแกน QR ในเมนู ตั้งค่า › เซลลูลาร์ / ซิม › เพิ่ม eSIM</li>
+    <li><b>ถึงปลายทาง</b> เปิดสาย eSIM ตั้งให้ "ข้อมูลมือถือ" ใช้จาก eSIM และเปิดโรมมิ่งข้อมูลเฉพาะสาย eSIM ถ้าแพ็กกำหนด</li>
+  </ol>
+
+  <h2>ตั้งค่าให้ซิม AIS ไม่โดนค่าโรมมิ่ง</h2>
+  <ul class="check">
+    <li><b>ปิดโรมมิ่งข้อมูลของซิม AIS</b> ก่อนเครื่องลง เพื่อไม่ให้เน็ตวิ่งผ่านซิมไทย</li>
+    <li><b>เลือก eSIM เป็นสายข้อมูลมือถือ</b> และปิด "สลับข้อมูลมือถืออัตโนมัติ" ถ้ามี</li>
+    <li><b>เปิดเบอร์ AIS ไว้</b> เพื่อรับ SMS และ OTP ธนาคาร (เงื่อนไขการรับ SMS ในต่างประเทศเป็นไปตามโรมมิ่งของ AIS)</li>
+    <li><b>เติมเงินให้วันใช้งานพอ</b> ก่อนเดินทาง ซิมเติมเงินยังนับวันต่อแม้อยู่ต่างประเทศ <a href="/blog/ais-prepaid-validity/">อ่านเพิ่ม</a></li>
+  </ul>
+
+  <h2>โปรเน็ต AIS วันเดินทางและวันกลับถึงไทย</h2>
+  <p>ช่วงที่ยังอยู่ในไทย ใช้โปรเน็ต AIS ไม่อั้นแบบสั้น ๆ คุ้มกว่าเปิดเน็ตแบบไม่มีโปร</p>
+  <div class="picks">
+    {picks.map((p) => (
+      <div class="pk dialbox">
+        <span class="lb">{p.when}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net}</div>
+        <p>{p.why}</p>
+        <code class="dial">{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+  <p class="small">โปรในส่วนนี้ใช้ในประเทศไทยเท่านั้น ใช้ต่างประเทศไม่ได้ · ดูโปรเที่ยวในประเทศทั้งหมดที่ <a href="/travel/">โปรเน็ตไปเที่ยว</a></p>
+
+  <aside class="cta2">
+    <span class="ad">โฆษณา</span>
+    <b>พร้อมเดินทางแล้ว? เลือก eSIM ของประเทศที่จะไป</b>
+    <p>เทียบแพ็กตามจำนวนวันและปริมาณเน็ต ราคาแสดงก่อนชำระเงิน</p>
+    <a class="o-btn aff" href={AIRALO.link} target="_blank" rel="sponsored noopener">ดูแพ็ก eSIM บน {AIRALO.name} →</a>
+  </aside>
+
+  <Faq items={faq} />
+
+  <h2>อ่านต่อก่อนเดินทาง</h2>
+  <ul class="links">
+    <li><a href="/blog/ais-esim/">eSIM AIS คืออะไร ขอยังไง</a></li>
+    <li><a href="/blog/ais-prepaid-validity/">วันใช้งานซิมเติมเงิน AIS</a></li>
+    <li><a href="/travel/">โปรเน็ตไปเที่ยวในประเทศ</a></li>
+    <li><a href="/blog/foreigner-ais-sim/">ซิม AIS สำหรับชาวต่างชาติ</a></li>
+  </ul>
+
+  <p class="small">ราคาโปร AIS ตรวจสอบ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS หรือ {AIRALO.name} · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการซื้อ โดยราคาของคุณไม่เปลี่ยน</p>
+
+  <div class="sticky">
+    <div><b>eSIM เที่ยวต่างประเทศ</b> · ติดตั้งก่อนบิน</div>
+    <a href={AIRALO.link} target="_blank" rel="sponsored noopener">ดูแพ็ก</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+
+  .hero { display: grid; gap: 18px; border-radius: 24px; padding: 24px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.3) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #5b6cf0 0%, #3e4bc4 50%, #262f86 100%);
+    box-shadow: 0 22px 40px -22px rgba(38,47,134,.8); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 8px; line-height: 1.3; }
+  .hero h1 em { font-style: normal; color: #fff3b0; display: block; }
+  .tag { margin: 0; font-size: 1.02rem; color: rgba(255,255,255,.95); }
+  .chips { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { font-size: .8rem; background: rgba(255,255,255,.18); padding: 3px 10px; border-radius: 999px; }
+  .offer { position: relative; background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; box-shadow: 0 16px 30px -18px rgba(10,20,70,.6); display: grid; gap: 8px; }
+  .o-h { font-size: 1.15rem; padding-right: 54px; }
+  .o-list { margin: 0; padding-left: 18px; font-size: .9rem; display: grid; gap: 3px; }
+  .o-btn { display: block; text-align: center; padding: 13px; border-radius: 14px; font-weight: 600; font-size: 1.05rem; color: #fff; text-decoration: none; }
+  .aff { background: linear-gradient(140deg, #6c7bff, #3e4bc4); box-shadow: 0 8px 18px -8px rgba(62,75,196,.9); }
+  .o-tax { font-size: .75rem; color: var(--muted); text-align: center; }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #f1f3ef; padding: 1px 8px; border-radius: 999px; }
+  @media (min-width: 760px) { .hero { grid-template-columns: 1.3fr 1fr; align-items: center; padding: 36px; } .hero h1 { font-size: 2.3rem; } }
+
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .9rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  tbody th { background: #f7f9f4; white-space: nowrap; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; min-width: 110px; }
+
+  .check { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .check li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 10px 40px; position: relative; }
+  .check li::before { content: '✓'; position: absolute; left: 14px; top: 10px; color: var(--lime-ink); font-weight: 700; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 12px 54px; }
+  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600; color: #fff; background: linear-gradient(140deg, #6c7bff, #3e4bc4); }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .pk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; }
+  .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .cta2 { position: relative; margin: 26px 0; background: linear-gradient(120deg, #eef0ff, #e1e5ff); border: 1px solid #c7cdfa; border-radius: 18px; padding: 18px; display: grid; gap: 8px; }
+  .cta2 b { font-size: 1.15rem; padding-right: 54px; }
+  .cta2 p { margin: 0; color: var(--muted); }
+  @media (min-width: 720px) { .cta2 .o-btn { justify-self: start; padding: 12px 22px; } }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,40,110,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, #6c7bff, #3e4bc4); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>

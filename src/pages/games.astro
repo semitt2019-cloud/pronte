@@ -6,6 +6,7 @@ import { gamePkgs, gameNewSim, gameMyStyle, GAME_USAGE } from '../data/games';
 import { MY_STYLE_GAMES } from '../data/mystyle';
 import { speedLabel } from '../data/ais';
 import { POSTS, thaiDate } from '../lib/blog';
+import { CODASHOP } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
 import { faqSchema, breadcrumb } from '../lib/seo';
 
@@ -16,13 +17,14 @@ const ms = gameMyStyle();
 const GAME_POSTS = ['mobile-game-data-usage', 'high-ping-mobile-game'];
 const posts = POSTS.filter((p) => GAME_POSTS.includes(p.slug));
 const title = 'โปรเน็ตเล่นเกม AIS ไม่อั้น ROV Free Fire PUBG เล่นลื่น ปิงนิ่ง';
-const description = 'รวมโปรเน็ต AIS เติมเงินสำหรับคนเล่นเกมมือถือ ROV, Free Fire, PUBG, MLBB เลือกตามงบและเวลาเล่น พร้อมแพ็กเน็ตเล่นเกมไม่จำกัด ตารางเน็ตที่เกมใช้ต่อชั่วโมง และรหัสกดสมัคร';
+const description = 'รวมโปรเน็ต AIS เติมเงินสำหรับคนเล่นเกมมือถือ ROV, Free Fire, PUBG, MLBB เลือกตามงบและเวลาเล่น พร้อมแพ็กเน็ตเล่นเกมไม่จำกัด ช่องทางเติมเกมด้วย UID และรหัสกดสมัคร';
 
 const faq: [string, string][] = [
   ['เล่นเกมมือถือควรใช้โปรเน็ตความเร็วเท่าไร?', 'ตัวเกมใช้แบนด์วิดท์ไม่มาก 2 Mbps ก็เล่นได้ แต่ถ้าเล่นเกมควบคู่กับดูคลิป คุยเสียงในทีม หรือต้องโหลดอัปเดต แนะนำ 4 Mbps ขึ้นไป'],
   ['ROV, Free Fire, PUBG ใช้เน็ตชั่วโมงละกี่ MB?', 'Free Fire ประมาณ 31 MB, PUBG Mobile ประมาณ 28 MB ต่อชั่วโมง ROV อยู่ในหลักสิบ MB เช่นกัน น้อยกว่าดู TikTok ราว 10 เท่า ที่กินเน็ตจริงคืออัปเดตเกม'],
   ['เน็ตแรงแต่ยังแล็ก ปิงสูง เกิดจากอะไร?', 'ความแล็กมาจาก ping (ความหน่วง) มากกว่าความเร็ว มักเกิดจากสัญญาณอ่อนหรือคนใช้เครือข่ายเยอะ ลองย้ายจุดเล่นใกล้หน้าต่าง ปิดแอปที่โหลดเบื้องหลัง และใช้ 5G ถ้ามือถือรองรับ'],
   ['มีแพ็กเน็ตเล่นเกมไม่จำกัดโดยเฉพาะไหม?', `มี 2 แบบ คือแพ็กซิมใหม่ ${ns.price} บาท (สมัครได้ภายใน 7 วันแรกของซิมใหม่) และแพ็ก MY STYLE เกม ${MY_STYLE_GAMES.length} เกม ที่เลือกเพิ่มได้เมื่อสมัครแพ็กเน็ต 250–350 บาทในวันเดียวกัน`],
+  ['เติมเกมผ่านเว็บปลอดภัยไหม ต้องให้รหัสผ่านไหม?', `เว็บเติมเกมอย่าง ${CODASHOP.name} ใช้แค่ UID หรือ Player ID ในเกม ไม่ต้องให้รหัสผ่านบัญชี ห้ามให้รหัสผ่านกับเว็บหรือคนที่อ้างว่ารับเติมเกมเด็ดขาด`],
   ['สมัครแล้วเงินถูกหักจากไหน?', 'หักจากยอดเงินในซิม AIS เติมเงินโดยตรง ไม่ต้องโอนเงินหรือให้ข้อมูลส่วนตัว ตรวจราคาใน SMS ยืนยันก่อนกดตกลงทุกครั้ง'],
 ];
 
@@ -48,7 +50,7 @@ const schema = [
     <p>เลือกโปรเน็ตเติมเงินให้พอดีกับเวลาเล่น ไม่ต้องจ่ายเกิน เริ่มต้นวันละประมาณ 13 บาท</p>
   </section>
 
-  <section class="answer"><b>สรุปสั้น:</b> เล่นทุกวันเลือก <b>490 บาท/30 วัน (4 Mbps)</b> งบน้อยและเล่นเกมอย่างเดียวเลือก <b>400 บาท/30 วัน (2 Mbps)</b> เล่นหนักบางสัปดาห์เลือก <b>236 บาท/7 วัน</b> เล่นเฉพาะวันหยุดกด <b>40 บาท/1 วัน</b> ถ้าเพิ่งเปิดซิมใหม่ แพ็กสายเกม <b>{ns.price} บาท</b> ได้เน็ตเล่นเกมไม่จำกัดด้วย</section>
+  <section class="answer"><b>สรุปสั้น:</b> เล่นทุกวันเลือก <b>490 บาท/30 วัน (4 Mbps)</b> งบน้อยและเล่นเกมอย่างเดียวเลือก <b>400 บาท/30 วัน (2 Mbps)</b> เล่นหนักบางสัปดาห์เลือก <b>235.40 บาท/7 วัน</b> เล่นเฉพาะวันหยุดกด <b>40 บาท/1 วัน</b> ถ้าเพิ่งเปิดซิมใหม่ แพ็กสายเกม <b>{ns.price} บาท</b> ได้เน็ตเล่นเกมไม่จำกัดด้วย</section>
 
   <h2>4 โปรเน็ตไม่อั้นที่เหมาะกับคนเล่นเกม</h2>
   <div class="picks">
@@ -94,6 +96,21 @@ const schema = [
     </div>
   </div>
 
+  <h2>เติมเกม ROV, Free Fire, MLBB, VALORANT ด้วย UID</h2>
+  <section class="topup">
+    <span class="ad">โฆษณา</span>
+    <p>เติมเพชร / คูปองเกมผ่าน <b>{CODASHOP.name}</b> กรอกแค่ <b>UID / Player ID</b> ไม่ต้องให้รหัสผ่านบัญชี จ่ายได้หลายช่องทางตามที่แต่ละเกมรองรับ แล้วไอเทมเข้าเกมอัตโนมัติ</p>
+    <div class="tu-btns">
+      {CODASHOP.games.map((g) => <a href={g.link} target="_blank" rel="sponsored noopener">เติม {g.name}</a>)}
+      <a class="all" href={CODASHOP.link} target="_blank" rel="sponsored noopener">เกมอื่น ๆ (ROV, Free Fire, PUBG…) →</a>
+    </div>
+    <ul class="tu-tips">
+      <li>เช็ก UID ในหน้าโปรไฟล์ของเกมให้ตรงก่อนจ่าย เติมผิดไอดีมักขอคืนไม่ได้</li>
+      <li>อย่าให้รหัสผ่านหรือ OTP กับใครที่อ้างว่ารับเติมเกมถูก</li>
+      <li>เติมเกมแล้วอย่าลืมเน็ต: เล่นทุกวันใช้ <b>{picks[0].price}฿/{picks[0].days} วัน</b> กด <code>{ussd(picks[0].code)}</code></li>
+    </ul>
+  </section>
+
   <h2>เล่นเกมใช้เน็ตชั่วโมงละเท่าไร</h2>
   <p>ตัวเกมระหว่างเล่นใช้เน็ตน้อยกว่าที่คิด ส่วนที่กินเน็ตจริงคืออัปเดตเกม คุยเสียง และไลฟ์</p>
   <div class="tbl">
@@ -133,7 +150,7 @@ const schema = [
 
   <Faq items={faq} />
 
-  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ชื่อเกมเป็นเครื่องหมายการค้าของเจ้าของ</p>
+  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ชื่อเกมเป็นเครื่องหมายการค้าของเจ้าของ · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการเติมเงิน โดยราคาของคุณไม่เปลี่ยน</p>
 </Base>
 
 <style>
@@ -183,6 +200,14 @@ const schema = [
   td.src { font-size: .78rem; color: var(--muted); }
 
   .tips { padding-left: 20px; display: grid; gap: 6px; }
+
+  .topup { position: relative; background: linear-gradient(120deg, #f3eefe, #e9e1fd); border: 1px solid #d3c6f7; border-radius: 18px; padding: 18px; display: grid; gap: 10px; }
+  .topup p { margin: 0; padding-right: 54px; }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #fff; padding: 1px 8px; border-radius: 999px; }
+  .tu-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tu-btns a { background: #5b2bd6; color: #fff; font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 12px; }
+  .tu-btns a.all { background: #fff; color: #5b2bd6; border: 1px solid #5b2bd6; }
+  .tu-tips { margin: 0; padding-left: 20px; font-size: .88rem; color: var(--muted); display: grid; gap: 3px; }
   .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
   .posts a { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); display: grid; gap: 2px; box-shadow: var(--shadow); }
   .posts a:hover { border-color: var(--lime); }

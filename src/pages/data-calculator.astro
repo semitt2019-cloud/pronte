@@ -39,7 +39,7 @@ const pick = (code: string) => {
 };
 const PK = {
   month: { 2: pick('7789'), 4: pick('7790'), 6: pick('7211') },
-  day: { 0.5: pick('7017'), 2: pick('7381'), 4: pick('7721'), 6: pick('7209') },
+  day: { 0.5: pick('7381'), 2: pick('7381'), 4: pick('7721'), 6: pick('7209') },
   week: pick('7629'),
   newsim: [...NEW_SIM].sort((a, b) => a.totalGB - b.totalGB).map((n) => ({ code: n.code, price: n.price, gb: n.totalGB, after: n.after, ussd: ussd(n.code), tel: telHref(n.code) })),
 };
