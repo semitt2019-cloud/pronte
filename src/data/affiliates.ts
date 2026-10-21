@@ -40,5 +40,54 @@ export const CODASHOP = {
   ],
 };
 
+/** ร้านมือถือ (หน้า /phone-5g/) */
+export const PHONE_SHOPS = [
+  {
+    name: 'PowerBuy',
+    tag: 'เครื่องใหม่ · เครือเซ็นทรัล',
+    desc: 'ร้านเครื่องใช้ไฟฟ้าและไอทีในเครือเซ็นทรัล มีมือถือ 5G ทุกแบรนด์หลัก สั่งออนไลน์หรือรับที่สาขาได้',
+    points: ['มือถือใหม่ทุกแบรนด์หลัก', 'มีหน้ารวมคูปองและสินค้าลดล้างสต๊อก', 'มีสาขาในห้างทั่วประเทศ'],
+    link: 'https://atth.me/000bo20029s7',
+    extra: [
+      { label: 'รวมคูปอง', link: 'https://atth.me/go/Lge9liRe' },
+      { label: 'ลดล้างสต๊อก', link: 'https://atth.me/go/SuGN0kPc' },
+    ],
+  },
+  {
+    name: 'TG Fone',
+    tag: 'เครื่องใหม่ · ผ่อน 0%',
+    desc: 'ร้านมือถือและ Apple มีทั้ง Samsung, OPPO, Xiaomi, HONOR, iPhone และแท็บเล็ต พร้อมโปรผ่อน 0% ผ่านบัตรเครดิตธนาคารที่ร่วมรายการ',
+    points: ['ผ่อน 0% นานสูงสุด 10 เดือน (บัตรที่ร่วมรายการ)', 'ส่งฟรีเมื่อซื้อครบ 1,500 บาท', 'เปลี่ยนสินค้าได้ภายใน 7 วันตามเงื่อนไขร้าน'],
+    link: 'https://atth.me/008jzz0029s7',
+    extra: [{ label: 'iPhone', link: 'https://atth.me/go/FC2vzvXX' }],
+  },
+  {
+    name: 'COMPASIA',
+    tag: 'มือสองตรวจสภาพ · ประหยัด',
+    desc: 'ร้าน iPhone และ Samsung มือสองที่ตรวจทุกปุ่ม ทุกฟังก์ชัน พร้อมการรับประกันจากร้าน และรับเทิร์นเครื่องเก่า เหมาะกับคนอยากได้รุ่นท็อปในงบน้อยกว่า',
+    points: ['มือสองตรวจสภาพทุกจุด มีประกันจากร้าน', 'รับเทิร์นเครื่องเก่าเป็นส่วนลด', 'ผ่อนผ่านบัตรเครดิตหรือไฟแนนซ์ได้'],
+    link: 'https://atth.me/00djzt0029s7',
+    extra: [],
+  },
+];
+
+/** ซิมเที่ยวต่างประเทศของ Berry Mobile (หน้า /esim-travel/) */
+export const TRAVESIM = {
+  name: 'TRAVeSIM',
+  link: 'https://atth.me/00eoq90029s7',
+  nihon: {
+    name: 'NihonSIM',
+    link: 'https://atth.me/00eoqu0029s7',
+    // ราคาตามหน้าเว็บผู้ให้บริการ (ต.ค. 2569) — เน็ตไม่อั้น ฮอตสปอตมีเพดาน
+    plans: [
+      { days: 4, price: 499, hotspot: '3GB' },
+      { days: 7, price: 749, hotspot: '6GB' },
+      { days: 10, price: 999, hotspot: '9GB' },
+      { days: 15, price: 1499, hotspot: '15GB' },
+      { days: 31, price: 2499, hotspot: '30GB' },
+    ],
+  },
+};
+
 /** หน้าโปรที่แสดงกล่อง Trip.com (หน้า /[slug]/ และ /pro/[slug]/) */
 export const TRIP_PAGES = ['ais-2-day', 'ais-3-day', 'ais-70-baht-2-day', 'ais-105-baht-3-day'];
