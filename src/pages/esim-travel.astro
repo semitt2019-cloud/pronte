@@ -2,6 +2,7 @@
 // Sale page: eSIM เที่ยวต่างประเทศ (Airalo) + โปรเน็ต AIS วันเดินทาง
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
+import InsuranceBox from '../components/InsuranceBox.astro';
 import { AIS, speedLabel, type Pkg } from '../data/ais';
 import { AIRALO, TRAVESIM } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
@@ -124,6 +125,8 @@ const schema = [
       <a class="o-btn alt" href={TRAVESIM.link} target="_blank" rel="sponsored noopener">eSIM ประเทศอื่นที่ {TRAVESIM.name} →</a>
     </div>
   </section>
+
+  <InsuranceBox scope="overseas" />
 
   <h2>ตั้งค่าให้ซิม AIS ไม่โดนค่าโรมมิ่ง</h2>
   <ul class="check">

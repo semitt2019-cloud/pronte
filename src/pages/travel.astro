@@ -2,6 +2,7 @@
 // Sale page: โปรเน็ตไปเที่ยว (เน็ต AIS + เว็บจองที่พัก/ที่เที่ยว)
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
+import InsuranceBox from '../components/InsuranceBox.astro';
 import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
 import { TRAVEL_BOOKING } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
@@ -112,6 +113,8 @@ const schema = [
     ))}
   </div>
   <p class="small">ราคา ส่วนลด และเงื่อนไขการยกเลิกเป็นไปตามแต่ละเว็บ ตรวจสอบก่อนชำระเงิน</p>
+
+  <InsuranceBox scope="domestic" />
 
   <h2>คุ้มกว่ากดรายวันแค่ไหน</h2>
   <div class="cmp">
