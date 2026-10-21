@@ -16,7 +16,7 @@ export type Affiliate = {
 
 export const TRIP: Affiliate = {
   name: 'Trip.com',
-  link: 'https://atth.me/go/mascqC3Y',
+  link: 'https://atth.me/001jzw0029s7',
   bannerHref: 'https://atth.me/adv.php?rk=006mri0029s7',
   bannerImg: 'https://imp.accesstrade.in.th/img.php?rk=006mri0029s7',
   bannerW: 752,
@@ -87,6 +87,19 @@ export const TRAVESIM = {
       { days: 31, price: 2499, hotspot: '30GB' },
     ],
   },
+};
+
+/** เว็บจองที่พัก / ที่เที่ยว (หน้า /travel/) */
+export const TRAVEL_BOOKING = [
+  { name: 'Traveloka', use: 'ที่พัก · ตั๋วเครื่องบิน · ตั๋วรถไฟ/รถทัวร์', desc: 'จองโรงแรม รีสอร์ท และตั๋วเดินทางในแอปเดียว เหมาะกับทริปที่ต้องจองทั้งที่พักและการเดินทาง', link: 'https://atth.me/003v5v0029s7' },
+  { name: 'Klook', use: 'บัตรเข้าที่เที่ยว · กิจกรรม · ทัวร์', desc: 'ตั๋วสวนสนุก พิพิธภัณฑ์ ทัวร์วันเดียว และกิจกรรมปลายทาง จองล่วงหน้า ใช้ QR เข้าได้เลย', link: 'https://atth.me/00dzj70029s7' },
+  { name: 'Trip.com', use: 'โรงแรม · เที่ยวบิน · แพ็กเกจ', desc: 'เทียบราคาโรงแรมและเที่ยวบิน มีดีลตามฤดูกาลและโปรเที่ยวในประเทศเป็นระยะ', link: 'https://atth.me/001jzw0029s7' },
+];
+
+/** iQIYI — ดูซีรีส์ (หน้า /iqiyi/) */
+export const IQIYI = {
+  name: 'iQIYI',
+  link: 'https://atth.me/00a7tn0029s7',
 };
 
 /** หน้าโปรที่แสดงกล่อง Trip.com (หน้า /[slug]/ และ /pro/[slug]/) */
