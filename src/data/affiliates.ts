@@ -102,5 +102,25 @@ export const IQIYI = {
   link: 'https://atth.me/00a7tn0029s7',
 };
 
+/** ประกันเดินทาง (หน้า /travel/ = ในประเทศ, /esim-travel/ = ต่างประเทศ) */
+export const INSURANCE = {
+  domestic: [
+    { name: 'AXA Smart Thailand Traveller', desc: 'ประกันเดินทางในประเทศของ AXA ซื้อออนไลน์ เลือกแผนตามจำนวนวันเที่ยว', link: 'https://atth.me/00424e0029s7' },
+    { name: 'Gettgo', desc: 'เว็บเปรียบเทียบประกันเดินทางหลายบริษัท เทียบเบี้ยและความคุ้มครองก่อนซื้อ', link: 'https://atth.me/000qc10029s7' },
+  ],
+  overseas: [
+    { name: 'Tune Protect', desc: 'ประกันเดินทางต่างประเทศ ซื้อออนไลน์ เลือกแผนตามประเทศและจำนวนวัน', link: 'https://atth.me/00bhg30029s7' },
+    { name: 'MSIG Travel Easy', desc: 'ประกันเดินทางต่างประเทศของ MSIG แบบรายเที่ยว ซื้อและรับกรมธรรม์ออนไลน์', link: 'https://atth.me/000bqk0029s7' },
+  ],
+};
+
+/** Shopee — ลิงก์ค้นหาสินค้า (สร้างจาก ACCESSTRADE > CUSTOMIZE) ใช้ในบทความฮอตสปอต / Pocket WiFi */
+export const SHOPEE = {
+  pocketWifi: 'https://atth.me/go/MejHh4Sw',  // shopee.co.th/search?keyword=pocket wifi
+  powerbank: 'https://atth.me/go/YHcNF0pN',   // shopee.co.th/search?keyword=powerbank
+};
+/** บทความที่แสดงกล่องอุปกรณ์เสริม */
+export const GEAR_POSTS = ['pocket-wifi-sim', 'share-hotspot-roommates', 'hotspot-laptop-for-study'];
+
 /** หน้าโปรที่แสดงกล่อง Trip.com (หน้า /[slug]/ และ /pro/[slug]/) */
 export const TRIP_PAGES = ['ais-2-day', 'ais-3-day', 'ais-70-baht-2-day', 'ais-105-baht-3-day'];
