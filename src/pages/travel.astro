@@ -1,9 +1,9 @@
 ---
-// Sale page: โปรเน็ตไปเที่ยว (เน็ต AIS + กล่อง Trip.com)
+// Sale page: โปรเน็ตไปเที่ยว (เน็ต AIS + เว็บจองที่พัก/ที่เที่ยว)
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
-import TripAd from '../components/TripAd.astro';
 import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
+import { TRAVEL_BOOKING } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
 import { faqSchema, breadcrumb } from '../lib/seo';
 
@@ -38,6 +38,7 @@ const faq: [string, string][] = [
   ['ควรสมัครโปรก่อนออกเดินทางไหม?', 'ควรสมัครก่อนออกจากบ้าน เพราะระหว่างทางบางช่วงสัญญาณอ่อน อาจรอ SMS ยืนยันนาน โปรจะเริ่มนับเวลาตั้งแต่ได้รับ SMS'],
   ['ขึ้นดอย เข้าป่า เน็ตใช้ได้ไหม?', 'ขึ้นกับสัญญาณในพื้นที่ ไม่ใช่โปร ก่อนไปที่ห่างไกล ควรโหลดแผนที่ออฟไลน์ไว้ และแจ้งเส้นทางให้คนที่บ้านรู้'],
   ['แชร์ฮอตสปอตให้เพื่อนในรถได้ไหม?', 'ได้ แต่เน็ตจะถูกแบ่งกันใช้ ถ้าแชร์ 2–3 เครื่อง แนะนำความเร็ว 6 Mbps ขึ้นไป'],
+  ['จองที่พักและที่เที่ยวเว็บไหนดี?', 'ถ้าต้องจองทั้งที่พักและตั๋วเดินทาง Traveloka หรือ Trip.com สะดวก ถ้าเน้นบัตรเข้าที่เที่ยว ทัวร์ และกิจกรรม Klook มีให้เลือกเยอะ ควรเทียบราคาและเงื่อนไขการยกเลิกก่อนจอง'],
   ['ไปเที่ยวต่างประเทศใช้โปรนี้ได้ไหม?', 'ไม่ได้ โปรในหน้านี้ใช้ในประเทศไทยเท่านั้น ต่างประเทศต้องใช้แพ็กโรมมิ่งหรือ eSIM ท่องเที่ยว ดูวิธีเลือกได้ที่หน้า eSIM เที่ยวต่างประเทศ'],
 ];
 
@@ -98,7 +99,19 @@ const schema = [
     ))}
   </div>
 
-  <TripAd heading="ได้เน็ตแล้ว จองที่พักหรือยัง?" text="เทียบราคาโรงแรม รีสอร์ท และตั๋วเครื่องบินบน Trip.com มีดีลลดราคาบ่อย จองก่อนเดินทางได้ราคาดีกว่า" />
+  <h2>ได้เน็ตแล้ว จองที่พักและที่เที่ยวหรือยัง?</h2>
+  <p class="adnote">ส่วนนี้มีลิงก์พันธมิตร (โฆษณา)</p>
+  <div class="book">
+    {TRAVEL_BOOKING.map((b) => (
+      <article class="bk">
+        <span class="lb">{b.use}</span>
+        <h3>{b.name}</h3>
+        <p>{b.desc}</p>
+        <a href={b.link} target="_blank" rel="sponsored noopener">ดูดีลบน {b.name} →</a>
+      </article>
+    ))}
+  </div>
+  <p class="small">ราคา ส่วนลด และเงื่อนไขการยกเลิกเป็นไปตามแต่ละเว็บ ตรวจสอบก่อนชำระเงิน</p>
 
   <h2>คุ้มกว่ากดรายวันแค่ไหน</h2>
   <div class="cmp">
@@ -135,7 +148,7 @@ const schema = [
     <li><a href="/ais-7-day/">โปรเน็ต 7 วันทั้งหมด</a></li>
   </ul>
 
-  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการจอง โดยราคาของคุณไม่เปลี่ยน</p>
+  <p class="small">ราคาและเงื่อนไขตรวจสอบ {SITE.updated} ตรวจราคาใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS · ลิงก์ในส่วนที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการจอง โดยราคาของคุณไม่เปลี่ยน</p>
 
   <div class="sticky">
     <div><b>{main.price} บาท</b> / {main.days} วัน · 5G ไม่อั้น</div>
@@ -185,6 +198,13 @@ const schema = [
   .tp p { margin: 0; font-size: .88rem; color: var(--muted); }
   .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
   .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .adnote { margin: -4px 0 10px; font-size: .78rem; color: var(--muted); }
+  .book { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .bk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .bk h3 { margin: 0; font-size: 1.25rem; }
+  .bk p { margin: 0; font-size: .9rem; color: var(--muted); }
+  .bk a { margin-top: 4px; text-align: center; background: #f57c00; color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
 
   .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   @media (max-width: 520px) { .cmp { grid-template-columns: 1fr; } }

@@ -1,0 +1,186 @@
+---
+// Sale page: ดูซีรีส์ iQIYI บนมือถือ + โปรเน็ตดูซีรีส์ AIS
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
+import { IQIYI } from '../data/affiliates';
+import { ussd, telHref, SITE } from '../config';
+import { faqSchema, breadcrumb } from '../lib/seo';
+
+const path = '/iqiyi/';
+const get = (code: string): Pkg => {
+  const p = AIS.find((x) => x.code === code);
+  if (!p) throw new Error(`ไม่พบรหัสโปร ${code} ใน ais.ts`);
+  return p;
+};
+
+// โปรเน็ตสำหรับดูซีรีส์ — แก้รหัสได้ที่นี่ ต้องมีใน ais.ts
+const PICKS: { code: string; label: string; why: string }[] = [
+  { code: '7790', label: 'ดูทุกวัน คุ้มสุด', why: 'ไม่อั้น 4 Mbps ทั้งเดือน ดูซีรีส์ HD 720p บนจอมือถือได้ลื่น ตกวันละประมาณ 16 บาท' },
+  { code: '7632', label: 'ประหยัดกว่า 20 บาท', why: 'คอมโบไม่อั้น 4 Mbps 30 วัน + โทรฟรีในเครือข่าย AIS ความเร็วพอดู HD ทั้งเดือน' },
+  { code: '7720', label: 'มาราธอนสุดสัปดาห์', why: '3 วัน ไม่อั้น 6 Mbps + เน็ต 5G วันละ 1GB ดู 1080p หรือดูจากจอใหญ่ผ่านฮอตสปอตได้' },
+  { code: '7211', label: 'ดู Full HD ทั้งเดือน', why: 'ไม่อั้น 6 Mbps 30 วัน สำหรับคนดู 1080p ทุกวัน หรือแชร์เน็ตให้แท็บเล็ต / ทีวี' },
+];
+const picks = PICKS.map((p) => ({ ...get(p.code), ...p }));
+
+const USAGE: [string, string, string][] = [
+  ['ความละเอียดต่ำ (ประมาณ 480p)', '≈ 0.5 GB', '2 Mbps'],
+  ['HD 720p', '≈ 1–1.5 GB', '4 Mbps'],
+  ['Full HD 1080p', '≈ 2–3 GB', '6 Mbps'],
+];
+
+const title = 'ดู iQIYI บนมือถือ ใช้เน็ตเท่าไร สมัคร VIP ยังไง + โปรเน็ตดูซีรีส์ AIS';
+const description = 'ดูซีรีส์จีน เกาหลี ไทยบน iQIYI ผ่านเน็ตมือถือ ใช้เน็ตชั่วโมงละกี่ GB ต้องใช้ความเร็วเท่าไร VIP ต่างจากดูฟรียังไง พร้อมโปรเน็ต AIS ไม่อั้นสำหรับดูซีรีส์และรหัสกดสมัคร';
+
+const faq: [string, string][] = [
+  ['ดู iQIYI 1 ชั่วโมงใช้เน็ตกี่ GB?', 'ขึ้นกับความละเอียด โดยประมาณ 0.5 GB ที่ความละเอียดต่ำ 1–1.5 GB ที่ 720p และ 2–3 GB ที่ 1080p ตัวเลขจริงต่างกันตามเนื้อหาและแอป'],
+  ['ดูซีรีส์บนมือถือควรใช้เน็ตความเร็วเท่าไร?', 'จอมือถือดู 720p ก็ชัดพอ ใช้โปรไม่อั้น 4 Mbps ถ้าดู 1080p หรือแชร์ให้แท็บเล็ต/ทีวี ใช้ 6 Mbps ขึ้นไป'],
+  ['iQIYI ดูฟรีได้ไหม?', 'มีเนื้อหาบางส่วนให้ดูฟรีแบบมีโฆษณา ส่วนสมาชิก VIP ได้ดูตอนใหม่และเนื้อหาเพิ่มเติม ข้ามโฆษณา และดูความละเอียดสูงสุด 1080p ได้ รายละเอียดแพ็กและราคาดูบนหน้าสมัครของ iQIYI'],
+  ['ดูซีรีส์ทั้งเดือนด้วยเน็ตมือถือคุ้มไหม?', 'ถ้าดูวันละ 2 ชั่วโมงที่ 720p จะใช้ราว 60–90 GB ต่อเดือน เกินแพ็กแบบนับ GB ส่วนใหญ่ โปรไม่อั้น 4 Mbps 30 วันจึงคุ้มกว่า'],
+  ['ดูแล้วภาพกระตุก แก้ยังไง?', 'ลดความละเอียดในแอปลง 1 ระดับ ปิดแอปอื่นที่โหลดเบื้องหลัง และย้ายไปจุดที่สัญญาณดีขึ้น ถ้ายังกระตุกบ่อย อาจต้องใช้โปรความเร็วสูงขึ้น'],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['ดู iQIYI บนมือถือ', path]]),
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต AIS สำหรับดูซีรีส์บนมือถือ',
+    itemListElement: picks.map((p, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
+    })),
+  },
+  faqSchema(faq),
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>ดู iQIYI บนมือถือ</span></nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <span class="badge">🎬 ซีรีส์จีน · เกาหลี · ไทย · อนิเมะ</span>
+      <h1>ดู iQIYI บนมือถือ <em>ซีรีส์ไม่สะดุด เน็ตไม่หมดกลางตอน</em></h1>
+      <p class="tag">ดูซีรีส์ทั้งเดือนผ่านเน็ตมือถือได้สบาย ถ้าเลือกความเร็วให้พอดีกับความละเอียดที่ดู</p>
+    </div>
+    <div class="offer">
+      <span class="ad">โฆษณา</span>
+      <b class="o-h">สมาชิก {IQIYI.name} VIP</b>
+      <ul class="o-list">
+        <li>ดูตอนใหม่และเนื้อหาสำหรับสมาชิก</li>
+        <li>ข้ามโฆษณา</li>
+        <li>ความละเอียดสูงสุด 1080p · ดูได้หลายอุปกรณ์</li>
+      </ul>
+      <a class="o-btn" href={IQIYI.link} target="_blank" rel="sponsored noopener">ดูแพ็ก VIP ของ {IQIYI.name} →</a>
+      <div class="o-tax">ราคาและเงื่อนไขแสดงบนหน้าสมัครของ {IQIYI.name}</div>
+    </div>
+  </section>
+
+  <section class="answer"><b>สรุปสั้น:</b> ดูซีรีส์บนจอมือถือที่ <b>720p ใช้ราว 1–1.5 GB/ชม.</b> และต้องใช้ความเร็วประมาณ <b>4 Mbps</b> ถ้าดูทุกวัน โปรไม่อั้น <b>490 บาท 30 วัน (4 Mbps)</b> คุ้มที่สุด ถ้าดู Full HD หรือแชร์ให้จอใหญ่ ใช้ <b>6 Mbps</b> ขึ้นไป</section>
+
+  <h2>ดู iQIYI ใช้เน็ตชั่วโมงละเท่าไร ต้องใช้ความเร็วเท่าไร</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>ความละเอียด</th><th>เน็ตต่อ 1 ชั่วโมง</th><th>ความเร็วที่แนะนำ</th></tr></thead>
+      <tbody>{USAGE.map(([a, b, c]) => <tr><td>{a}</td><td><b>{b}</b></td><td>{c}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="small">ตัวเลขประมาณการจากวิดีโอสตรีมมิ่งทั่วไป ใช้วางแผนเลือกโปร อ่านเพิ่มเรื่อง <a href="/blog/youtube-data-usage/">ดูวิดีโอใช้เน็ตเท่าไร</a> และ <a href="/blog/netflix-mobile-data/">Netflix ใช้เน็ตเท่าไร</a></p>
+
+  <h2>โปรเน็ต AIS สำหรับดูซีรีส์</h2>
+  <div class="picks">
+    {picks.map((p) => (
+      <div class="pk dialbox">
+        <span class="lb">{p.label}</span>
+        <div class="pr"><b>{p.price}฿</b><small>/ {p.days} วัน</small></div>
+        <div class="sp">เน็ตไม่อั้น {speedLabel(p.mbps)} · {p.net} · เฉลี่ย {perDay(p)}฿/วัน</div>
+        <p>{p.why}</p>
+        <code class="dial">{ussd(p.code)}</code>
+        <a class="go" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+      </div>
+    ))}
+  </div>
+
+  <h2>ดูซีรีส์ด้วยเน็ตมือถือให้ลื่นและประหยัด</h2>
+  <ul class="check">
+    <li><b>ตั้งความละเอียดให้พอดีจอ</b> มือถือ 720p ก็ชัดพอ ตั้ง 1080p ใช้เน็ตเพิ่มราว 2 เท่า</li>
+    <li><b>เลือกโปรไม่อั้น</b> ดูทุกวันจะเกินแพ็กแบบนับ GB ได้ง่าย</li>
+    <li><b>ปิดแอปที่โหลดเบื้องหลัง</b> เช่น สำรองรูปอัตโนมัติ ช่วยให้ภาพไม่กระตุก</li>
+    <li><b>ดูจากทีวีผ่านฮอตสปอต</b> ควรใช้ 6 Mbps ขึ้นไป เพราะจอใหญ่มักเลือกความละเอียดสูงอัตโนมัติ</li>
+  </ul>
+
+  <aside class="cta2">
+    <span class="ad">โฆษณา</span>
+    <b>พร้อมดูแล้ว? สมัคร {IQIYI.name} VIP</b>
+    <p>ดูตอนใหม่ ข้ามโฆษณา และความละเอียดสูงสุด 1080p</p>
+    <a class="o-btn" href={IQIYI.link} target="_blank" rel="sponsored noopener">ไปหน้าสมัคร {IQIYI.name} VIP →</a>
+  </aside>
+
+  <Faq items={faq} />
+
+  <h2>อ่านต่อ</h2>
+  <ul class="links">
+    <li><a href="/ais-youtube/">โปรเน็ตดู YouTube ไม่สะดุด</a></li>
+    <li><a href="/speed-guide/">ความเร็วเน็ตแต่ละระดับใช้ทำอะไรได้</a></li>
+    <li><a href="/blog/netflix-mobile-data/">ดู Netflix ใช้เน็ตเท่าไร</a></li>
+    <li><a href="/data-calculator/">คำนวณเน็ตต่อเดือน</a></li>
+  </ul>
+
+  <p class="small">ราคาโปร AIS ตรวจสอบ {SITE.updated} · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS หรือ {IQIYI.name} · ลิงก์ที่มีป้าย "โฆษณา" เป็นลิงก์พันธมิตร เว็บอาจได้ค่าตอบแทนเมื่อมีการสมัคร โดยราคาของคุณไม่เปลี่ยน</p>
+
+  <div class="sticky">
+    <div><b>{picks[0].price} บาท</b> / 30 วัน · ไม่อั้น 4 Mbps</div>
+    <a href={telHref(picks[0].code)} data-pkg={picks[0].code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin: 10px 0 6px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .hero { display: grid; gap: 18px; border-radius: 24px; padding: 24px; color: #fff;
+    background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #1fbf6a 0%, #11924f 50%, #0a5a31 100%);
+    box-shadow: 0 22px 40px -22px rgba(10,90,49,.8); }
+  .badge { display: inline-block; font-size: .78rem; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.8rem; margin: 12px 0 8px; line-height: 1.3; }
+  .hero h1 em { font-style: normal; color: #fff3b0; display: block; }
+  .tag { margin: 0; color: rgba(255,255,255,.95); }
+  .offer { position: relative; background: #fff; color: var(--ink); border-radius: 18px; padding: 18px; display: grid; gap: 8px; box-shadow: 0 16px 30px -18px rgba(0,0,0,.5); }
+  .o-h { font-size: 1.15rem; padding-right: 54px; }
+  .o-list { margin: 0; padding-left: 18px; font-size: .9rem; display: grid; gap: 3px; }
+  .o-btn { display: block; text-align: center; padding: 13px; border-radius: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(140deg, #28d17c, #11924f); }
+  .o-tax { font-size: .75rem; color: var(--muted); text-align: center; }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #f1f3ef; padding: 1px 8px; border-radius: 999px; }
+  @media (min-width: 760px) { .hero { grid-template-columns: 1.3fr 1fr; align-items: center; padding: 36px; } .hero h1 { font-size: 2.3rem; } }
+  .answer { margin-top: 18px; background: var(--card); border-left: 4px solid var(--lime); border-radius: 0 16px 16px 0; padding: 14px 18px; box-shadow: var(--shadow); }
+
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; }
+  th { background: var(--lime-soft); text-align: left; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+
+  .picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 6px; box-shadow: var(--shadow); align-content: start; }
+  .lb { justify-self: start; font-size: .75rem; font-weight: 600; color: #8a5a00; background: #fff3d6; padding: 2px 10px; border-radius: 999px; }
+  .pr b { font-size: 1.8rem; color: var(--lime-ink); }
+  .pr small { color: var(--muted); }
+  .sp { font-weight: 600; font-size: .92rem; }
+  .pk p { margin: 0; font-size: .88rem; color: var(--muted); }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+
+  .check { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .check li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 10px 40px; position: relative; }
+  .check li::before { content: '✓'; position: absolute; left: 14px; top: 10px; color: var(--lime-ink); font-weight: 700; }
+
+  .cta2 { position: relative; margin: 26px 0; background: linear-gradient(120deg, #e8f9ef, #d6f3e3); border: 1px solid #a9e2c2; border-radius: 18px; padding: 18px; display: grid; gap: 8px; }
+  .cta2 b { font-size: 1.15rem; padding-right: 54px; }
+  .cta2 p { margin: 0; color: var(--muted); }
+  @media (min-width: 720px) { .cta2 .o-btn { justify-self: start; padding: 12px 22px; } }
+
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(30,70,10,.5); font-size: .92rem; }
+  .sticky a { flex: none; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px 22px; border-radius: 12px; }
+  @media (min-width: 760px) { .sticky { display: none; } }
+  :global(body) { padding-bottom: 64px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>
