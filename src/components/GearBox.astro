@@ -1,0 +1,38 @@
+---
+// กล่องอุปกรณ์เสริมสำหรับแชร์เน็ต (Shopee) + โปรเน็ต 6 Mbps — ลิงก์อยู่ที่ src/data/affiliates.ts
+import { SHOPEE } from '../data/affiliates';
+import { AIS, speedLabel } from '../data/ais';
+import { ussd, telHref } from '../config';
+
+const pk = AIS.find((p) => p.code === '7211')!;
+const pk3 = AIS.find((p) => p.code === '7720')!;
+---
+<aside class="gear">
+  <span class="ad">โฆษณา</span>
+  <b class="h">อุปกรณ์ที่ใช้คู่กับการแชร์เน็ต</b>
+  <div class="row">
+    <a href={SHOPEE.pocketWifi} target="_blank" rel="sponsored noopener"><span>📶</span><b>Pocket WiFi</b><small>ใส่ซิมแล้วแชร์ได้หลายเครื่อง ไม่เปลืองแบตมือถือ</small></a>
+    <a href={SHOPEE.powerbank} target="_blank" rel="sponsored noopener"><span>🔋</span><b>พาวเวอร์แบงก์</b><small>เปิดฮอตสปอตนาน ๆ แบตหมดไว พกไว้อุ่นใจ</small></a>
+  </div>
+  <p class="src">ค้นหาและเทียบราคาบน Shopee</p>
+  <div class="pk dialbox">
+    <span>แชร์ให้หลายเครื่อง ควรใช้ <b>{speedLabel(pk.mbps)}</b> ขึ้นไป: {pk3.price}฿/{pk3.days} วัน หรือ {pk.price}฿/{pk.days} วัน</span>
+    <code class="dial">{ussd(pk.code)}</code>
+    <a class="go" href={telHref(pk.code)} data-pkg={pk.code}>กดสมัคร {pk.days} วัน</a>
+  </div>
+</aside>
+
+<style>
+  .gear { position: relative; margin: 22px 0; background: linear-gradient(120deg, #fff4ec, #ffe8d9); border: 1px solid #f6c9a8; border-radius: 18px; padding: 16px; display: grid; gap: 10px; }
+  .h { font-size: 1.1rem; padding-right: 54px; }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #fff; padding: 1px 8px; border-radius: 999px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+  .row a { display: grid; grid-template-columns: 36px 1fr; column-gap: 10px; align-items: center; background: #fff; border: 1px solid #f3d3bc; border-radius: 14px; padding: 12px; text-decoration: none; color: var(--ink); }
+  .row a span { grid-row: span 2; font-size: 1.7rem; }
+  .row a small { color: var(--muted); font-size: .82rem; }
+  .src { margin: -4px 0 0; font-size: .78rem; color: var(--muted); }
+  .pk { display: grid; gap: 8px; background: #fff; border-radius: 14px; padding: 12px; font-size: .9rem; }
+  .dial { text-align: center; padding: 8px 4px; background: #f5f7f3; border: 1px dashed #cfd8c8; border-radius: 10px; }
+  .go { text-align: center; background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c); color: #fff; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 12px; }
+</style>

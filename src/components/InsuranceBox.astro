@@ -1,0 +1,41 @@
+---
+// กล่องประกันเดินทาง (ลิงก์พันธมิตร) — ลิงก์อยู่ที่ src/data/affiliates.ts
+import { INSURANCE } from '../data/affiliates';
+
+interface Props { scope: 'domestic' | 'overseas' }
+const { scope } = Astro.props;
+const items = INSURANCE[scope];
+const heading = scope === 'domestic' ? 'ประกันเดินทางในประเทศ ซื้อไว้อุ่นใจ' : 'ประกันเดินทางต่างประเทศ เช็กก่อนบิน';
+const points = scope === 'domestic'
+  ? ['ค่ารักษาพยาบาลจากอุบัติเหตุระหว่างเดินทาง', 'อุบัติเหตุจากการขับขี่หรือกิจกรรมกลางแจ้ง', 'บางแผนคุ้มครองทรัพย์สินหรือการยกเลิกการเดินทาง']
+  : ['ค่ารักษาพยาบาลในต่างประเทศ ซึ่งมักแพงกว่าไทยหลายเท่า', 'เที่ยวบินล่าช้า กระเป๋าล่าช้า หรือสูญหาย', 'ไปยุโรปกลุ่มเชงเก้น ต้องมีประกันเดินทางตามเงื่อนไขวีซ่า'];
+---
+<section class="ins">
+  <span class="ad">โฆษณา</span>
+  <h2>{heading}</h2>
+  <p>สิ่งที่ควรดูในกรมธรรม์:</p>
+  <ul>{points.map((p) => <li>{p}</li>)}</ul>
+  <div class="cards">
+    {items.map((it) => (
+      <div class="c">
+        <b>{it.name}</b>
+        <span>{it.desc}</span>
+        <a href={it.link} target="_blank" rel="sponsored noopener">ดูแผนและเบี้ยประกัน →</a>
+      </div>
+    ))}
+  </div>
+  <p class="note">ข้อมูลทั่วไป ไม่ใช่คำแนะนำทางการเงิน ความคุ้มครองและเบี้ยประกันเป็นไปตามกรมธรรม์ของแต่ละบริษัท อ่านเงื่อนไขและข้อยกเว้นก่อนซื้อ</p>
+</section>
+
+<style>
+  .ins { position: relative; margin: 26px 0; background: linear-gradient(120deg, #eef5ff, #e2edfb); border: 1px solid #c3d6f2; border-radius: 18px; padding: 18px; }
+  .ins h2 { margin: 0 0 6px; padding-right: 54px; font-size: 1.25rem; }
+  .ins > p { margin: 6px 0 4px; }
+  .ins ul { margin: 0 0 12px; padding-left: 20px; font-size: .92rem; }
+  .ad { position: absolute; top: 10px; right: 12px; font-size: .7rem; color: var(--muted); background: #fff; padding: 1px 8px; border-radius: 999px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .c { background: #fff; border: 1px solid #d5e2f5; border-radius: 14px; padding: 14px; display: grid; gap: 6px; align-content: start; }
+  .c span { font-size: .88rem; color: var(--muted); }
+  .c a { text-align: center; background: #1f5fbf; color: #fff; font-weight: 600; text-decoration: none; padding: 9px; border-radius: 10px; }
+  .note { margin: 12px 0 0; font-size: .78rem; color: var(--muted); }
+</style>
