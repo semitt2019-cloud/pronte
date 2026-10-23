@@ -5,7 +5,7 @@ import Faq from '../components/Faq.astro';
 import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
 import { IQIYI } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
-import { faqSchema, breadcrumb } from '../lib/seo';
+import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../lib/seo';
 
 const path = '/iqiyi/';
 const get = (code: string): Pkg => {
@@ -46,7 +46,7 @@ const schema = [
     '@context': 'https://schema.org', '@type': 'ItemList', name: 'โปรเน็ต AIS สำหรับดูซีรีส์บนมือถือ',
     itemListElement: picks.map((p, i) => ({
       '@type': 'ListItem', position: i + 1,
-      item: { '@type': 'Product', name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
+      item: { '@type': 'Product', image: PRODUCT_IMAGE, name: `เน็ต AIS ไม่อั้น ${speedLabel(p.mbps)} ${p.days} วัน`, brand: { '@type': 'Brand', name: 'AIS' },
         offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' } },
     })),
   },

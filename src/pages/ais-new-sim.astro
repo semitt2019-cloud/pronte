@@ -9,7 +9,7 @@ import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import { NEW_SIM } from '../data/newsim';
 import { ussd, telHref, SITE } from '../config';
-import { faqSchema, breadcrumb } from '../lib/seo';
+import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../lib/seo';
 
 const path = '/ais-new-sim/';
 const title = 'เปิดซิมใหม่ AIS โปรเน็ต 200–350 บาท เน็ตรวม 100GB โทรฟรี';
@@ -44,6 +44,7 @@ const schema = [
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'Product',
+        image: PRODUCT_IMAGE,
         name: `แพ็กเสริมเน็ต AIS ซิมใหม่ ${p.price} บาท 30 วัน เน็ตรวม ${p.totalGB}GB`,
         description: [...p.net, p.after, p.call].join(' · '),
         brand: { '@type': 'Brand', name: 'AIS' },

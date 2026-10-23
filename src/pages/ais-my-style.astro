@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import { MY_STYLE, MY_STYLE_GAMES } from '../data/mystyle';
 import { ussd, telHref, SITE } from '../config';
-import { faqSchema, breadcrumb } from '../lib/seo';
+import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../lib/seo';
 
 const path = '/ais-my-style/';
 const title = 'แพ็ก MY STYLE AIS 29 บาท เลือกรายเดือน เมื่อมีแพ็กเน็ต 250–350 บาท';
@@ -27,6 +27,7 @@ const schema = [
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'Product',
+        image: PRODUCT_IMAGE,
         name: `แพ็ก MY STYLE AIS ${p.code} ${p.title}`,
         description: [...p.perks, p.condition].join(' · '),
         brand: { '@type': 'Brand', name: 'AIS' },
