@@ -7,7 +7,7 @@ import { TRIP_PAGES } from '../../data/affiliates';
 import { AIS, perDay, speedLabel, type Pkg } from '../../data/ais';
 import { SALES, USES, useLevel, salesByCode, type SalesPage } from '../../data/sales';
 import { ussd, telHref, SITE } from '../../config';
-import { faqSchema, breadcrumb } from '../../lib/seo';
+import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../../lib/seo';
 
 export function getStaticPaths() {
   return SALES.map((s) => {
@@ -43,7 +43,7 @@ const productSchema = {
   name: s.title,
   description: s.description,
   brand: { '@type': 'Brand', name: 'AIS' },
-  category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
+  image: PRODUCT_IMAGE,
   offers: {
     '@type': 'Offer',
     price: pkg.price,
