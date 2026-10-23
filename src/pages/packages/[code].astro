@@ -8,7 +8,7 @@ import { NEW_SIM, type NewSimPkg } from '../../data/newsim';
 import { MY_STYLE, type MyStylePkg } from '../../data/mystyle';
 import { salesByCode } from '../../data/sales';
 import { ussd, telHref, SITE } from '../../config';
-import { faqSchema, breadcrumb } from '../../lib/seo';
+import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../../lib/seo';
 
 type Item =
   | { kind: 'ais'; code: string; price: number; days: number; p: Pkg }
@@ -91,7 +91,7 @@ const faq: [string, string][] = ms
     ];
 const product: Record<string, unknown> = {
   '@context': 'https://schema.org', '@type': 'Product', name: title, description,
-  brand: { '@type': 'Brand', name: 'AIS' }, sku: it.code, category: 'แพ็กเกจอินเทอร์เน็ตมือถือ',
+  brand: { '@type': 'Brand', name: 'AIS' }, sku: it.code, image: PRODUCT_IMAGE,
 };
 if (charge != null) {
   product.offers = { '@type': 'Offer', price: charge, priceCurrency: 'THB', availability: 'https://schema.org/InStock', url: new URL(path, SITE.url).href };
