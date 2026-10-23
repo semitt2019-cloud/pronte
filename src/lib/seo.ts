@@ -1,6 +1,9 @@
 import type { Pkg } from '../data/ais';
 import { SITE } from '../config';
 
+/** รูปที่ใช้ใน schema Product (Google บังคับช่อง image) */
+export const PRODUCT_IMAGE = new URL('/og/default.jpg', SITE.url).href;
+
 export function faqSchema(items: [string, string][]) {
   return {
     '@context': 'https://schema.org',
@@ -23,6 +26,7 @@ export function offersSchema(name: string, items: Pkg[]) {
       position: i + 1,
       item: {
         '@type': 'Product',
+        image: PRODUCT_IMAGE,
         name: `เน็ต AIS ${p.net} ${p.mbps < 1 ? p.mbps * 1000 + ' Kbps' : p.mbps + ' Mbps'} ไม่อั้น ${p.days} วัน`,
         brand: { '@type': 'Brand', name: 'AIS' },
         offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' },
