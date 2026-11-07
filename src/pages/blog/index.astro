@@ -6,9 +6,9 @@ import { POSTS, thaiDate, CATEGORIES, catOf } from '../../lib/blog';
 import { breadcrumb } from '../../lib/seo';
 import { SITE } from '../../config';
 
-const title = 'บทความโปรเน็ต AIS เปิดซิมใหม่ และเน็ตสำหรับนักเรียน นักศึกษา';
-const groups = (['students', 'newsim'] as const).map((k) => ({ key: k, ...CATEGORIES[k], posts: POSTS.filter((p) => catOf(p) === k) })).filter((g) => g.posts.length);
-const description = 'รวมบทความโปรเน็ต AIS เรื่องเปิดซิมใหม่ ลงทะเบียน แก้ปัญหาซิม และบทความสำหรับนักเรียน นักศึกษา เรียนออนไลน์ใช้เน็ตเท่าไร ประหยัดเน็ตยังไง อ่านง่าย ทำตามได้ทันที';
+const title = 'บทความโปรเน็ต AIS ความรู้เน็ตมือถือ เปิดซิมใหม่ และเน็ตนักเรียน';
+const groups = (['guide', 'students', 'newsim'] as const).map((k) => ({ key: k, ...CATEGORIES[k], posts: POSTS.filter((p) => catOf(p) === k) })).filter((g) => g.posts.length);
+const description = 'รวมบทความโปรเน็ต AIS ความรู้เน็ตมือถือ แก้เน็ตช้า ตั้งค่า APN 5G เรื่องเปิดซิมใหม่ ลงทะเบียน แก้ปัญหาซิม และบทความสำหรับนักเรียน นักศึกษา เรียนออนไลน์ใช้เน็ตเท่าไร ประหยัดเน็ตยังไง อ่านง่าย ทำตามได้ทันที';
 const schema = [
   breadcrumb([['หน้าแรก', '/'], ['บทความ', '/blog/']]),
   {
@@ -21,11 +21,11 @@ const schema = [
   <nav class="crumb" aria-label="breadcrumb"><a href="/">หน้าแรก</a> › <span>บทความ</span></nav>
   <section class="hero">
     <h1>บทความโปรเน็ต AIS</h1>
-    <p>ทุกเรื่องที่ต้องรู้ ตั้งแต่เปิดซิมใหม่ จนถึงใช้เน็ตให้คุ้มสำหรับนักเรียน นักศึกษา</p>
+    <p>ทุกเรื่องที่ต้องรู้ ตั้งแต่แก้เน็ตช้า ตั้งค่าเน็ต เปิดซิมใหม่ จนถึงใช้เน็ตให้คุ้มสำหรับนักเรียน นักศึกษา</p>
   </section>
 
   <nav class="chips" aria-label="หมวดบทความ">
-    {groups.map((g) => <a href={`#${g.key}`}>{g.key === 'students' ? '🎓 ' : ''}{g.label} <small>{g.posts.length}</small></a>)}
+    {groups.map((g) => <a href={`#${g.key}`}>{g.key === 'students' ? '🎓 ' : g.key === 'guide' ? '📶 ' : ''}{g.label} <small>{g.posts.length}</small></a>)}
   </nav>
 
   <a class="stu" href="/students/">
@@ -49,7 +49,7 @@ const schema = [
           </a>
         ))}
       </div>
-      <a class="hub" href={g.hub}>ไปหน้า {g.hubLabel} →</a>
+      {g.key !== 'guide' && <a class="hub" href={g.hub}>ไปหน้า {g.hubLabel} →</a>}
     </section>
   ))}
 

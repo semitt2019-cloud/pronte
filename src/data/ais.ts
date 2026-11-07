@@ -56,7 +56,7 @@ export const AIS: Pkg[] = [
 
 export const byDays = (d: number) => AIS.filter((p) => p.days === d).sort((a, b) => a.price - b.price);
 export const perDay = (p: Pkg) => Math.round((p.price / p.days) * 10) / 10;
-export const speedLabel = (mbps: number) => (mbps < 1 ? `${mbps * 1000} Kbps` : `${mbps} Mbps`);
+export const speedLabel = (mbps: number) => (mbps < 1 ? `${Math.round(mbps * 1024)} Kbps` : `${mbps} Mbps`);
 
 /** ความเร็วแต่ละระดับใช้ทำอะไรได้ (เขียนเอง ใช้ในหลายหน้า) */
 export const SPEED_GUIDE: { mbps: number; good: string; limit: string }[] = [

@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
 import StudentCta from '../../components/StudentCta.astro';
+import GuideCta from '../../components/GuideCta.astro';
+import { AIS } from '../../data/ais';
 import GearBox from '../../components/GearBox.astro';
 import { GEAR_POSTS } from '../../data/affiliates';
 import { POSTS, readMinutes, thaiDate, CATEGORIES, catOf, type Post } from '../../lib/blog';
@@ -35,6 +37,7 @@ const same = POSTS.filter((p) => catOf(p) === cat);
 const idx = same.findIndex((p) => p.slug === slug);
 const others = [1, 2, 3, 4].map((k) => same[(idx + k) % same.length]).filter((p, i, a) => p.slug !== slug && a.indexOf(p) === i);
 const pick = NEW_SIM[1];
+const daily = AIS.find((p) => p.code === '7721')!;
 
 const schema = [
   breadcrumb([['หน้าแรก', '/'], [C.hubLabel, C.hub], [meta.h1, path]]),
@@ -58,7 +61,7 @@ const schema = [
 
   <article>
     <header class="ah">
-      <span class="kw">{cat === 'students' ? '🎓 ' : ''}{C.label}</span>
+      <span class="kw">{cat === 'students' ? '🎓 ' : cat === 'guide' ? '📶 ' : ''}{C.label}</span>
       <h1>{meta.h1}</h1>
       <p class="by">
         <time datetime={meta.updated ?? meta.date}>อัปเดต {thaiDate(meta.updated ?? meta.date)}</time>{' · '}อ่าน {minutes} นาที
@@ -76,7 +79,7 @@ const schema = [
 
     <div class="prose">
       <Fragment set:html={firstHalf} />
-      {cat === 'students' ? <StudentCta /> : <NewSimCta />}
+      {cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : <NewSimCta />}
       <Fragment set:html={secondHalf} />
       {GEAR_POSTS.includes(slug) && <GearBox />}
     </div>
@@ -84,7 +87,9 @@ const schema = [
 
   {meta.faq?.length && <Faq items={meta.faq} />}
 
-  <NewSimCta heading="พร้อมแล้ว? เลือกแพ็กเน็ตให้ซิมใหม่เลย" text="กดปุ่มสมัคร มือถือจะโทรออกด้วยรหัสสมัครให้ทันที รอ SMS ยืนยันจาก AIS แล้วตอบรับตามขั้นตอน" />
+  {cat === 'guide'
+    ? <GuideCta heading="เลือกโปรเน็ตไม่อั้นที่พอดีกับการใช้งาน" codes={['7017', '7381', '7721', '7629', '7789', '7790']} />
+    : <NewSimCta heading="พร้อมแล้ว? เลือกแพ็กเน็ตให้ซิมใหม่เลย" text="กดปุ่มสมัคร มือถือจะโทรออกด้วยรหัสสมัครให้ทันที รอ SMS ยืนยันจาก AIS แล้วตอบรับตามขั้นตอน" />}
 
   {meta.related?.length && (
     <>
@@ -110,8 +115,13 @@ const schema = [
   <p class="small">ข้อมูลอาจเปลี่ยนแปลงตามประกาศของผู้ให้บริการและ กสทช. ตรวจเงื่อนไขใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
 
   <div class="sticky">
+    {cat === 'guide' ? (<>
+      <div><b>เน็ตไม่อั้น</b> {daily.price}฿ 1 วัน 4 Mbps</div>
+      <a href={telHref(daily.code)} data-pkg={daily.code} aria-label={`สมัคร ${ussd(daily.code)}`}>กดสมัคร</a>
+    </>) : (<>
     <div><b>ซิมใหม่</b> {pick.price}฿ เน็ต {pick.totalGB}GB</div>
     <a href={telHref(pick.code)} data-pkg={pick.code} aria-label={`สมัคร ${ussd(pick.code)}`}>กดสมัคร</a>
+    </>)}
   </div>
 </Base>
 

@@ -27,7 +27,7 @@ export function offersSchema(name: string, items: Pkg[]) {
       item: {
         '@type': 'Product',
         image: PRODUCT_IMAGE,
-        name: `เน็ต AIS ${p.net} ${p.mbps < 1 ? p.mbps * 1000 + ' Kbps' : p.mbps + ' Mbps'} ไม่อั้น ${p.days} วัน`,
+        name: `เน็ต AIS ${p.net} ${p.mbps < 1 ? Math.round(p.mbps * 1024) + ' Kbps' : p.mbps + ' Mbps'} ไม่อั้น ${p.days} วัน`,
         brand: { '@type': 'Brand', name: 'AIS' },
         offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' },
       },
