@@ -42,10 +42,11 @@ jobs:
       contains(github.event.pull_request.labels.*.name, 'automerge')
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # contents + pull-requests only. `workflows` is not a valid GITHUB_TOKEN
+    # scope and makes GitHub reject the whole file before any job starts.
     permissions:
       contents: write
       pull-requests: write
-      workflows: write
     steps:
       - name: Squash-merge
         env:
