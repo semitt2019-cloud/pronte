@@ -6,6 +6,7 @@ import { AIS, byDays } from '../data/ais';
 import { LIST_PAGES } from '../data/pages';
 import { SALES } from '../data/sales';
 import { faqSchema, offersSchema } from '../lib/seo';
+import { POSTS, KEYWORD_GUIDES } from '../lib/blog';
 import { SITE } from '../config';
 
 const popular = AIS.filter((p) => p.popular).sort((a, b) => a.days - b.days || a.price - b.price);
@@ -13,6 +14,10 @@ const groups: [number, string][] = [[1, 'ais-1-day'], [2, 'ais-2-day'], [3, 'ais
 
 const title = `โปรเน็ต AIS ไม่อั้น ไม่ลดสปีด ล่าสุด ${SITE.updated}`;
 const description = 'รวมโปรเน็ต AIS เติมเงิน ไม่จำกัดปริมาณ ไม่ลดสปีด ทั้งรายวัน 7 วัน และ 30 วัน ราคาเริ่ม 24 บาท พร้อมรหัสกดสมัครและวิธีเลือกความเร็วให้เหมาะกับการใช้งาน';
+const guides = KEYWORD_GUIDES.flatMap((slug) => {
+  const post = POSTS.find((p) => p.slug === slug);
+  return post ? [post] : [];
+});
 const faq: [string, string][] = [
   ['เน็ตไม่อั้นไม่ลดสปีดคืออะไร?', 'ใช้ได้ไม่จำกัดปริมาณที่ความเร็วคงที่ตามโปรตลอดอายุ เช่น 4 Mbps ก็ได้ 4 Mbps ตลอด ไม่ถูกลดลงเมื่อใช้เยอะ'],
   ['ควรเลือกความเร็วเท่าไหร่?', 'แชตและ Facebook ใช้ 1–2 Mbps, TikTok และ YouTube 720p ใช้ 4 Mbps, ไลฟ์สดหรือแชร์ฮอตสปอตใช้ 6 Mbps ขึ้นไป'],
@@ -20,7 +25,11 @@ const faq: [string, string][] = [
   ['เช็กโปรที่ใช้อยู่ยังไง?', 'กด *121*32# แล้วโทรออก ระบบจะส่งรายละเอียดโปรที่ใช้อยู่ทาง SMS'],
 ];
 ---
-<Base title={title} description={description} schema={[offersSchema('โปรเน็ต AIS ยอดนิยม', popular), faqSchema(faq)]}>
+<Base title={title} description={description} schema={[
+  offersSchema('โปรเน็ต AIS ยอดนิยม', popular),
+  faqSchema(faq),
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'th-TH' },
+]}>
   <section class="hero">
     <span class="eyebrow">AIS เติมเงิน · {SITE.updated}</span>
     <h1>โปรเน็ต AIS <em>ไม่อั้น ไม่ลดสปีด</em><br />ล่าสุด {SITE.updated}</h1>
@@ -75,6 +84,11 @@ const faq: [string, string][] = [
   <h2>รีวิวโปรแนะนำ</h2>
   <ul class="links">
     {SALES.map((x) => <li><a href={`/pro/${x.slug}/`}>{x.keyword}</a></li>)}
+  </ul>
+
+  <h2>คู่มือเลือกโปรเน็ต</h2>
+  <ul class="links">
+    {guides.map((p) => <li><a href={`/blog/${p.slug}/`}>{p.meta.keyword}</a></li>)}
   </ul>
 
   <h2>เลือกโปรตามการใช้งาน</h2>

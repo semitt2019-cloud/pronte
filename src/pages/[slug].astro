@@ -15,6 +15,41 @@ export function getStaticPaths() {
 const { page } = Astro.props as { page: ListPage };
 const items = page.items();
 const related = LIST_PAGES.filter((p) => p.slug !== page.slug);
+const MORE: Record<string, [string, string][]> = {
+  'ais-1-day': [
+    ['แพ็กเน็ตรายวัน AIS อธิบายทีละราคา', '/blog/ais-daily-pack/'],
+    ['สมัครเน็ต AIS กดอะไร', '/blog/subscribe-ais-internet/'],
+  ],
+  'ais-2-day': [
+    ['เน็ต AIS เติมเงิน เลือกตามจำนวนวัน', '/blog/ais-prepaid-internet/'],
+    ['โปรเน็ตไปเที่ยวในประเทศ', '/travel/'],
+  ],
+  'ais-3-day': [
+    ['โปรเน็ตไปเที่ยว', '/travel/'],
+    ['เน็ตไม่อั้นไม่ลดสปีด AIS', '/blog/ais-unlimited-fixed/'],
+  ],
+  'ais-7-day': [
+    ['เน็ตรายสัปดาห์ AIS', '/blog/ais-weekly-pack/'],
+    ['สมัครเน็ต AIS กดอะไร', '/blog/subscribe-ais-internet/'],
+  ],
+  'ais-30-day': [
+    ['เน็ตรายเดือน AIS เติมเงิน', '/blog/ais-monthly-prepaid/'],
+    ['ซิมใหม่ AIS กับโปร 30 วัน', '/blog/ais-new-sim-pack/'],
+  ],
+  'ais-under-100': [
+    ['แพ็กเน็ตรายวัน AIS', '/blog/ais-daily-pack/'],
+    ['เน็ต AIS เติมเงิน', '/blog/ais-prepaid-internet/'],
+  ],
+  'ais-tiktok': [
+    ['เน็ตไม่อั้นไม่ลดสปีด AIS', '/blog/ais-unlimited-fixed/'],
+    ['ความเร็วเน็ตแต่ละระดับ', '/speed-guide/'],
+  ],
+  'ais-youtube': [
+    ['เน็ตรายเดือน AIS เติมเงิน', '/blog/ais-monthly-prepaid/'],
+    ['ความเร็วเน็ตแต่ละระดับ', '/speed-guide/'],
+  ],
+};
+const more = MORE[page.slug] ?? [];
 const schema = [
   breadcrumb([['หน้าแรก', '/'], [page.title, `/${page.slug}/`]]),
   offersSchema(page.title, items),
@@ -40,6 +75,15 @@ const schema = [
   {TRIP_PAGES.includes(page.slug) && <TripAd />}
 
   <Faq items={page.faq} />
+
+  {more.length > 0 && (
+    <>
+      <h2>อ่านเพิ่ม</h2>
+      <ul class="links">
+        {more.map(([label, href]) => <li><a href={href}>{label}</a></li>)}
+      </ul>
+    </>
+  )}
 
   <h2>โปรเน็ตหมวดอื่น</h2>
   <ul class="links">

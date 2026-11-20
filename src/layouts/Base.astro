@@ -38,6 +38,8 @@ const path = Astro.url.pathname;
   <meta name="description" content={description} />
   {keywords && <meta name="keywords" content={keywords} />}
   <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="th" href={canonical} />
+  <link rel="alternate" hreflang="x-default" href={canonical} />
   <meta property="og:type" content={ogType} />
   <meta property="og:locale" content="th_TH" />
   <meta property="og:site_name" content={SITE.name} />
@@ -63,7 +65,7 @@ const path = Astro.url.pathname;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s).replace(/</g, '\\u003c')} />)}
   {GA_ID && (
     <>
       <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>

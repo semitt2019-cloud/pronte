@@ -53,7 +53,9 @@
   const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 
   // ---------- Service Worker (เก็บหน้าไว้ในเครื่อง) ----------
-  if ('serviceWorker' in navigator) {
+  // ไม่ลงทะเบียนกับโปรแกรมเก็บข้อมูลของเสิร์ชเอนจิน เพื่อไม่ให้แคชเก่าไปแทนหน้าที่เพิ่งอัปเดต
+  const crawler = /bot|crawler|spider|slurp|facebookexternalhit|embedly|pinterest|redditbot|whatsapp|telegram/i.test(navigator.userAgent || '');
+  if ('serviceWorker' in navigator && !crawler) {
     window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
   }
 
