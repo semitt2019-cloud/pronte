@@ -1,0 +1,319 @@
+---
+// หน้าฮับ /packages/ — โปรเน็ตมือถือ AIS จากข้อมูลใน repo เท่านั้น
+import Base from '../../layouts/Base.astro';
+import PkgList from '../../components/PkgList.astro';
+import Faq from '../../components/Faq.astro';
+import { AIS, byDays, perDay, speedLabel } from '../../data/ais';
+import { NEW_SIM } from '../../data/newsim';
+import { MY_STYLE } from '../../data/mystyle';
+import { CONTACT, SITE, lineHref, telHref, ussd } from '../../config';
+import { breadcrumb, faqSchema, offersSchema } from '../../lib/seo';
+
+const path = '/packages/';
+const money = (n: number) => n.toLocaleString('th-TH');
+const priceRange = (prices: number[]) => {
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return min === max ? `${money(min)} บาท` : `${money(min)}–${money(max)} บาท`;
+};
+
+const dayGroups = [1, 2, 3, 7, 30].map((days) => ({
+  days,
+  items: byDays(days),
+  href: `/ais-${days}-day/`,
+}));
+const cheapest = [...AIS].sort((a, b) => a.price - b.price || a.days - b.days)[0];
+const travel = AIS.find((p) => p.code === '7719');
+if (!cheapest) throw new Error('ไม่มีโปรใน ais.ts');
+if (!travel) throw new Error('ไม่พบรหัส 7719 ใน ais.ts');
+
+const dayMatch = byDays(1).find((p) => p.net === travel.net && p.mbps === travel.mbps);
+const tripSave = dayMatch ? dayMatch.price * travel.days - travel.price : 0;
+
+const stylePriced = MY_STYLE.filter((m) => m.price != null);
+const styleOpen = MY_STYLE.filter((m) => m.price == null);
+const conditions = [...new Set(MY_STYLE.map((m) => m.condition))];
+const line = lineHref();
+const phone = CONTACT.phone.trim();
+
+const title = `โปรเน็ตมือถือ AIS ไม่อั้น ไม่ลดสปีด เริ่มต้น ${money(cheapest.price)} บาท`;
+const description = `รวมโปรเน็ตมือถือ AIS เติมเงิน ไม่อั้น ไม่ลดสปีด ราคารวมภาษี เริ่ม ${money(cheapest.price)} บาท เลือกโปร 1 วันถึง 30 วัน แพ็กซิมใหม่ และ MY STYLE พร้อมรหัสกดสมัคร`;
+const keywords = 'โปรเน็ตมือถือ, โปรเน็ต AIS, เน็ตไม่อั้น, เน็ตไม่ลดสปีด, สมัครโปรเน็ต, โปรเน็ตเติมเงิน';
+
+const faq: [string, string][] = [
+  [
+    'โปรเน็ตมือถือ AIS เริ่มต้นเท่าไหร่?',
+    `โปรถูกที่สุดในรายการนี้คือ ${money(cheapest.price)} บาท ใช้ได้ ${cheapest.days} วัน เน็ต ${cheapest.net} ${speedLabel(cheapest.mbps)} ไม่อั้น ไม่ลดสปีด กด ${ussd(cheapest.code)} ราคารวมภาษีและหักจากยอดเงินในซิม`,
+  ],
+  [
+    'สมัครต้องโหลดแอปไหม เงินหักจากไหน?',
+    'ไม่ต้องโหลดแอป กดรหัสบนหน้านี้แล้วโทรออกจากแป้นโทรศัพท์ ระบบหักเงินจากยอดในซิม AIS เติมเงิน ไม่มีการโอนเงิน ตรวจราคาใน SMS ยืนยันก่อนถือว่าสมัครสำเร็จ',
+  ],
+  [
+    'โปร 1 วัน ถึง 30 วัน ราคาเท่าไหร่?',
+    dayGroups.map((g) => `${g.days} วัน ${priceRange(g.items.map((p) => p.price))} (${g.items.length} โปร)`).join(' · '),
+  ],
+  [
+    'ไปเที่ยว 3 วัน ควรใช้โปรไหน?',
+    `รหัส ${travel.code} ราคา ${money(travel.price)} บาท ใช้ได้ ${travel.days} วัน เน็ต ${travel.net} ${speedLabel(travel.mbps)} ไม่อั้น${travel.bonus?.length ? ` ${travel.bonus.join(' ')}` : ''} กด ${ussd(travel.code)}`,
+  ],
+  [
+    'ซิมใหม่ใช้โปรชุดเดียวกับลูกค้าเดิมได้ไหม?',
+    `ไม่ได้ทั้งหมด แพ็กซิมใหม่มี ${NEW_SIM.length} แบบ ราคา ${priceRange(NEW_SIM.map((p) => p.price))} ต่อ 30 วัน สำหรับซิมใหม่หรือย้ายค่าย ลูกค้าเดิมสมัครโปรไม่อั้นไม่ลดสปีดในหมวดรายวันถึง 30 วัน`,
+  ],
+  [
+    'แพ็ก MY STYLE สมัครเพิ่มยังไง?',
+    `${stylePriced.map((m) => `รหัส ${m.code} ราคา ${m.priceText} (${m.condition})`).join(' ')} ${styleOpen.length ? `รหัส ${styleOpen.map((m) => m.code).join(' ')} ใบโปรไม่ได้พิมพ์ราคาแยก ตรวจยอดใน SMS ยืนยัน` : ''} รับได้ 1 รหัส และกดในวันเดียวกับวันที่สมัครแพ็กเน็ต`.replace(/\s+/g, ' '),
+  ],
+];
+
+const schema = [
+  breadcrumb([['หน้าแรก', '/'], ['โปรเน็ตมือถือ', path]]),
+  offersSchema('โปรเน็ตมือถือ AIS ไม่อั้น', AIS),
+  faqSchema(faq),
+];
+
+const hourNote = (days: number) => (days <= 2 ? ` (${days * 24} ชั่วโมง)` : '');
+---
+<Base title={title} description={description} keywords={keywords} schema={schema}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">หน้าแรก</a> › <span>โปรเน็ตมือถือ</span>
+  </nav>
+
+  <section class="hero">
+    <span class="eyebrow">AIS เติมเงิน · อัปเดต {SITE.updated}</span>
+    <h1>โปรเน็ตมือถือ AIS <em>ไม่อั้น ไม่ลดสปีด</em></h1>
+    <p>เน็ตเติมเงินไม่จำกัดปริมาณ ราคารวมภาษี เริ่มต้น {money(cheapest.price)} บาท กดรหัสสมัครได้ทันที ไม่ต้องโหลดแอป</p>
+    <div class="chips">
+      <span>ไม่จำกัดปริมาณ</span><span>ไม่ลดสปีด</span><span>ราคารวมภาษี</span>
+    </div>
+    <div class="hero-cta">
+      <a class="cta" href="#day-1">ดูโปรทั้งหมด</a>
+      <a class="cta-2" href={telHref(cheapest.code)} data-pkg={cheapest.code}>สมัครโปร {money(cheapest.price)} บาท</a>
+    </div>
+  </section>
+
+  <nav class="jumps" aria-label="หมวดโปร">
+    {dayGroups.map((g) => <a href={`#day-${g.days}`}>{g.days} วัน</a>)}
+    <a href="#new-sim">ซิมใหม่</a>
+    <a href="#my-style">MY STYLE</a>
+    <a href="#travel">เที่ยว {travel.days} วัน</a>
+  </nav>
+
+  {dayGroups.map((g) => (
+    <section id={`day-${g.days}`} class="block">
+      <h2>โปรเน็ต {g.days} วัน{hourNote(g.days)}</h2>
+      <p class="lead">{g.items.length} โปร · {priceRange(g.items.map((p) => p.price))} · ราคารวมภาษี</p>
+      <PkgList items={g.items} />
+      <p><a href={g.href}>คำแนะนำโปร {g.days} วัน →</a></p>
+    </section>
+  ))}
+
+  <section id="new-sim" class="block">
+    <h2>แพ็กซิมใหม่และย้ายค่าย</h2>
+    <p class="lead">{NEW_SIM.length} แพ็ก · {priceRange(NEW_SIM.map((p) => p.price))} ต่อ 30 วัน · สำหรับซิมใหม่หรือย้ายค่ายเบอร์เดิมมา AIS</p>
+    <div class="grid">
+      {NEW_SIM.map((p) => (
+        <article class:list={['card', { hot: Boolean(p.tag) }]}>
+          {p.tag && <span class="ribbon">{p.tag}</span>}
+          <div class="head">
+            <h3 class="price"><small>฿</small>{money(p.price)}<span>/30 วัน</span></h3>
+            <div class="gb"><b>{p.totalGB}GB</b><span>เน็ตรวม</span></div>
+          </div>
+          <ul>
+            {p.net.map((n) => <li>{n}</li>)}
+            <li>{p.after}</li>
+            <li>{p.call}</li>
+          </ul>
+          <div class="act">
+            <span class="dialbox"><code>{ussd(p.code)}</code></span>
+            <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+          </div>
+          <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a> · ราคารวมภาษี</div>
+        </article>
+      ))}
+    </div>
+    <p><a href="/ais-new-sim/">อ่านเงื่อนไขเปิดซิมใหม่ →</a></p>
+  </section>
+
+  <section id="my-style" class="block">
+    <h2>แพ็ก MY STYLE</h2>
+    <p class="lead">
+      {MY_STYLE.length} รหัส
+      {stylePriced.map((m) => ` · รหัส ${m.code} ${m.priceText}`)}
+      {styleOpen.length > 0 && ` · รหัส ${styleOpen.map((m) => m.code).join(' ')} ใบโปรไม่ได้พิมพ์ราคาแยก ตรวจใน SMS`}
+    </p>
+    <ul class="conds">
+      {conditions.map((c) => <li>{c} · รับได้ 1 รหัส</li>)}
+    </ul>
+    <div class="grid">
+      {MY_STYLE.map((p) => (
+        <article class:list={['card', { hot: p.price != null }]}>
+          {p.tag && <span class="ribbon">{p.tag}</span>}
+          <div class="head">
+            {p.price != null
+              ? <h3 class="price"><small>฿</small>{money(p.price)}<span>/เดือน</span></h3>
+              : <h3 class="price dur">{p.duration}</h3>}
+          </div>
+          <p class="name">{p.title}</p>
+          <p class="meta">{p.priceText}</p>
+          <ul>
+            {p.perks.filter((n) => n.length < 80).map((n) => <li>{n}</li>)}
+          </ul>
+          <p class="cond">{p.condition}</p>
+          <div class="act">
+            <span class="dialbox"><code>{ussd(p.code)}</code></span>
+            <a class="btn" href={telHref(p.code)} data-pkg={p.code}>กดสมัคร</a>
+          </div>
+          <div class="tax"><a href={`/packages/${p.code}/`}>รายละเอียดโปร {p.code} →</a>{p.price == null ? ' · ตรวจราคาใน SMS' : ' · ราคารวมภาษี'}</div>
+        </article>
+      ))}
+    </div>
+    <p><a href="/ais-my-style/">ดูเงื่อนไขแพ็ก MY STYLE →</a></p>
+  </section>
+
+  <section id="travel" class="block">
+    <h2>โปรเที่ยว {travel.days} วัน {money(travel.price)} บาท</h2>
+    <p class="lead">รหัส {travel.code} จากรายการโปรเติมเงิน ใช้ระหว่างทริปในประเทศ</p>
+    <article class="trip">
+      {travel.popular && <span class="ribbon">ยอดนิยม</span>}
+      <div class="trip-price"><small>฿</small>{money(travel.price)}</div>
+      <p class="trip-meta">{travel.days} วัน · {travel.net} {speedLabel(travel.mbps)} ไม่อั้น · เฉลี่ย {money(perDay(travel))} บาท/วัน</p>
+      {travel.bonus && <ul>{travel.bonus.map((b) => <li>{b}</li>)}</ul>}
+      {dayMatch && tripSave > 0 && <p class="save">ถูกกว่ากดโปร {money(dayMatch.price)} บาท {travel.days} ครั้ง อยู่ {money(tripSave)} บาท</p>}
+      <div class="act">
+        <span class="dialbox"><code>{ussd(travel.code)}</code></span>
+        <a class="btn" href={telHref(travel.code)} data-pkg={travel.code}>กดสมัคร</a>
+      </div>
+      <p class="tax"><a href={`/packages/${travel.code}/`}>รายละเอียดโปร {travel.code}</a> · <a href="/travel/">โปรเน็ตไปเที่ยว</a></p>
+    </article>
+  </section>
+
+  <section class="block" id="why">
+    <h2>ทำไมดูโปรที่โปรเน็ต</h2>
+    <div class="why">
+      <article><b>รวมโปรไว้ที่เดียว</b><span>รายวันถึง 30 วัน แพ็กซิมใหม่ และ MY STYLE อยู่ในหน้านี้</span></article>
+      <article><b>กดสมัครทันที</b><span>แต่ละโปรมีรหัสให้โทรออกจากปุ่มกดสมัคร</span></article>
+      <article><b>ไม่ต้องโหลดแอป</b><span>ใช้แป้นโทรศัพท์ของมือถือได้เลย</span></article>
+      <article><b>หักจากยอดในซิม</b><span>ไม่ต้องโอนเงิน สมัครแล้วตรวจราคาใน SMS อีกครั้ง</span></article>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>วิธีสมัคร</h2>
+    <ol>
+      <li>เช็กให้มียอดในซิมพอสำหรับราคาโปรที่เลือก</li>
+      <li>กดปุ่ม "กดสมัคร" หรือกดรหัสบนการ์ดแล้วโทรออก</li>
+      <li>รอ SMS ยืนยัน ตรวจราคาและจำนวนวันให้ตรง แล้วใช้งานได้ทันที</li>
+    </ol>
+    <p><a href="/chooser/">ยังไม่แน่ใจว่าโปรไหนเหมาะ →</a></p>
+  </section>
+
+  <Faq items={faq} />
+
+  <section class="block contact" id="contact">
+    <h2>ติดต่อ</h2>
+    <p>สอบถามโปรในหน้านี้ได้ทาง LINE การสมัครโปรหักจากยอดเงินในซิม</p>
+    <div class="hero-cta">
+      {line && <a class="cta line" href={line} target="_blank" rel="noopener">ทัก LINE</a>}
+      {phone && <a class="cta-2" href={`tel:${phone}`}>โทร {phone}</a>}
+      <a class="cta-2" href="#day-1">กลับไปเลือกโปร</a>
+    </div>
+  </section>
+
+  <div class="sticky">
+    <div class="sk">
+      <b>เริ่ม {money(cheapest.price)} บาท</b>
+      <span class="dialbox"><code>{ussd(cheapest.code)}</code></span>
+    </div>
+    <a href={telHref(cheapest.code)} data-pkg={cheapest.code}>กดสมัคร</a>
+  </div>
+</Base>
+
+<style>
+  .crumb { font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .block { scroll-margin-top: 120px; }
+  .hero {
+    position: relative; overflow: hidden; color: #fff; border-radius: 24px; padding: 28px 20px 24px;
+    background:
+      radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+    box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
+  }
+  .eyebrow { font-size: .78rem; letter-spacing: .4px; color: #fff7d6; display: inline-block; background: rgba(255,255,255,.18); padding: 3px 12px; border-radius: 999px; }
+  .hero h1 { font-size: 1.85rem; margin: 12px 0 10px; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
+  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .hero p { margin: 0 0 14px; color: rgba(255,255,255,.95); }
+  .chips, .jumps, .hero-cta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips { margin-bottom: 16px; }
+  .chips span, .jumps a {
+    font-size: .82rem; padding: 4px 12px; border-radius: 999px; text-decoration: none;
+  }
+  .chips span { color: #fff; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); }
+  .jumps { margin: 14px 0 4px; }
+  .jumps a { color: var(--ink); background: var(--card); border: 1px solid var(--line); }
+  .cta, .cta-2, .btn, .sticky a {
+    display: inline-block; text-align: center; font-weight: 600; text-decoration: none; border-radius: 12px;
+  }
+  .cta { background: #fff; color: var(--lime-ink); padding: 12px 18px; box-shadow: 0 10px 24px -10px rgba(30,70,10,.6); }
+  .cta-2 { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.55); color: #fff; padding: 12px 18px; }
+  .contact .cta-2 { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+  .line { background: #06c755; color: #fff; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .card, .trip {
+    position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column;
+  }
+  .card.hot, .trip { border: 1.5px solid transparent; background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(140deg, var(--lime-2), var(--lime) 50%, #f5c04a) border-box; }
+  .ribbon {
+    position: absolute; top: -11px; right: 16px; background: linear-gradient(140deg, #ffd36b, #f5a623); color: #5a3700;
+    font-size: .72rem; font-weight: 600; padding: 3px 12px; border-radius: 999px;
+  }
+  .head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  .price { font-size: 2rem; font-weight: 700; line-height: 1; margin: 6px 0 0; }
+  .price small { font-size: 1rem; color: var(--muted); font-weight: 500; margin-right: 2px; vertical-align: 8px; }
+  .price span { font-size: .8rem; color: var(--muted); font-weight: 500; margin-left: 3px; }
+  .price.dur { font-size: 1.35rem; color: var(--lime-ink); }
+  .gb { text-align: center; background: var(--lime-soft); color: var(--lime-ink); border-radius: 12px; padding: 6px 10px; min-width: 72px; }
+  .gb b { display: block; font-size: 1.15rem; line-height: 1.1; }
+  .gb span, .meta, .tax, .save { color: var(--muted); font-size: .8rem; }
+  .name { font-weight: 600; margin: 8px 0 0; }
+  .meta { margin: 0 0 6px; }
+  .card ul, .trip ul { list-style: none; padding: 0; margin: 10px 0; font-size: .92rem; flex: 1; }
+  .card li, .trip li { position: relative; padding-left: 18px; margin: 4px 0; }
+  .card li::before, .trip li::before { content: '✓'; position: absolute; left: 0; color: #5fae2e; font-weight: 700; }
+  .cond { margin: 0 0 12px; font-size: .82rem; color: #6b4600; background: #fdf6e3; border-radius: 12px; padding: 8px 10px; }
+  .act { display: flex; gap: 8px; align-items: stretch; }
+  .btn, .sticky a {
+    flex: none; display: grid; place-items: center; padding: 0 16px; color: #fff;
+    background: linear-gradient(140deg, var(--lime-2), var(--lime) 60%, #6aae2c);
+  }
+  .tax { text-align: right; margin-top: 8px; }
+  .trip-price { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+  .trip-price small { font-size: 1.1rem; color: var(--muted); margin-right: 2px; }
+  .trip-meta { margin: 8px 0; }
+  .save { margin: 0 0 12px; }
+  .why { display: grid; gap: 10px; }
+  .why article, .conds { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow); }
+  .why article { display: grid; gap: 2px; }
+  .why span { color: var(--muted); font-size: .92rem; }
+  .conds { margin: 0 0 14px; }
+  .sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid var(--line);
+  }
+  .sk { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .sk b { font-size: .85rem; line-height: 1.2; }
+  .sticky a { padding: 10px 18px; }
+  @media (min-width: 760px) {
+    .hero { padding: 40px 36px; }
+    .hero h1 { font-size: 2.4rem; }
+    .why { grid-template-columns: 1fr 1fr; }
+    .sticky { display: none; }
+  }
+  :global(body) { padding-bottom: 74px; }
+  @media (min-width: 760px) { :global(body) { padding-bottom: 0; } }
+</style>
