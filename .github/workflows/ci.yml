@@ -1,0 +1,88 @@
+# Build the site on pull requests to main, then squash-merge only when the PR
+# carries the "automerge" label. Other pull requests stay open.
+#
+# Gate the merge on this workflow's build job only. "Workers Builds: pronte"
+# fails on every branch except main (no preview builds), so do not use GitHub
+# native auto-merge and do not wait for the combined check rollup.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and check USSD codes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Every /packages/ USSD code contains 441605
+        run: node scripts/check-packages-ussd.mjs
+
+  automerge:
+    name: Squash-merge if labeled automerge
+    needs: build
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(github.event.pull_request.labels.*.name, 'automerge')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # contents + pull-requests only. `workflows` is not a valid GITHUB_TOKEN
+    # scope and makes GitHub reject the whole file before any job starts.
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Squash-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          meta=$(gh pr view "$PR" --json state,mergedAt,labels)
+          echo "$meta"
+          if [ "$(echo "$meta" | jq -r '.mergedAt // empty')" != "" ]; then
+            echo "Already merged."
+            exit 0
+          fi
+          if ! echo "$meta" | jq -e '.labels[].name | select(. == "automerge")' >/dev/null; then
+            echo "automerge label is not on the pull request. Leaving it open."
+            exit 0
+          fi
+          echo "CI build passed. Merging without waiting for other checks (Workers Builds: pronte fails off main)."
+          ready=0
+          for _ in 1 2 3 4 5 6; do
+            state=$(gh pr view "$PR" --json mergeStateStatus,mergeable --jq '"\(.mergeStateStatus) \(.mergeable)"')
+            echo "merge state: $state"
+            case "$state" in
+              CLEAN*|UNSTABLE*|BEHIND*|HAS_HOOKS*) ready=1; break ;;
+              UNKNOWN*) sleep 5 ;;
+              *) echo "Refusing to merge from state: $state"; exit 1 ;;
+            esac
+          done
+          if [ "$ready" != 1 ]; then
+            echo "Merge state stayed unknown."
+            exit 1
+          fi
+          title=$(gh pr view "$PR" --json title --jq .title)
+          body=$(gh pr view "$PR" --json body --jq '.body // ""')
+          head=$(gh pr view "$PR" --json headRefOid --jq .headRefOid)
+          jq -n --arg title "$title" --arg body "$body" --arg sha "$head" \
+            '{merge_method:"squash", commit_title:$title, commit_message:$body, sha:$sha}' \
+            | gh api --method PUT "repos/${GH_REPO}/pulls/${PR}/merge" --input -

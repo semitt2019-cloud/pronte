@@ -10,6 +10,7 @@ import { MY_STYLE } from '../data/mystyle';
 
 export const ALL_ROUTES: string[] = [
   '/',
+  '/packages/',
   '/chooser/',
   '/speed-guide/',
   '/ais-shortcodes/',
