@@ -35,6 +35,18 @@ export const CATEGORIES: Record<string, { label: string; hub: string; hubLabel: 
 };
 export const catOf = (p: Post) => p.meta.category ?? 'newsim';
 
+/** คู่มือเลือกโปรที่เขียนจากข้อมูลแพ็กจริง เรียงตามทางที่ควรอ่าน */
+export const KEYWORD_GUIDES = [
+  'ais-prepaid-internet',
+  'ais-daily-pack',
+  'ais-unlimited-fixed',
+  'subscribe-ais-internet',
+  'ais-weekly-pack',
+  'ais-monthly-prepaid',
+  'ais-new-sim-pack',
+  'ais-travel-abroad',
+] as const;
+
 /** ประมาณเวลาอ่าน (ภาษาไทย ~ 500 ตัวอักษร/นาที) */
 export function readMinutes(html: string): number {
   const text = html.replace(/<[^>]+>/g, '').replace(/\s+/g, '');

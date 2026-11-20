@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /sw.js
 
 Sitemap: https://pronetmobile.com/sitemap-index.xml

@@ -10,6 +10,7 @@ import GearBox from '../../components/GearBox.astro';
 import { GEAR_POSTS } from '../../data/affiliates';
 import { POSTS, readMinutes, thaiDate, CATEGORIES, catOf, type Post } from '../../lib/blog';
 import { faqSchema, breadcrumb } from '../../lib/seo';
+import { expandPost } from '../../lib/post-tokens';
 import { SITE } from '../../config';
 import { NEW_SIM } from '../../data/newsim';
 import { ussd, telHref } from '../../config';
@@ -22,7 +23,9 @@ const { meta, mod, slug } = post;
 const path = `/blog/${slug}/`;
 const cat = catOf(post);
 const C = CATEGORIES[cat];
-const html: string = (await mod.compiledContent()).replace(/<img /g, '<img loading="lazy" decoding="async" width="1200" height="675" ');
+const html: string = expandPost((await mod.compiledContent()).replace(/<img /g, '<img loading="lazy" decoding="async" width="1200" height="675" '));
+const summary = expandPost(meta.summary);
+const faq = meta.faq?.map(([q, a]) => [expandPost(q), expandPost(a)] as [string, string]);
 const minutes = readMinutes(html);
 const toc = mod.getHeadings().filter((h) => h.depth === 2);
 
@@ -51,7 +54,7 @@ const schema = [
     author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
     publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icons/icon-512.png', SITE.url).href } },
   },
-  ...(meta.faq?.length ? [faqSchema(meta.faq)] : []),
+  ...(faq?.length ? [faqSchema(faq)] : []),
 ];
 ---
 <Base title={meta.title} description={meta.description} schema={schema} image={image} ogType="article">
@@ -68,7 +71,7 @@ const schema = [
       </p>
     </header>
 
-    <section class="answer"><b>สรุปสั้น:</b> <Fragment set:html={meta.summary} /></section>
+    <section class="answer"><b>สรุปสั้น:</b> <Fragment set:html={summary} /></section>
 
     {toc.length > 2 && (
       <nav class="toc" aria-label="สารบัญ">
@@ -85,7 +88,7 @@ const schema = [
     </div>
   </article>
 
-  {meta.faq?.length && <Faq items={meta.faq} />}
+  {faq?.length && <Faq items={faq} />}
 
   {cat === 'guide'
     ? <GuideCta heading="เลือกโปรเน็ตไม่อั้นที่พอดีกับการใช้งาน" codes={['7017', '7381', '7721', '7629', '7789', '7790']} />

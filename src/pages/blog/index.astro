@@ -2,10 +2,14 @@
 // หน้ารวมบทความ
 import Base from '../../layouts/Base.astro';
 import NewSimCta from '../../components/NewSimCta.astro';
-import { POSTS, thaiDate, CATEGORIES, catOf } from '../../lib/blog';
+import { POSTS, thaiDate, CATEGORIES, catOf, KEYWORD_GUIDES } from '../../lib/blog';
 import { breadcrumb } from '../../lib/seo';
 import { SITE } from '../../config';
 
+const guides = KEYWORD_GUIDES.flatMap((slug) => {
+  const post = POSTS.find((p) => p.slug === slug);
+  return post ? [post] : [];
+});
 const title = 'บทความโปรเน็ต AIS ความรู้เน็ตมือถือ เปิดซิมใหม่ และเน็ตนักเรียน';
 const groups = (['guide', 'students', 'newsim'] as const).map((k) => ({ key: k, ...CATEGORIES[k], posts: POSTS.filter((p) => catOf(p) === k) })).filter((g) => g.posts.length);
 const description = 'รวมบทความโปรเน็ต AIS ความรู้เน็ตมือถือ แก้เน็ตช้า ตั้งค่า APN 5G เรื่องเปิดซิมใหม่ ลงทะเบียน แก้ปัญหาซิม และบทความสำหรับนักเรียน นักศึกษา เรียนออนไลน์ใช้เน็ตเท่าไร ประหยัดเน็ตยังไง อ่านง่าย ทำตามได้ทันที';
@@ -23,6 +27,19 @@ const schema = [
     <h1>บทความโปรเน็ต AIS</h1>
     <p>ทุกเรื่องที่ต้องรู้ ตั้งแต่แก้เน็ตช้า ตั้งค่าเน็ต เปิดซิมใหม่ จนถึงใช้เน็ตให้คุ้มสำหรับนักเรียน นักศึกษา</p>
   </section>
+
+  <h2>คู่มือเลือกโปร</h2>
+  <div class="list">
+    {guides.map((p, i) => (
+      <a class="post" href={`/blog/${p.slug}/`}>
+        <span class="n">{String(i + 1).padStart(2, '0')}</span>
+        <div>
+          <b>{p.meta.h1}</b>
+          <p>{p.meta.description}</p>
+        </div>
+      </a>
+    ))}
+  </div>
 
   <nav class="chips" aria-label="หมวดบทความ">
     {groups.map((g) => <a href={`#${g.key}`}>{g.key === 'students' ? '🎓 ' : g.key === 'guide' ? '📶 ' : ''}{g.label} <small>{g.posts.length}</small></a>)}

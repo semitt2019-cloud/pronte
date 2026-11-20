@@ -79,5 +79,10 @@ self.addEventListener('fetch', (event) => {
   })));
 });
 `;
-  return new Response(js, { headers: { 'Content-Type': 'application/javascript; charset=utf-8' } });
+  return new Response(js, {
+    headers: {
+      'Content-Type': 'application/javascript; charset=utf-8',
+      'X-Robots-Tag': 'noindex',
+    },
+  });
 };

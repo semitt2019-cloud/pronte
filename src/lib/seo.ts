@@ -29,7 +29,14 @@ export function offersSchema(name: string, items: Pkg[]) {
         image: PRODUCT_IMAGE,
         name: `เน็ต AIS ${p.net} ${p.mbps < 1 ? Math.round(p.mbps * 1024) + ' Kbps' : p.mbps + ' Mbps'} ไม่อั้น ${p.days} วัน`,
         brand: { '@type': 'Brand', name: 'AIS' },
-        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'THB', availability: 'https://schema.org/InStock' },
+        url: new URL(`/packages/${p.code}/`, SITE.url).href,
+        offers: {
+          '@type': 'Offer',
+          url: new URL(`/packages/${p.code}/`, SITE.url).href,
+          price: p.price,
+          priceCurrency: 'THB',
+          availability: 'https://schema.org/InStock',
+        },
       },
     })),
   };
@@ -43,7 +50,7 @@ export function breadcrumb(pairs: [string, string][]) {
       '@type': 'ListItem',
       position: i + 1,
       name,
-      item: new URL(path, SITE.url).href,
+      item: new URL(path.replace(/#.*$/, '') || '/', SITE.url).href,
     })),
   };
 }
