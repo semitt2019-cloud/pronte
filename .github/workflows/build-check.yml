@@ -1,0 +1,33 @@
+# Build check for every push and pull request on any branch.
+# Branch protection on main requires the "Build site (npm run build)" job,
+# so only code that builds can reach main and the Cloudflare production deploy.
+name: Build check
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-check-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site (npm run build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check build output exists
+        run: test -f dist/index.html
