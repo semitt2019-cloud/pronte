@@ -82,7 +82,7 @@ const schema = [
 
     <div class="prose">
       <Fragment set:html={firstHalf} />
-      {cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : <NewSimCta />}
+      {cat !== 'travel' && (cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : <NewSimCta />)}
       <Fragment set:html={secondHalf} />
       {GEAR_POSTS.includes(slug) && <GearBox />}
     </div>
@@ -90,7 +90,7 @@ const schema = [
 
   {faq?.length && <Faq items={faq} />}
 
-  {cat === 'guide'
+  {cat === 'travel' ? <p class="answer"><a href="/travel/">ดูโปรเน็ตสำหรับทริปในประเทศ →</a> · <a href="/chooser/">ช่วยเลือกโปรตามการใช้งาน</a></p> : cat === 'guide'
     ? <GuideCta heading="เลือกโปรเน็ตไม่อั้นที่พอดีกับการใช้งาน" codes={['7017', '7381', '7721', '7629', '7789', '7790']} />
     : <NewSimCta heading="พร้อมแล้ว? เลือกแพ็กเน็ตให้ซิมใหม่เลย" text="กดปุ่มสมัคร มือถือจะโทรออกด้วยรหัสสมัครให้ทันที รอ SMS ยืนยันจาก AIS แล้วตอบรับตามขั้นตอน" />}
 
@@ -103,7 +103,7 @@ const schema = [
     </>
   )}
 
-  <h2>{cat === 'students' ? 'บทความอื่นสำหรับนักเรียน นักศึกษา' : 'บทความอื่นเกี่ยวกับซิมใหม่'}</h2>
+  {others.length > 0 && <h2>{cat === 'travel' ? 'บทความเที่ยวและเตรียมเน็ต' : cat === 'students' ? 'บทความอื่นสำหรับนักเรียน นักศึกษา' : cat === 'guide' ? 'บทความความรู้เน็ตมือถือ' : 'บทความอื่นเกี่ยวกับซิมใหม่'}</h2>}
   <div class="cards">
     {others.map((p) => (
       <a class="pc" href={`/blog/${p.slug}/`}><b>{p.meta.h1}</b><span>{p.meta.description.slice(0, 70)}…</span></a>
@@ -118,7 +118,7 @@ const schema = [
   <p class="small">ข้อมูลอาจเปลี่ยนแปลงตามประกาศของผู้ให้บริการและ กสทช. ตรวจเงื่อนไขใน SMS ยืนยันก่อนสมัครทุกครั้ง · เว็บนี้ไม่ใช่เว็บไซต์ทางการของ AIS</p>
 
   <div class="sticky">
-    {cat === 'guide' ? (<>
+    {cat === 'travel' ? (<><div>เตรียมเน็ตก่อนเที่ยว</div><a href="/travel/">ดูตัวเลือก</a></>) : cat === 'guide' ? (<>
       <div><b>เน็ตไม่อั้น</b> {daily.price}฿ 1 วัน 4 Mbps</div>
       <a href={telHref(daily.code)} data-pkg={daily.code} aria-label={`สมัคร ${ussd(daily.code)}`}>กดสมัคร</a>
     </>) : (<>
@@ -147,6 +147,8 @@ const schema = [
   .toc a:hover { text-decoration: underline; }
 
   .prose { font-size: 1.02rem; line-height: 1.85; }
+  .prose :global(figure) { margin: 18px 0; }
+  .prose :global(figcaption) { color: var(--muted); font-size: .8rem; line-height: 1.6; }
   .prose :global(h2) { scroll-margin-top: 120px; }
   .prose :global(h3) { margin: 22px 0 6px; font-size: 1.1rem; }
   .prose :global(p) { margin: 10px 0; }

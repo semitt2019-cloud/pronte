@@ -12,7 +12,7 @@ export type PostMeta = {
   date: string;         // วันที่เผยแพร่ YYYY-MM-DD
   updated?: string;     // วันที่แก้ล่าสุด YYYY-MM-DD
   order: number;        // ลำดับในหน้ารวมบทความ
-  category?: 'newsim' | 'students' | 'guide'; // หมวด (ไม่ใส่ = เปิดซิมใหม่, guide = ความรู้เน็ต AIS)
+  category?: 'newsim' | 'students' | 'guide' | 'travel'; // หมวด (ไม่ใส่ = เปิดซิมใหม่, guide = ความรู้เน็ต AIS)
   summary: string;      // กล่อง "สรุปสั้น" ด้านบน (ตอบคำถามทันที)
   image?: string;       // รูปแชร์ 1200x630
   faq?: [string, string][];
@@ -31,6 +31,7 @@ export const POSTS: Post[] = Object.entries(files)
 export const CATEGORIES: Record<string, { label: string; hub: string; hubLabel: string }> = {
   newsim: { label: 'เปิดซิมใหม่ AIS', hub: '/ais-new-sim/', hubLabel: 'เปิดซิมใหม่ AIS' },
   students: { label: 'นักเรียน นักศึกษา', hub: '/students/', hubLabel: 'โปรเน็ตนักเรียน นักศึกษา' },
+  travel: { label: 'เที่ยวและเตรียมเน็ต', hub: '/travel/', hubLabel: 'โปรเน็ตไปเที่ยว' },
   guide: { label: 'ความรู้เน็ต AIS', hub: '/blog/#guide', hubLabel: 'บทความความรู้เน็ต AIS' },
 };
 export const catOf = (p: Post) => p.meta.category ?? 'newsim';
