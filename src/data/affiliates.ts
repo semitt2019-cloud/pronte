@@ -122,5 +122,8 @@ export const SHOPEE = {
 /** บทความที่แสดงกล่องอุปกรณ์เสริม */
 export const GEAR_POSTS = ['pocket-wifi-sim', 'share-hotspot-roommates', 'hotspot-laptop-for-study'];
 
+/** บทความสถานที่ท่องเที่ยวที่แสดงกล่อง Trip.com (จองที่พัก) */
+export const TRIP_BLOG_POSTS = ['ayutthaya-one-day', 'hua-hin-one-day'];
+
 /** หน้าโปรที่แสดงกล่อง Trip.com (หน้า /[slug]/ และ /pro/[slug]/) */
 export const TRIP_PAGES = ['ais-2-day', 'ais-3-day', 'ais-70-baht-2-day', 'ais-105-baht-3-day'];

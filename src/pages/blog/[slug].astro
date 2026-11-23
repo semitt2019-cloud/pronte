@@ -7,7 +7,8 @@ import StudentCta from '../../components/StudentCta.astro';
 import GuideCta from '../../components/GuideCta.astro';
 import { AIS } from '../../data/ais';
 import GearBox from '../../components/GearBox.astro';
-import { GEAR_POSTS } from '../../data/affiliates';
+import TripAd from '../../components/TripAd.astro';
+import { GEAR_POSTS, TRIP_BLOG_POSTS } from '../../data/affiliates';
 import { POSTS, readMinutes, thaiDate, CATEGORIES, catOf, type Post } from '../../lib/blog';
 import { faqSchema, breadcrumb } from '../../lib/seo';
 import { expandPost } from '../../lib/post-tokens';
@@ -84,6 +85,7 @@ const schema = [
       <Fragment set:html={firstHalf} />
       {cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : cat === 'travel' ? <GuideCta heading="เลือกโปรเน็ตไม่อั้นสำหรับทริปนี้" codes={['7721', '7629', '7789']} /> : <NewSimCta />}
       <Fragment set:html={secondHalf} />
+      {TRIP_BLOG_POSTS.includes(slug) && <TripAd />}
       {GEAR_POSTS.includes(slug) && <GearBox />}
     </div>
   </article>

@@ -17,3 +17,12 @@ koh-poda-beach-krabi.jpg
 วันที่ถ่าย: 2007-03-03
 ตรวจสิทธิ์: 2026-11-23
 ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+hua-hin-beach.jpg
+ชื่อเดิม: 02 Hua Hin Beach.jpg
+ผู้ถ่าย: Elmschrat
+ต้นทาง: https://commons.wikimedia.org/wiki/File:02_Hua_Hin_Beach.jpg
+ใบอนุญาต: https://creativecommons.org/publicdomain/zero/1.0/ (CC0 ไม่บังคับให้เครดิต)
+วันที่ถ่าย: 2024-11-23
+ตรวจสิทธิ์: 2026-11-23
+ใช้ไฟล์ย่อขนาด 1280 × 964 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
