@@ -1,0 +1,18 @@
+---
+import { PHONE_SHOPS } from '../data/affiliates';
+const shops = PHONE_SHOPS.filter(s => ['TG Fone', 'COMPASIA'].includes(s.name));
+---
+<aside class="phone-ad" aria-label="โฆษณาร้านมือถือ">
+  <small>โฆษณา · ลิงก์ Affiliate</small>
+  <h2>เปรียบเทียบเครื่องใหม่และมือสอง</h2>
+  <p>เว็บไซต์อาจได้รับค่าคอมมิชชันเมื่อซื้อผ่านลิงก์นี้ โปรดตรวจราคาสุทธิ สภาพเครื่อง การรับประกัน และเงื่อนไขคืนสินค้าบนหน้าร้านก่อนสั่งซื้อ</p>
+  <div class="shops">
+    {shops.map(shop => <a href={shop.extra.find(e => e.label === 'iPhone')?.link ?? shop.link} target="_blank" rel="sponsored noopener">{shop.name === 'TG Fone' ? 'ดู iPhone เครื่องใหม่ที่ TG Fone' : 'ดูมือถือมือสองที่ COMPASIA'} →</a>)}
+  </div>
+</aside>
+<style>
+  .phone-ad { margin:22px 0; padding:20px; border:1px solid var(--line); border-radius:18px; background:var(--card); }
+  small { color:var(--muted); } h2 { font-size:1.2rem; margin:10px 0; } p { color:var(--muted); }
+  .shops { display:flex; flex-wrap:wrap; gap:12px; }
+  a { display:block; padding:12px 16px; border-radius:12px; background:#f57c00; color:#fff; font-weight:600; text-decoration:none; }
+</style>
