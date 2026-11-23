@@ -6,6 +6,7 @@ keyword: "เที่ยว 3 วัน 2 คืน ใช้เน็ตกี
 date: "2026-11-23"
 order: 67
 category: "guide"
+image: "/images/travel/koh-poda-beach-krabi.jpg"
 summary: "ทริป 3 วัน 2 คืน: <b>สายชิล</b> (แผนที่ + แชท) ใช้เน็ตราว <b>1 GB</b>, <b>สายโซเชียล</b> (+ไถฟีด โพสต์รูป) ราว <b>2-3 GB</b>, <b>สายดูวิดีโอ</b> (+ดูคลิปที่โรงแรม) ราว <b>5-7 GB</b> ตลอดทริป โปรเน็ต AIS แบบ 3 วันราคา 105-130 บาทครอบคลุมได้ทั้งสามสาย ไม่ต้องกลัวเน็ตหมดกลางทาง"
 faq:
   - ["เที่ยว 3 วัน 2 คืน ใช้เน็ตกี่ GB?", "ถ้าไม่ดูวิดีโอใช้ราว 1 GB ถ้าเล่นโซเชียลด้วยราว 2-3 GB และถ้าดูวิดีโอที่โรงแรมด้วยราว 5-7 GB ตลอดทริป"]
@@ -22,6 +23,11 @@ sources:
   - ["BetterRoaming: How Much Data Does Google Maps Use", "https://www.betterroaming.com/blog/esim-data-plans/how-much-data-does-google-maps-use/"]
   - ["Netflix Help Center: How to control how much data Netflix uses", "https://help.netflix.com/en/node/87/us"]
 ---
+
+<figure>
+<img src="/images/travel/koh-poda-beach-krabi.jpg" alt="หาดทรายขาวที่เกาะปอดะ กระบี่ จุดหมายทริปสั้น ๆ 3 วัน 2 คืนยอดนิยม" />
+<figcaption>หาดทรายขาวที่เกาะปอดะ กระบี่ — ภาพโดย <a href="https://commons.wikimedia.org/wiki/File:White_sand_beach,_Koh_Poda_tropical_archipelago,_Krabi,_Thailand.jpg">Vyacheslav Argenberg / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · ภาพถ่าย 3 มีนาคม 2550 ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัด</figcaption>
+</figure>
 
 เตรียมตัวเที่ยว 3 วัน 2 คืน หลายคนกังวลเรื่องเดียวกัน คือ **เน็ตจะพอไหม** บทความนี้แยกการใช้งานทริปจริงออกเป็น 3 สาย พร้อมตัวเลข GB โดยประมาณ จะได้เลือกโปรเน็ตได้พอดี ไม่ซื้อเกินความจำเป็นหรือซื้อน้อยไปจนเน็ตหมดกลางทาง
 
