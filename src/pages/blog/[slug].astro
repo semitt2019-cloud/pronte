@@ -82,7 +82,7 @@ const schema = [
 
     <div class="prose">
       <Fragment set:html={firstHalf} />
-      {cat !== 'travel' && (cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : <NewSimCta />)}
+      {cat === 'students' ? <StudentCta /> : cat === 'guide' ? <GuideCta /> : cat === 'travel' ? <GuideCta heading="เลือกโปรเน็ตไม่อั้นสำหรับทริปนี้" codes={['7721', '7629', '7789']} /> : <NewSimCta />}
       <Fragment set:html={secondHalf} />
       {GEAR_POSTS.includes(slug) && <GearBox />}
     </div>
