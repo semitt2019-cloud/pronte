@@ -215,3 +215,88 @@ uthai-thani.jpg
 วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+# เครดิตภาพ
+
+ayutthaya-wat-mahathat.jpg
+ชื่อเดิม: Wat Mahathat, Ayutthaya 20231230 (II).jpg
+ผู้ถ่าย: Supanut Arunoprayote
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Mahathat,_Ayutthaya_20231230_(II).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2023-12-30
+ตรวจสิทธิ์: 2026-11-23
+ใช้ไฟล์ย่อขนาด 1280 × 720 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+koh-poda-beach-krabi.jpg
+ชื่อเดิม: White sand beach, Koh Poda tropical archipelago, Krabi, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:White_sand_beach,_Koh_Poda_tropical_archipelago,_Krabi,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2007-03-03
+ตรวจสิทธิ์: 2026-11-23
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+hua-hin-beach.jpg
+ชื่อเดิม: 02 Hua Hin Beach.jpg
+ผู้ถ่าย: Elmschrat
+ต้นทาง: https://commons.wikimedia.org/wiki/File:02_Hua_Hin_Beach.jpg
+ใบอนุญาต: https://creativecommons.org/publicdomain/zero/1.0/ (CC0 ไม่บังคับให้เครดิต)
+วันที่ถ่าย: 2024-11-23
+ตรวจสิทธิ์: 2026-11-23
+ใช้ไฟล์ย่อขนาด 1280 × 964 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chanthaburi-riverside.jpg
+ชื่อเดิม: Chanthaburi Riverside.jpg
+ผู้ถ่าย: Travelpleb
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Chanthaburi_Riverside.jpg
+ใบอนุญาต: สาธารณสมบัติ (Public domain) ไม่บังคับให้เครดิต ใส่ไว้เพื่อความโปร่งใส
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 × 1707 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+trat-ko-chang-road.jpg
+ชื่อเดิม: Ko Chang Long Beach Road.jpg
+ผู้ถ่าย: Khaosaming
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Ko_Chang_Long_Beach_Road.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 ไม่ครอบตัดหรือปรับสี
+
+rayong-ko-samet-port.jpg
+ชื่อเดิม: Ko Samet - Port.jpg
+ผู้ถ่าย: PA
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Ko_Samet_-_Port.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chonburi-sanctuary-of-truth.jpg
+ชื่อเดิม: Sanctuary of Truth Pattaya.jpg
+ผู้ถ่าย: Nvedi
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Sanctuary_of_Truth_Pattaya.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 × 1600 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chachoengsao-wat-sothon.jpg
+ชื่อเดิม: Wat sothorn 11.jpg
+ผู้ถ่าย: Khunkay
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_sothorn_11.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 ไม่ครอบตัดหรือปรับสี
+
+prachinburi-khao-yai-elephants.jpg
+ชื่อเดิม: Wild Asian elephants at Khao Yai NP.JPG
+ผู้ถ่าย: Mammalwatcher
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wild_Asian_elephants_at_Khao_Yai_NP.JPG
+ใบอนุญาต: CC0 (สาธารณสมบัติ)
+หมายเหตุ: ถ่ายในพื้นที่อุทยานแห่งชาติเขาใหญ่ ซึ่งส่วนใหญ่อยู่ในนครราชสีมา ไม่ได้ถ่ายในปราจีนบุรีโดยตรง
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 ไม่ครอบตัดหรือปรับสี
+
+sa-kaeo-countryside.jpg
+ชื่อเดิม: Countryside in the Srakaeo Province.JPG
+ผู้ถ่าย: Jose A. Garcia (U.S. Marine Corps)
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Countryside_in_the_Srakaeo_Province.JPG
+ใบอนุญาต: สาธารณสมบัติ (Public domain)
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
