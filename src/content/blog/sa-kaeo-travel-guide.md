@@ -6,7 +6,7 @@ keyword: "เที่ยวสระแก้ว"
 date: "2026-11-24"
 order: 108
 category: "travel"
-image: "/images/travel/sa-kaeo-countryside.jpg"
+image: "/images/travel/prasat-sdok-kok-thom.jpg"
 summary: "เส้นทางแนะนำ 2 วัน 1 คืน: วันแรกอุทยานแห่งชาติตาพระยาและทิวทัศน์ป่า วันที่สองปราสาทสดกกธม เผื่อเวลาเดินทางจากกรุงเทพฯ ราว 4 ชั่วโมง และตรวจสถานะเส้นทางบริเวณชายแดนก่อนออกเดินทาง คู่มือนี้เรียบเรียงจากแหล่งข้อมูล ไม่ใช่รีวิวจากการลงพื้นที่"
 faq:
   - ["เที่ยวสระแก้วควรไปกี่วัน?", "แนะนำ 2 วัน 1 คืน เพื่อเผื่อเวลาเดินทางไกลและแวะอุทยานกับปราสาทให้ไม่รีบ"]
@@ -18,13 +18,13 @@ related:
   - ["ช่วยเลือกโปรให้เหมาะกับการใช้งาน", "/chooser/"]
   - ["เที่ยว 3 วัน 2 คืน เตรียมเน็ตกี่ GB ถึงพอ", "/blog/how-many-gb-for-3-day-trip/"]
 sources:
-  - ["Wikimedia Commons: Countryside in the Srakaeo Province", "https://commons.wikimedia.org/wiki/File:Countryside_in_the_Srakaeo_Province.JPG"]
+  - ["Wikimedia Commons: Prasat Sdok Kok Thom", "https://commons.wikimedia.org/wiki/File:Prasat_Sdok_Kok_Thom-007.jpg"]
   - ["การท่องเที่ยวแห่งประเทศไทย: สระแก้ว", "https://www.tourismthailand.org/Destinations/Provinces/Sa-Kaeo/467"]
 ---
 
 <figure>
-<img src="/images/travel/sa-kaeo-countryside.jpg" alt="ทิวทัศน์ชนบทในจังหวัดสระแก้ว" />
-<figcaption>ทิวทัศน์ชนบทในจังหวัดสระแก้ว — ภาพโดย Jose A. Garcia (U.S. Marine Corps), <a href="https://commons.wikimedia.org/wiki/File:Countryside_in_the_Srakaeo_Province.JPG">Wikimedia Commons</a>, สาธารณสมบัติ (Public domain) · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัด</figcaption>
+<img src="/images/travel/prasat-sdok-kok-thom.jpg" alt="ปราสาทสดกกธม จังหวัดสระแก้ว" />
+<figcaption>ปราสาทสดกกธม จังหวัดสระแก้ว — ภาพโดย Ddalbiez, <a href="https://commons.wikimedia.org/wiki/File:Prasat_Sdok_Kok_Thom-007.jpg">Wikimedia Commons</a>, CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/) · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัด</figcaption>
 </figure>
 
 สระแก้วเป็นจังหวัดทางตะวันออกที่ติดชายแดนกัมพูชา เที่ยวเน้นธรรมชาติและโบราณสถาน บทความนี้จัดเส้นทาง 2 วัน 1 คืนไปอุทยานแห่งชาติตาพระยาและปราสาทสดกกธม พร้อมเช็กลิสต์มือถือ โดยไม่ใส่ราคาหรือเวลาเปิด-ปิดที่ยังไม่ได้ตรวจยืนยัน

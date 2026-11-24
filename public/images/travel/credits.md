@@ -471,3 +471,19 @@ yasothon.jpg
 วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 × 914 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+prasat-sdok-kok-thom.jpg
+ชื่อเดิม: Prasat Sdok Kok Thom-007.jpg
+ผู้ถ่าย: Ddalbiez
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Prasat_Sdok_Kok_Thom-007.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1920 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chanthaburi-phlio-waterfall.jpg
+ชื่อเดิม: Phlio Waterfall and rocky stream Chanthaburi.jpg
+ผู้ถ่าย: PloyAquamarine
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phlio_Waterfall_and_rocky_stream_Chanthaburi.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1956 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
