@@ -487,3 +487,12 @@ chanthaburi-phlio-waterfall.jpg
 ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 × 1956 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+sing-buri-bang-rachan.jpg
+ชื่อเดิม: Singburi Monument of Bang Rachan Heroes 1.jpg
+ผู้ถ่าย: Mr.Peerapong Prasutr
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Singburi_Monument_of_Bang_Rachan_Heroes_1.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2015-01-27
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
