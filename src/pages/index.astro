@@ -123,13 +123,16 @@ const faq: [string, string][] = [
 <style>
   .package-jumps { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
   .package-jumps a { padding:8px 14px; border:1px solid var(--line); border-radius:999px; color:var(--lime-ink); text-decoration:none; background:var(--card); }
+  .hero .eyebrow, .hero .chips span { color:#173d0d; background:rgba(255,255,255,.65); }
+  .hero p { color:#173d0d !important; }
+  .hero h1 { text-shadow:none !important; }
   h2[id] { scroll-margin-top:90px; }
   .hero {
-    position: relative; overflow: hidden; color: #fff; border-radius: 24px;
+    position: relative; overflow: hidden; color: #173d0d; border-radius: 24px;
     padding: 32px 24px 28px; margin-top: 4px;
     background:
       radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 60%),
-      linear-gradient(135deg, #a6d84e 0%, #7fbf35 45%, #4f9e24 100%);
+      linear-gradient(135deg, #ceef69 0%, #a8df43 45%, #86c937 100%);
     box-shadow: 0 22px 40px -22px rgba(79,158,36,.75);
   }
   .hero::after {
@@ -138,7 +141,7 @@ const faq: [string, string][] = [
   }
   .eyebrow { font-size: .78rem; letter-spacing: 1.5px; color: #fff7d6; display: inline-block; background: rgba(255,255,255,.18); padding: 3px 12px; border-radius: 999px; text-transform: uppercase; font-weight: 500; }
   .hero h1 { font-size: 2rem; margin: 12px 0 12px; position: relative; z-index: 1; text-shadow: 0 2px 10px rgba(40,90,10,.25); }
-  .hero h1 em { font-style: normal; color: #fff6c2; }
+  .hero h1 em { font-style: normal; color: #244b0c; }
   .hero p { color: rgba(255,255,255,.95); margin: 0 0 16px; max-width: 520px; position: relative; z-index: 1; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
   .chips span { font-size: .82rem; padding: 4px 12px; border-radius: 999px; color: #fff; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); }
