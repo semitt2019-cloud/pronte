@@ -215,3 +215,101 @@ uthai-thani.jpg
 วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+krabi-railay.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Railay,_Krabi,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+chumphon-city.jpg
+ผู้ถ่าย: Dario Schär
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Chumphon_Thailand_(64750181).jpeg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+trang-dugong.jpg
+ผู้ถ่าย: Dominic Nelson
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Trang_-_Dugong_Roundabout_04_-_Sep_2024.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+nakhonsithammarat-temple.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Nakhon_Si_Thammarat,_Temple,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+narathiwat-bangnak.jpg
+ผู้ถ่าย: กิตติ เลขะกุล
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Bang_Nak,_Mueang_Narathiwat_District,_Narathiwat_96000,_Thailand_-_panoramio.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+pattani-mosque.jpg
+ผู้ถ่าย: Ukwaenterprise
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Pattani_mosque.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/2.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+phangnga-karst.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phang_Nga_Bay,_Karst_islands,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+phatthalung-thalenoi.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Thale_Noi_wetlands_2,_Phatthalung,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+phuket-big-buddha.jpg
+ผู้ถ่าย: Subhrajyoti07
+ต้นทาง: https://commons.wikimedia.org/wiki/File:The_Big_Buddha,_Phuket.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+yala-lammai.jpg
+ผู้ถ่าย: กิตติ เลขะกุล
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Lam_Mai,_Mueang_Yala_District,_Yala,_Thailand_-_panoramio.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+ranong-khaoniwet.jpg
+ผู้ถ่าย: Mozhar
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Khao_Niwet,_Mueang_Ranong_District,_Ranong_85000,_Thailand_-_panoramio_(3).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+songkhla-samila.jpg
+ผู้ถ่าย: OPK-Photography
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Songkhla,_Thailand,_Samila_Beach,_2024.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+satun-tarutao.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Koh_Tarutao,_Thailand,_Ao_Son.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+
+suratthani-samui.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Koh_Samui,_Island,_Beach,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
