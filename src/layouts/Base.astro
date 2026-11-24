@@ -157,17 +157,17 @@ const path = Astro.url.pathname;
 
 <style is:global>
   :root {
-    --bg: #f7faf2;
+    --bg: #ffffff;
     --card: #ffffff;
     --ink: #0e1710;
     --muted: #5f6b62;
-    --line: #e3e8e0;
+    --line: #d6e8c9;
     --dark: #0a120c;
     --dark-2: #13221a;
-    --lime: #8dc63f;        /* เขียวมะนาว */
-    --lime-2: #b4e05a;
-    --lime-ink: #3b7a12;    /* เขียวเข้มสำหรับตัวอักษรบนพื้นขาว */
-    --lime-soft: #eef7e1;
+    --lime: #70aa46;        /* เขียวสด */
+    --lime-2: #93d53b;
+    --lime-ink: #286b16;    /* เขียวเข้มสำหรับตัวอักษรบนพื้นขาว */
+    --lime-soft: #effadd;
     --gold: #d4b26a;
     --hot: #c2410c;
     --radius: 18px;
@@ -206,7 +206,7 @@ const path = Astro.url.pathname;
     flex: none; padding: 6px 14px; border-radius: 999px; color: var(--ink);
     text-decoration: none; font-size: .9rem; background: #f1f5ec; border: 1px solid transparent;
   }
-  .nav a[aria-current='page'] { background: linear-gradient(140deg, var(--lime-2), var(--lime)); color: #fff; font-weight: 600; box-shadow: 0 4px 12px -6px rgba(110,170,40,.9); }
+  .nav a[aria-current='page'] { background: #37821b; color: #fff; font-weight: 600; box-shadow: 0 4px 12px -6px rgba(110,170,40,.9); }
 
   /* ---------- เนื้อหา ---------- */
   main { padding-top: 24px; padding-bottom: 48px; }
@@ -226,7 +226,7 @@ const path = Astro.url.pathname;
   .tbl { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
   table { width: 100%; border-collapse: collapse; background: var(--card); font-size: .95rem; }
   th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { background: var(--lime-soft); color: var(--lime-ink); font-weight: 600; }
+  th { background: #37821b; color: #fff; font-weight: 600; }
   tr:last-child td { border-bottom: 0; }
   code { background: var(--lime-soft); padding: 2px 8px; border-radius: 8px; font-size: .95em; font-family: ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
 
