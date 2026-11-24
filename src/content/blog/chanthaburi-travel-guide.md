@@ -6,7 +6,7 @@ keyword: "เที่ยวจันทบุรี"
 date: "2026-11-24"
 order: 102
 category: "travel"
-image: "/images/travel/chanthaburi-riverside.jpg"
+image: "/images/travel/chanthaburi-phlio-waterfall.jpg"
 summary: "เส้นทางแนะนำหนึ่งวัน: เช้าน้ำตกพลิ้ว บ่ายเดินเที่ยวตลาดพลอยและอาสนวิหารจันทบุรี เย็นริมแม่น้ำจันทบุรี เผื่อเวลาเดินทางจากกรุงเทพฯ ราว 4-5 ชั่วโมง พร้อมเช็กลิสต์มือถือ คู่มือนี้เรียบเรียงจากแหล่งข้อมูล ไม่ใช่รีวิวจากการลงพื้นที่"
 faq:
   - ["เที่ยวจันทบุรีควรไปกี่วัน?", "ถ้าเน้นสถานที่หลักในตัวเมืองและน้ำตกพลิ้ว 1 วันพอ ถ้าอยากไปทะเลหรือเกาะด้วยควรเพิ่มเป็น 2 วัน 1 คืน"]
@@ -18,13 +18,13 @@ related:
   - ["ช่วยเลือกโปรให้เหมาะกับการใช้งาน", "/chooser/"]
   - ["เที่ยว 3 วัน 2 คืน เตรียมเน็ตกี่ GB ถึงพอ", "/blog/how-many-gb-for-3-day-trip/"]
 sources:
-  - ["Wikimedia Commons: Chanthaburi Riverside", "https://commons.wikimedia.org/wiki/File:Chanthaburi_Riverside.jpg"]
+  - ["Wikimedia Commons: Phlio Waterfall and rocky stream Chanthaburi", "https://commons.wikimedia.org/wiki/File:Phlio_Waterfall_and_rocky_stream_Chanthaburi.jpg"]
   - ["Wikimedia Commons: Main altar in Chanthaburi cathedral", "https://commons.wikimedia.org/wiki/File:Main_altar_in_Chanthaburi_cathedral.jpg"]
 ---
 
 <figure>
-<img src="/images/travel/chanthaburi-riverside.jpg" alt="บรรยากาศริมแม่น้ำจันทบุรี" />
-<figcaption>ริมแม่น้ำจันทบุรี — ภาพโดย Travelpleb, <a href="https://commons.wikimedia.org/wiki/File:Chanthaburi_Riverside.jpg">Wikimedia Commons</a>, สาธารณสมบัติ (Public domain) · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัด</figcaption>
+<img src="/images/travel/chanthaburi-phlio-waterfall.jpg" alt="น้ำตกพลิ้ว จังหวัดจันทบุรี" />
+<figcaption>น้ำตกพลิ้ว จังหวัดจันทบุรี — ภาพโดย PloyAquamarine, <a href="https://commons.wikimedia.org/wiki/File:Phlio_Waterfall_and_rocky_stream_Chanthaburi.jpg">Wikimedia Commons</a>, CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/) · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัด</figcaption>
 </figure>
 
 จันทบุรีเป็นจังหวัดชายทะเลทางตะวันออกที่มีทั้งน้ำตก ตลาดพลอย และย่านเมืองเก่าริมแม่น้ำ บทความนี้จัดเส้นทางเที่ยว 1 วันจากสถานที่หลักของจังหวัด พร้อมเช็กลิสต์มือถือ โดยไม่ใส่ราคาหรือเวลาเปิด-ปิดที่ยังไม่ได้ตรวจยืนยัน
