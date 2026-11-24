@@ -538,6 +538,122 @@ wat-lan-khuad.jpg
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
 
+phuket.jpg
+ชื่อเดิม: Big Buddha - Phuket.jpg
+ผู้ถ่าย: Mussi Katz
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Big_Buddha_-_Phuket.jpg
+ใบอนุญาต: https://creativecommons.org/publicdomain/zero/1.0/ (CC0 ไม่บังคับให้เครดิต)
+วันที่ถ่าย: 2022-11-30
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+krabi.jpg
+ชื่อเดิม: Railay, Krabi, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Railay,_Krabi,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2007-02-24
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+surat-thani.jpg
+ชื่อเดิม: Cheow Lan Lake, Rainforest, Khao Sok, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Cheow_Lan_Lake,_Rainforest,_Khao_Sok,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2011-02-19
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nakhon-si-thammarat.jpg
+ชื่อเดิม: Wat Phra Mahathat Woramahawihan, Nakhon Si Thammarat.jpg
+ผู้ถ่าย: Preecha.MJ
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Phra_Mahathat_Woramahawihan,_Nakhon_Si_Thammarat.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2013-04-11
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 848 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+songkhla.jpg
+ชื่อเดิม: Songkhla, Thailand, Samila Beach, 2024.jpg
+ผู้ถ่าย: OPK-Photography
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Songkhla,_Thailand,_Samila_Beach,_2024.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2024-07-16
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 720 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phang-nga.jpg
+ชื่อเดิม: Ko Tapu (James Bond) Island in Phang Nga Bay, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Ko_Tapu_(James_Bond)_Island_in_Phang_Nga_Bay,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2007-02-18
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+ranong.jpg
+ชื่อเดิม: Geyser Hot springs Landmark At Raksawarin Public Park in Ranong, Southern Thailand.jpg
+ผู้ถ่าย: DarkInSeiOnG
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Geyser_Hot_springs_Landmark_At_Raksawarin_Public_Park_in_Ranong,_Southern_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2017-12-10
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 711 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chumphon.jpg
+ชื่อเดิม: Chum Kho, Pathio District, Chumphon, Thailand - panoramio.jpg
+ผู้ถ่าย: ::::=UT=::::
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Chum_Kho,_Pathio_District,_Chumphon,_Thailand_-_panoramio.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: 2015-10-08 (วันอัปโหลดเดิม)
+ตรวจสิทธิ์: 2026-11-24
+หมายเหตุ: ภาพท่าอากาศยานชุมพร (ไม่ใช่ภาพแหล่งท่องเที่ยว) ใช้ในหัวข้อการเดินทาง ใช้ไฟล์ย่อขนาด 1280 × 1707 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+satun.jpg
+ชื่อเดิม: Koh Lipe (island), Sandy beach, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Koh_Lipe_(island),_Sandy_beach,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2007-03-12
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+trang.jpg
+ชื่อเดิม: 2016 Prowincja Trang, Ko Muk (01).jpg
+ผู้ถ่าย: Marcin Konsek
+ต้นทาง: https://commons.wikimedia.org/wiki/File:2016_Prowincja_Trang,_Ko_Muk_(01).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2016-03-02
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phatthalung.jpg
+ชื่อเดิม: Thale Noi (lake), Birds, Phatthalung, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Thale_Noi_(lake),_Birds,_Phatthalung,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: 2007-03-08
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+pattani.jpg
+ชื่อเดิม: มัสยิดกรือเซะ.jpg
+ผู้ถ่าย: Amraam1
+ต้นทาง: https://commons.wikimedia.org/wiki/File:%E0%B8%A1%E0%B8%B1%E0%B8%AA%E0%B8%A2%E0%B8%B4%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%8B%E0%B8%B0.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: 2011-04-22
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 857 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+narathiwat.jpg
+ชื่อเดิม: Narabeach.jpg
+ผู้ถ่าย: Abstinent (Wikivoyage)
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Narabeach.jpg
+ใบอนุญาต: สาธารณสมบัติ (Public domain ตามที่ระบุในหน้า Wikimedia Commons)
+วันที่ถ่าย: 2008-06-23 (วันอัปโหลดเดิม)
+ตรวจสิทธิ์: 2026-11-24
+หมายเหตุ: ระบุสถานที่จากชื่อไฟล์และภาพ ควรตรวจซ้ำก่อนเผยแพร่ ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
 chiang-mai.jpg
 ชื่อเดิม: Wat Phra That Doi Suthep, Golden Buddha, Doi Suthep, Thailand.jpg
 ผู้ถ่าย: Vyacheslav Argenberg
