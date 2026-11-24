@@ -11,6 +11,7 @@ import { SITE } from '../config';
 
 const popular = AIS.filter((p) => p.popular).sort((a, b) => a.days - b.days || a.price - b.price);
 const groups: [number, string][] = [[1, 'ais-1-day'], [2, 'ais-2-day'], [3, 'ais-3-day'], [7, 'ais-7-day'], [30, 'ais-30-day']];
+const minPrice = Math.min(...AIS.map((p) => p.price));
 
 const title = `โปรเน็ต AIS ไม่อั้น ไม่ลดสปีด ล่าสุด ${SITE.updated}`;
 const description = 'รวมโปรเน็ต AIS เติมเงิน ไม่จำกัดปริมาณ ไม่ลดสปีด ทั้งรายวัน 7 วัน และ 30 วัน ราคาเริ่ม 24 บาท พร้อมรหัสกดสมัครและวิธีเลือกความเร็วให้เหมาะกับการใช้งาน';
@@ -19,13 +20,15 @@ const guides = KEYWORD_GUIDES.flatMap((slug) => {
   return post ? [post] : [];
 });
 const faq: [string, string][] = [
+  ['โปรเน็ต AIS เติมเงินเริ่มต้นกี่บาท?', `แพ็กในหน้านี้เริ่ม ${minPrice} บาท ราคารวมภาษีแล้ว ควรเปรียบเทียบความเร็ว ระยะเวลา และสิทธิ์สมัครของหมายเลขก่อนเลือกแพ็ก`],
+  ['ควรเลือกโปรรายวันหรือ 30 วัน?', 'ใช้ชั่วคราวเลือกแพ็ก 1–3 วัน ใช้ต่อเนื่องหนึ่งสัปดาห์ดูแพ็ก 7 วัน หากใช้ทุกวันให้เทียบแพ็ก 30 วันจากงบรวมและความเร็วที่ต้องการ ไม่ควรดูเฉพาะราคาเฉลี่ยต่อวัน'],
   ['เน็ตไม่อั้นไม่ลดสปีดคืออะไร?', 'ใช้ได้ไม่จำกัดปริมาณที่ความเร็วคงที่ตามโปรตลอดอายุ เช่น 4 Mbps ก็ได้ 4 Mbps ตลอด ไม่ถูกลดลงเมื่อใช้เยอะ'],
   ['ควรเลือกความเร็วเท่าไหร่?', 'แชตและ Facebook ใช้ 1–2 Mbps, TikTok และ YouTube 720p ใช้ 4 Mbps, ไลฟ์สดหรือแชร์ฮอตสปอตใช้ 6 Mbps ขึ้นไป'],
   ['สมัครแล้วเงินถูกหักจากไหน?', 'หักจากยอดเงินในซิม AIS เติมเงินของคุณโดยตรง ไม่ต้องโอนเงินหรือให้ข้อมูลส่วนตัวใด ๆ'],
   ['เช็กโปรที่ใช้อยู่ยังไง?', 'กด *121*32# แล้วโทรออก ระบบจะส่งรายละเอียดโปรที่ใช้อยู่ทาง SMS'],
 ];
 ---
-<Base title={title} description={description} schema={[
+<Base title={`โปรเน็ต AIS เติมเงิน รายวัน 7 วัน 30 วัน | เริ่ม ${minPrice} บาท`} description={description} schema={[
   offersSchema('โปรเน็ต AIS ยอดนิยม', popular),
   faqSchema(faq),
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'th-TH' },
@@ -39,6 +42,11 @@ const faq: [string, string][] = [
     </div>
     <a class="cta" href="/chooser/">ช่วยเลือกโปรที่คุ้มที่สุด →</a>
   </section>
+
+  <nav class="package-jumps" aria-label="เลือกโปรเน็ต AIS ตามจำนวนวัน">
+    <a href="#popular">โปรยอดนิยม</a>
+    {groups.map(([d]) => <a href={`#ais-${d}-day`}>{d} วัน</a>)}
+  </nav>
 
   <a class="newsim" href="/ais-new-sim/">
     <span class="ns-tag">เปิดซิมใหม่ AIS</span>
@@ -70,18 +78,30 @@ const faq: [string, string][] = [
     <span class="ns-go">ดูโปรเน็ตไปเที่ยว →</span>
   </a>
 
-  <h2>โปรยอดนิยม</h2>
+  <h2 id="popular">โปรเน็ต AIS ยอดนิยม</h2>
   <PkgList items={popular} />
 
   {groups.map(([d, slug]) => (
     <section>
-      <h2>โปรเน็ต AIS {d} วัน</h2>
+      <h2 id={`ais-${d}-day`}>โปรเน็ต AIS {d} วัน</h2>
       <PkgList items={byDays(d)} />
       <p><a href={`/${slug}/`}>ดูรายละเอียดและคำแนะนำโปร {d} วัน →</a></p>
     </section>
   ))}
 
-  <h2>รีวิวโปรแนะนำ</h2>
+  <section aria-labelledby="choose-package">
+    <h2 id="choose-package">เลือกโปรเน็ต AIS ให้เหมาะกับการใช้งาน</h2>
+    <p>เริ่มจากจำนวนวันที่ต้องใช้และงบรวม แล้วค่อยเลือกความเร็ว แพ็กที่มีเน็ตเต็มสปีดแถมกับแพ็กความเร็วคงที่อาจมีเงื่อนไขต่างกัน ควรอ่านรายละเอียดก่อนกดสมัคร</p>
+    <ul class="links">
+      <li>ใช้ชั่วคราว: <a href="/ais-1-day/">โปรรายวัน</a> หรือ <a href="/ais-3-day/">โปร 3 วัน</a> สำหรับเติมเน็ตช่วงสั้น</li>
+      <li>ใช้ต่อเนื่อง: เปรียบเทียบ <a href="/ais-7-day/">โปร 7 วัน</a> กับ <a href="/ais-30-day/">โปร 30 วัน</a> จากยอดจ่ายรวมและความเร็ว</li>
+      <li>ยังเลือกไม่ถูก: ใช้ <a href="/chooser/">ตัวช่วยเลือกโปรตามงบและการใช้งาน</a> หรืออ่าน <a href="/speed-guide/">คำแนะนำเรื่องความเร็วเน็ต</a></li>
+    </ul>
+    <p>ก่อนสมัคร: เช็กแพ็กเดิมและยอดเงิน เลือกซิมให้ถูก แล้วรอ SMS ยืนยันจาก AIS ก่อนใช้เน็ต สิทธิ์สมัครขึ้นกับหมายเลขและเงื่อนไขของแพ็ก ความเร็วจริงขึ้นกับสัญญาณ พื้นที่ อุปกรณ์ และเครือข่าย</p>
+    <p>หน้านี้รวมแพ็กเสริมเติมเงิน หากต้องการเปิดหมายเลขใหม่ให้ดู <a href="/ais-new-sim/">แพ็กสำหรับเปิดซิมใหม่ AIS</a> และตรวจสิทธิ์เฉพาะหมายเลขผ่าน <a href="https://www.ais.th/consumers/lifestyle/myais3">myAIS ของ AIS</a></p>
+  </section>
+
+  <h2>รายละเอียดโปรแนะนำ</h2>
   <ul class="links">
     {SALES.map((x) => <li><a href={`/pro/${x.slug}/`}>{x.keyword}</a></li>)}
   </ul>
@@ -101,6 +121,9 @@ const faq: [string, string][] = [
 </Base>
 
 <style>
+  .package-jumps { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+  .package-jumps a { padding:8px 14px; border:1px solid var(--line); border-radius:999px; color:var(--lime-ink); text-decoration:none; background:var(--card); }
+  h2[id] { scroll-margin-top:90px; }
   .hero {
     position: relative; overflow: hidden; color: #fff; border-radius: 24px;
     padding: 32px 24px 28px; margin-top: 4px;
