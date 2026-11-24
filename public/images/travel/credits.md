@@ -300,3 +300,174 @@ sa-kaeo-countryside.jpg
 ใบอนุญาต: สาธารณสมบัติ (Public domain)
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+amnat-charoen.jpg
+ชื่อเดิม: จังหวัดอำนาจเจริญ_Amnat_Charoen_-Mukdahan_rd._-_panoramio.jpg
+ผู้ถ่าย: JAMRAT
+ต้นทาง: https://commons.wikimedia.org/wiki/File:จังหวัดอำนาจเจริญ_Amnat_Charoen_-Mukdahan_rd._-_panoramio.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+bueng-kan.jpg
+ชื่อเดิม: Bueng_Khong_Long,_Bueng_Khong_Long_District,_Bueng_Kan_38220,_Thailand_-_panoramio.jpg
+ผู้ถ่าย: ::::=UT=::::
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Bueng_Khong_Long,_Bueng_Khong_Long_District,_Bueng_Kan_38220,_Thailand_-_panoramio.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1280 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+buriram.jpg
+ชื่อเดิม: Phanom_Rung_Buriram_Thailand_02.jpg
+ผู้ถ่าย: Philip Nalangan
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phanom_Rung_Buriram_Thailand_02.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chaiyaphum.jpg
+ชื่อเดิม: Thung_Kramang_Grassland,_Phu_Khiao_Wildlife_Sanctuary,_Thailand.jpg
+ผู้ถ่าย: JCSPhotography
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Thung_Kramang_Grassland,_Phu_Khiao_Wildlife_Sanctuary,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+kalasin.jpg
+ชื่อเดิม: Lam_Pao_Dam_05.jpg
+ผู้ถ่าย: Kaoavi
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Lam_Pao_Dam_05.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+khon-kaen.jpg
+ชื่อเดิม: Museum_Dinosaur_KK.jpg
+ผู้ถ่าย: Wickanet
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Museum_Dinosaur_KK.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1037 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+loei.jpg
+ชื่อเดิม: Starry_Night_at_Phu_Kradueng_National_Park_01.jpg
+ผู้ถ่าย: Pulperm Phungprachit
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Starry_Night_at_Phu_Kradueng_National_Park_01.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1920 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+maha-sarakham.jpg
+ชื่อเดิม: Kham_Riang,_Kantharawichai_District,_Maha_Sarakham_44150,_Thailand_-_panoramio_(11).jpg
+ผู้ถ่าย: TonG_CB
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Kham_Riang,_Kantharawichai_District,_Maha_Sarakham_44150,_Thailand_-_panoramio_(11).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 956 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+mukdahan.jpg
+ชื่อเดิม: Mukdahan_Haw_Kaew_SW_View.jpg
+ผู้ถ่าย: Gary
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Mukdahan_Haw_Kaew_SW_View.jpg
+ใบอนุญาต: ไม่ต้องใช้ใบอนุญาต (สาธารณสมบัติ)
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nakhon-phanom.jpg
+ชื่อเดิม: Wat_Phra_That_Phanom_2006-02.JPG
+ผู้ถ่าย: Guido Johannes Joerg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Phra_That_Phanom_2006-02.JPG
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 851 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nakhon-ratchasima.jpg
+ชื่อเดิม: Phimai_Historical_Park_Thailand_06.jpg
+ผู้ถ่าย: Philip Nalangan
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phimai_Historical_Park_Thailand_06.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 959 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nong-bua-lamphu.jpg
+ชื่อเดิม: NongbuaLamphu_SanLakMueang091223a.jpg
+ผู้ถ่าย: Me and yu
+ต้นทาง: https://commons.wikimedia.org/wiki/File:NongbuaLamphu_SanLakMueang091223a.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1396 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nong-khai.jpg
+ชื่อเดิม: Mekong_in_Nong_Khai_2.jpg
+ผู้ถ่าย: Christophe95
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Mekong_in_Nong_Khai_2.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+roi-et.jpg
+ชื่อเดิม: Bueng_Phlan_Chai_Roi_Et_Tower_Night_Time.jpg
+ผู้ถ่าย: Mapleonade
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Bueng_Phlan_Chai_Roi_Et_Tower_Night_Time.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1707 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+sakon-nakhon.jpg
+ชื่อเดิม: Nong_Han_Lake_(2499138321).jpg
+ผู้ถ่าย: nakhon100
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Nong_Han_Lake_(2499138321).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/2.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+surin.jpg
+ชื่อเดิม: Surin_Elephant_Show_2009_DSC06213c.jpg
+ผู้ถ่าย: Per Meistrup
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Surin_Elephant_Show_2009_DSC06213c.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1024 × 682 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+ubon-ratchathani.jpg
+ชื่อเดิม: Pha_Taem-001.jpg
+ผู้ถ่าย: Ddalbiez
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Pha_Taem-001.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+udon-thani.jpg
+ชื่อเดิม: Ban_Chiang_Tribal_Culture.JPG
+ผู้ถ่าย: Kiwiodysee
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Ban_Chiang_Tribal_Culture.JPG
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+yasothon.jpg
+ชื่อเดิม: Wat_Mahathat,_Yasothon_(II).jpg
+ผู้ถ่าย: Supanut Arunoprayote
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Mahathat,_Yasothon_(II).jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0/
+วันที่ถ่าย: ไม่ระบุในหน้า Wikimedia ที่ตรวจ
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 914 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
