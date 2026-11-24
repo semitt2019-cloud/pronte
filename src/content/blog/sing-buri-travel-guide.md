@@ -6,7 +6,7 @@ keyword: "เที่ยวสิงห์บุรี"
 date: "2026-11-24"
 order: 317
 category: "travel"
-image: "/images/travel/sing-buri.jpg"
+image: "/images/travel/sing-buri-bang-rachan.jpg"
 summary: "สิงห์บุรีเป็นจังหวัดเงียบ ๆ ริมที่ราบลุ่มแม่น้ำเจ้าพระยา เหมาะกับทริปวันเดียวที่เน้นประวัติศาสตร์ท้องถิ่นและวัดในเมือง ค่ายบางระจันเป็นจุดที่คนนิยมมาเรียนรู้เรื่องราวของเมือง"
 faq:
   - ["สิงห์บุรีมีอะไรน่าเที่ยว?", "จุดเด่นคือค่ายบางระจันที่เป็นประวัติศาสตร์ท้องถิ่น และวัดในตัวเมืองที่เหมาะกับการเดินชมเป็นวันเดียว"]
@@ -17,8 +17,8 @@ related:
 ---
 
 <figure>
-<img src="/images/travel/sing-buri.jpg" alt="ภาพประกอบการเที่ยวสิงห์บุรี" />
-<figcaption>อุโบสถวัดในจังหวัดสิงห์บุรี (ภาพประกอบ) — ภาพโดย <a href="https://commons.wikimedia.org/wiki/File:Wat_Sai_Ubosot.jpg">Ahoerstemeier / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัดหรือปรับสี</figcaption>
+<img src="/images/travel/sing-buri-bang-rachan.jpg" alt="อนุสาวรีย์วีรชนค่ายบางระจัน จังหวัดสิงห์บุรี" />
+<figcaption>อนุสาวรีย์วีรชนค่ายบางระจัน ในสวนอนุสรณ์ค่ายบางระจัน อำเภอบางระจัน — ภาพโดย <a href="https://commons.wikimedia.org/wiki/File:Singburi_Monument_of_Bang_Rachan_Heroes_1.jpg">Mr.Peerapong Prasutr / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a> · ใช้ฉบับย่อ 1280 พิกเซล ไม่ครอบตัดหรือปรับสี</figcaption>
 </figure>
 
 สิงห์บุรีเป็นจังหวัดเงียบ ๆ ริมที่ราบลุ่มแม่น้ำเจ้าพระยา เหมาะกับทริปวันเดียวที่เน้นประวัติศาสตร์ท้องถิ่นและวัดในเมือง ค่ายบางระจันเป็นจุดที่คนนิยมมาเรียนรู้เรื่องราวของเมือง

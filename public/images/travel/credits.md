@@ -495,3 +495,45 @@ thi-lo-su-tak.jpg
 ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 พิกเซล ไม่ครอบตัดหรือปรับสี
+prasat-sdok-kok-thom.jpg
+ชื่อเดิม: Prasat Sdok Kok Thom-007.jpg
+ผู้ถ่าย: Ddalbiez
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Prasat_Sdok_Kok_Thom-007.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1920 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chanthaburi-phlio-waterfall.jpg
+ชื่อเดิม: Phlio Waterfall and rocky stream Chanthaburi.jpg
+ผู้ถ่าย: PloyAquamarine
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phlio_Waterfall_and_rocky_stream_Chanthaburi.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 1956 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+sing-buri-bang-rachan.jpg
+ชื่อเดิม: Singburi Monument of Bang Rachan Heroes 1.jpg
+ผู้ถ่าย: Mr.Peerapong Prasutr
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Singburi_Monument_of_Bang_Rachan_Heroes_1.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2015-01-27
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 853 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+sisaket.jpg
+ชื่อเดิม: Prasat Sa Kamphaeng Yai-003.jpg
+ผู้ถ่าย: Ddalbiez
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Prasat_Sa_Kamphaeng_Yai-003.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0/
+วันที่ถ่าย: 2009-03-30
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+wat-lan-khuad.jpg
+ชื่อเดิม: WatLanKhuad Wall Mural Large.JPG
+ผู้ถ่าย: Jpatokal
+ต้นทาง: https://commons.wikimedia.org/wiki/File:WatLanKhuad_Wall_Mural_Large.JPG
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2012-11-29
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
