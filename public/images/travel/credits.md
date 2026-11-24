@@ -537,3 +537,147 @@ wat-lan-khuad.jpg
 วันที่ถ่าย: 2012-11-29
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chiang-mai.jpg
+ชื่อเดิม: Wat Phra That Doi Suthep, Golden Buddha, Doi Suthep, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Phra_That_Doi_Suthep,_Golden_Buddha,_Doi_Suthep,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0
+วันที่ถ่าย: 2007-02-05 15:00:46
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chiang-mai-doi-inthanon.jpg
+ชื่อเดิม: Doi Inthanon, View of the mountains, Thailand.jpg
+ผู้ถ่าย: Vyacheslav Argenberg
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Doi_Inthanon,_View_of_the_mountains,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0
+วันที่ถ่าย: 2010-11-24 14:28:31
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chiang-mai-old-city.jpg
+ชื่อเดิม: Chiang-Mai Thailand Brick-wall-01.jpg
+ผู้ถ่าย: CEphoto, Uwe Aranas
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Chiang-Mai_Thailand_Brick-wall-01.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0
+วันที่ถ่าย: 2009-11-18
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chiang-rai.jpg
+ชื่อเดิม: 20171107 White Temple Chiang Rai 0221 DxO.jpg
+ผู้ถ่าย: Jakub Hałun
+ต้นทาง: https://commons.wikimedia.org/wiki/File:20171107_White_Temple_Chiang_Rai_0221_DxO.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2017-11-07 14:37:59
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+chiang-rai-blue-temple.jpg
+ชื่อเดิม: Wat Rong Suea Ten (Blue Temple, Chiang Rai) วัดร่องเสือเต้น (October 2021) - img 01.jpg
+ผู้ถ่าย: Chainwit.
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Rong_Suea_Ten_(Blue_Temple,_Chiang_Rai)_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B9%89%E0%B8%99_(October_2021)_-_img_01.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2021-10-25
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+lampang.jpg
+ชื่อเดิม: The Wat Phra That Lampang Luang.jpg
+ผู้ถ่าย: Woonzen5558
+ต้นทาง: https://commons.wikimedia.org/wiki/File:The_Wat_Phra_That_Lampang_Luang.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2013-09-16 14:10:29
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+lampang-wat-phra-kaew-don-tao.jpg
+ชื่อเดิม: Wat Phra Kaew Don Tao 001RS.jpg
+ผู้ถ่าย: Ritthichai Siangdee
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Phra_Kaew_Don_Tao_001RS.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2015-10-23 11:09:28
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+lamphun.jpg
+ชื่อเดิม: Wat Phra That Hariphunchai.jpg
+ผู้ถ่าย: Achompunuch
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Phra_That_Hariphunchai.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2015-07-26 12:51:31
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+lamphun-wat-chamadevi.jpg
+ชื่อเดิม: Chedi Ku Kut, Wat Chamadevi เจดีย์กู่กุด วัดจามเทวี (2026) - IMG 01.jpg
+ผู้ถ่าย: Chainwit.
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Chedi_Ku_Kut,_Wat_Chamadevi_%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%81%E0%B8%B9%E0%B9%88%E0%B8%81%E0%B8%B8%E0%B8%94_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%88%E0%B8%B2%E0%B8%A1%E0%B9%80%E0%B8%97%E0%B8%A7%E0%B8%B5_(2026)_-_IMG_01.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by/4.0
+วันที่ถ่าย: 2026-07-28 09:57:38
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nan.jpg
+ชื่อเดิม: 2013 Wat Phumin Nan.jpg
+ผู้ถ่าย: Takeaway
+ต้นทาง: https://commons.wikimedia.org/wiki/File:2013_Wat_Phumin_Nan.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0
+วันที่ถ่าย: 2013-12-10 17:03:58
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+nan-doi-phu-kha.jpg
+ชื่อเดิม: Doi Pu Kha top.jpg
+ผู้ถ่าย: Takeaway
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Doi_Pu_Kha_top.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/3.0
+วันที่ถ่าย: 2013-12-13 10:52:19
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phayao.jpg
+ชื่อเดิม: Phayao - Small rowing boat moored on shores of Phayao Lake Jan 2024.jpg
+ผู้ถ่าย: Dominic Nelson
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phayao_-_Small_rowing_boat_moored_on_shores_of_Phayao_Lake_Jan_2024.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2024-01-24 12:41:16
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phayao-sunset.jpg
+ชื่อเดิม: Sunset at Kwan Phayao กว๊านพะเยา (25-12-2021) img 05.jpg
+ผู้ถ่าย: Chainwit.
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Sunset_at_Kwan_Phayao_%E0%B8%81%E0%B8%A7%E0%B9%8A%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B0%E0%B9%80%E0%B8%A2%E0%B8%B2_(25-12-2021)_img_05.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2021-12-25
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+uttaradit.jpg
+ชื่อเดิม: Sirikit Dam IMG 7748.jpg
+ผู้ถ่าย: Broichmore
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Sirikit_Dam_IMG_7748.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2018-11-14 11:01:13
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+mae-hong-son.jpg
+ชื่อเดิม: Wat Chong Kham 1.jpg
+ผู้ถ่าย: Christophe95
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Wat_Chong_Kham_1.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2018-09-01 18:10:13
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+mae-hong-son-pai-canyon.jpg
+ชื่อเดิม: Pai Canyon 3.jpg
+ผู้ถ่าย: Christophe95
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Pai_Canyon_3.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2018-08-30 17:55:53
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
