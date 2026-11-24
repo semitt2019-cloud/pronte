@@ -537,3 +537,21 @@ wat-lan-khuad.jpg
 วันที่ถ่าย: 2012-11-29
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phetchaburi-khao-luang-cave.jpg
+ชื่อเดิม: Khao Luang Cave, Phetchaburi.jpg
+ผู้ถ่าย: Preecha.MJ
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Khao_Luang_Cave,_Phetchaburi.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2016-02-14
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 852 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phetchaburi-cha-am-beach.jpg
+ชื่อเดิม: Hua Hin from Cha Am beach.jpg
+ผู้ถ่าย: Slyronit
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Hua_Hin_from_Cha_Am_beach.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0
+วันที่ถ่าย: 2025-04-12
+ตรวจสิทธิ์: 2026-11-24
+ใช้ไฟล์ย่อขนาด 1280 × 960 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
