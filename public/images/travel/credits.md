@@ -815,3 +815,12 @@ mae-hong-son-pai-canyon.jpg
 วันที่ถ่าย: 2018-08-30 17:55:53
 ตรวจสิทธิ์: 2026-11-24
 ใช้ไฟล์ย่อขนาด 1280 px จาก Wikimedia ไม่ครอบตัดหรือปรับสี
+
+phetchaburi-khao-wang.jpg
+ชื่อเดิม: Phra-Nakhon-Khiri (Khao-Wang), Phetchaburi, Thailand.jpg
+ผู้ถ่าย: Preecha.MJ
+ต้นทาง: https://commons.wikimedia.org/wiki/File:Phra-Nakhon-Khiri_(Khao-Wang),_Phetchaburi,_Thailand.jpg
+ใบอนุญาต: https://creativecommons.org/licenses/by-sa/4.0/
+วันที่ถ่าย: 2016-02-14
+ตรวจสิทธิ์: 2026-11-26
+ใช้ไฟล์ย่อขนาด 1280 × 852 จาก Wikimedia ไม่ครอบตัดหรือปรับสี
