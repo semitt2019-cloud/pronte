@@ -7,6 +7,9 @@ import { AIS, perDay, speedLabel, type Pkg } from '../data/ais';
 import { TRAVEL_BOOKING } from '../data/affiliates';
 import { ussd, telHref, SITE } from '../config';
 import { faqSchema, breadcrumb, PRODUCT_IMAGE } from '../lib/seo';
+import { POSTS, catOf } from '../lib/blog';
+
+const travelGuides = POSTS.filter((p) => catOf(p) === 'travel').sort((a, b) => a.meta.h1.localeCompare(b.meta.h1, 'th'));
 
 const path = '/travel/';
 const get = (code: string): Pkg => {
@@ -139,6 +142,12 @@ const schema = [
   </ol>
 
   <Faq items={faq} />
+
+  <h2>คู่มือเที่ยวตามจังหวัด</h2>
+  <p>เลือกจังหวัดที่จะไปแล้วอ่านที่เที่ยวหลัก เส้นทาง และการใช้เน็ตระหว่างทริปได้เลย</p>
+  <ul class="links">
+    {travelGuides.map((p) => <li><a href={`/blog/${p.slug}/`}>{p.meta.h1}</a></li>)}
+  </ul>
 
   <h2>อ่านต่อก่อนเที่ยว</h2>
   <p><a href="/blog/ayutthaya-one-day/">เที่ยวอยุธยา 1 วัน: สองวัดสำคัญ พร้อมเช็กลิสต์มือถือและเน็ตก่อนเดินทาง →</a></p>
